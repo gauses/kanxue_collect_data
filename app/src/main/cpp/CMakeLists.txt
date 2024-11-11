@@ -4,21 +4,17 @@
 
 # Sets the minimum CMake version required for this project.
 
-cmake_minimum_required (VERSION 3.22)
+cmake_minimum_required(VERSION 3.22.1)
 
 
-add_library( # 库名称
-        getdents64-lib
-        # 共享库
-        SHARED
-        # 源文件
-        getdents64.cpp )
+project("ndk_kanxue")
 
-find_library( # 加载 log 库
-        log-lib
-        log )
+add_library(${CMAKE_PROJECT_NAME} SHARED
+        # List C/C++ source files with relative paths to this CMakeLists.txt.
+        getdents64.cpp)
 
-target_link_libraries( # 链接 log 库
-        getdents64-lib
-        ${log-lib} )
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        # List libraries link to the target library
+        android
+        log)
 
