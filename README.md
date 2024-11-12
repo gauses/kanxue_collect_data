@@ -33,6 +33,19 @@ input设备相关，读取/proc/bus/input/devices，获取注册的input设备�
 在libNetHTProtect.so中主要检测了crc校验，还有frida和Xposed的一些特征： (网易易盾手游SDK，暂时没有加)
 
 
+这个暂时没有加：改机软件，
+2.检查/dev/wgzs目录下的内容是否存在，若存在则获取值：  (因为非root环境，读取不了/dev)
+
+
+这个暂时没有加：Root和Root工具，
+7.检测seLinux安全上下文，cat /proc/%d/attr/prev检测app进程的selinux安全上下文是否为“u:r:zygote:s0(没有看懂)
+
+
+这个暂时没有加：
+ebpf检测(没有看懂)
+
+
+
 
 
 

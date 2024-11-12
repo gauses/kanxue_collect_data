@@ -3,9 +3,6 @@ package com.nest.kanxue
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.ParcelFileDescriptor
-import android.system.Os
-import android.system.OsConstants
 import android.util.Base64
 import android.util.Log
 import android.widget.Button
@@ -14,7 +11,6 @@ import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.checkenvironment.checkHookEnvironment
-import com.nest.kanxue.checkenvironment.checkXposed
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
 import com.nest.kanxue.devicefingerprint.getSystemProp
@@ -22,11 +18,17 @@ import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.inputmethodlist.getInputMethodList
-import com.nest.kanxue.model_system_determination.CheckBrandOS
 import com.nest.kanxue.model_system_determination.CheckSIM
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
+import com.nest.kanxue.modifymachine.CheckInstallPackageChangerApps
 import com.nest.kanxue.network.getNetworkInfo
+import com.nest.kanxue.procstat.ProcStatReader
+import com.nest.kanxue.root.CheckRoot
 import com.nest.kanxue.screentoolandclick.CheckAutoClick
+import com.nest.kanxue.simulators.CheckFileDir
+import com.nest.kanxue.simulators.CheckSimulators
+import com.nest.kanxue.simulators.CheckSystemProp
+import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
 import org.json.JSONArray
@@ -95,6 +97,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("sb" , "CheckSIM = "+ CheckSIM.getSimOperator(this))
 
             Log.d("sb" , "CheckAutoClick = "+ CheckAutoClick.getInfo(this))
+            Log.d("sb" , "CheckSystemProp = "+ CheckSystemProp.checkEmulatorPropsWithGetprop())
+            Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
+            Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
+            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.detectChangerApps(this))
+            Log.d("sb" , "CheckRoot = "+ CheckRoot.getInfo(this))
 
 
         }
@@ -214,6 +221,68 @@ class MainActivity : AppCompatActivity() {
             AutoClickerJson.put("data", Base64.encodeToString(Gson().toJson(CheckAutoClick.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(AutoClickerJson)
 
+
+            //13.模拟器 :扫描常见的模拟器特征
+            val simulatorsJson = JSONObject();
+            simulatorsJson.put("name", "模拟器") ;
+            simulatorsJson.put("data", Base64.encodeToString(Gson().toJson(CheckSimulators.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(AutoClickerJson)
+
+            //14.改机软件
+            val chageAppsJson = JSONObject();
+            chageAppsJson.put("name", "改机软件") ;
+            chageAppsJson.put("data", Base64.encodeToString(Gson().toJson(CheckInstallPackageChangerApps.detectChangerApps(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(chageAppsJson)
+
+
+
+            //15.root
+            val rootJson = JSONObject();
+            rootJson.put("name", "ROOT") ;
+            rootJson.put("data", Base64.encodeToString(Gson().toJson(CheckRoot.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(rootJson)
+
+
+            //16.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
+            try {
+                val sishuiliuyunJson = JSONObject();
+                sishuiliuyunJson.put("name", "sishuiliuyun-系统相关属性") ;
+                val sishuiliuyun = Gson().toJson(sishuiliuyunCpuManager().getInfo(this@MainActivity))
+                Log.d("sb", "sishuiliuyun = $sishuiliuyun")
+                sishuiliuyunJson.put("data", Base64.encodeToString(sishuiliuyun.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(sishuiliuyunJson)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+
+
+
+            //17.读取/proc/stat下的所有内容
+//            Log.d("sb", "ProcStatReader.readProcStat() = " + ProcStatReader.readProcStat())
+//            val procStatJson = JSONObject();
+//            procStatJson.put("name", "/proc/stat下的所有内容") ;
+//            procStatJson.put("data", Base64.encodeToString(ProcStatReader.readProcStat().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+//            uploadJsonArray.put(procStatJson)
+            // 方法1：获取所有原始数据
+            val allStats = ProcStatReader.readProcStat()
+            println("原始数据:")
+            allStats.forEach { (key, value) ->
+                println("$key: $value")
+            }
+
+            println("\n")
+
+            // 方法2：获取CPU详细信息
+            val cpuStats = ProcStatReader.parseCpuStats()
+            println("CPU统计信息:")
+            cpuStats.forEach { stat ->
+                println(stat)
+            }
+
+            println("\n")
+
+            // 方法3：获取格式化的完整报告
+            println(ProcStatReader.getFormattedStats())
 
 
 

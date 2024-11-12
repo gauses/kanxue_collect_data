@@ -15,6 +15,27 @@
     <uses-feature android:name="android.hardware.vulkan.version" android:required="true"  />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <!-- 如果是 Android 11 及以上，还需要在 manifest 中添加 queries 标签 -->
+    <queries>
+        <package android:name="com.yztc.studio.plugin" />
+        <package android:name="com.soft.apk008v" />
+        <package android:name="com.uwish.app" />
+        <package android:name="zpp.wjy.xxsq" />
+        <package android:name="com.bigsing.changer" />
+        <package android:name="zap.fh.wipe" />
+        <package android:name="com.sollyu.xposed.hook.model" />
+        <package android:name="com.soft.apk008Tool" />
+        <package android:name="com.doubee.ig" />
+        <package android:name="com.variable.apkhook" />
+        <package android:name="com.addeasy.fastest" />
+        <package android:name="com.xenice.mask" />
+        <package android:name="com.shyl.artifact" />
+        <package android:name="com.android1500.androidfaker" />
+
+    </queries>
 
 
     <application
