@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
+import com.nest.kanxue.checkenvironment.checkHookEnvironment
 import com.nest.kanxue.checkenvironment.checkXposed
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -21,7 +22,11 @@ import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.inputmethodlist.getInputMethodList
+import com.nest.kanxue.model_system_determination.CheckBrandOS
+import com.nest.kanxue.model_system_determination.CheckSIM
+import com.nest.kanxue.model_system_determination.getModelSystemDeter
 import com.nest.kanxue.network.getNetworkInfo
+import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
 import org.json.JSONArray
@@ -85,7 +90,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("sb" , "getBootId = "+getBootId.getBootIdUsingCat())
             Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
             Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
+            Log.d("sb" , "checkHookEnvironment = "+ checkHookEnvironment.getInfo())
+            Log.d("sb" , "CheckBrandOS = "+ getModelSystemDeter.getInfo(this))
+            Log.d("sb" , "CheckSIM = "+ CheckSIM.getSimOperator(this))
 
+            Log.d("sb" , "CheckAutoClick = "+ CheckAutoClick.getInfo(this))
 
 
         }
@@ -190,6 +199,22 @@ class MainActivity : AppCompatActivity() {
             InputMethodListJson.put("name", "InputMethodList") ;
             InputMethodListJson.put("data", Base64.encodeToString(Gson().toJson(getInputMethodList.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(InputMethodListJson)
+
+
+            //11.机型和系统判定 + Bootloader解锁状态 + SIM卡
+            val deviceOSListJson = JSONObject();
+            deviceOSListJson.put("name", "deviceOS") ;
+            deviceOSListJson.put("data", Base64.encodeToString(Gson().toJson(getModelSystemDeter.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(deviceOSListJson)
+
+
+            //12.截图和模拟点击
+            val AutoClickerJson = JSONObject();
+            AutoClickerJson.put("name", "AutoClick") ;
+            AutoClickerJson.put("data", Base64.encodeToString(Gson().toJson(CheckAutoClick.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(AutoClickerJson)
+
+
 
 
             UploadData.upload(this , externalDir , uploadJsonArray)

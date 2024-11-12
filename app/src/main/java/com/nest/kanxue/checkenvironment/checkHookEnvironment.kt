@@ -14,6 +14,10 @@ object checkHookEnvironment {
         Log.d("sb" , "checkXposed check_Hook_loadClass = "+ checkXposed.check_Hook_loadClass(this::class.java.classLoader))
         Log.d("sb" , "checkXposed check_data_package = "+ checkXposed.check_data_package())
 
+
+
+
+
     }
 
 }

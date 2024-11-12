@@ -8,6 +8,8 @@ import java.lang.reflect.Proxy
 
 object checkXposed {
 
+
+
     var xposed_file_path = arrayOf(
         "/sbin/.magisk/modules/riru_lsposed",
         "/data/adb/lspd",

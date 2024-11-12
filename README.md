@@ -27,10 +27,10 @@ input设备相关，读取/proc/bus/input/devices，获取注册的input设备�
 #文件哈希：和上面设备标识中的(获取文件的最近访问时间、最近修改时间、最近改变时间，Innode编号)重复
 
 
-
+这一个暂时没有加
 #环境检测：
 一、HOOK环境:
-在libNetHTProtect.so中主要检测了crc校验，还有frida和Xposed的一些特征： (网易易盾手游SDK)
+在libNetHTProtect.so中主要检测了crc校验，还有frida和Xposed的一些特征： (网易易盾手游SDK，暂时没有加)
 
 
 
