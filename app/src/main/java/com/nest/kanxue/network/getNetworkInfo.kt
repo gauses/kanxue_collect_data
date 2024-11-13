@@ -4,81 +4,65 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.os.Build
+import android.util.Log
+import org.json.JSONArray
 import org.json.JSONObject
 import java.net.InetAddress
 import java.net.NetworkInterface
 
 object getNetworkInfo {
 
-    // 计算子网掩码
-    fun getSubnetMask(prefixLength: Int): String {
-        val mask = (0xffffffff shl (32 - prefixLength)).toInt()
-        return InetAddress.getByAddress(
-            byteArrayOf(
-                (mask shr 24 and 0xff).toByte(),
-                (mask shr 16 and 0xff).toByte(),
-                (mask shr 8 and 0xff).toByte(),
-                (mask and 0xff).toByte()
-            )
-        ).hostAddress
-    }
-
-
-    fun getNetworkInterfaceInfo():Map<String, String?>  {
-        var interfacesMap = HashMap<String, String?>()
-        val interfaces = NetworkInterface.getNetworkInterfaces()
-        while (interfaces.hasMoreElements()) {
-            val networkInterface = interfaces.nextElement()
-            if (!networkInterface.isLoopback && networkInterface.isUp) {
-                println("Interface Name: ${networkInterface.displayName}")
-                interfacesMap.put("Interface Name" , networkInterface.displayName)
-
-                // 获取 MAC 地址
-                val macAddress = networkInterface.hardwareAddress?.joinToString(":") { "%02X".format(it) }
-                println("MAC Address: $macAddress")
-                interfacesMap.put("MAC Address" , macAddress)
-
-                // 获取 IP 地址和子网掩码
-                networkInterface.interfaceAddresses.forEach { address ->
-                    val ip = address.address.hostAddress
-                    val subnetPrefixLength = address.networkPrefixLength
-                    val subnetMask = getSubnetMask(subnetPrefixLength.toInt())
-                    println("IP Address: $ip")
-                    println("Subnet Mask: $subnetMask")
-                    interfacesMap.put("IP Address" , ip)
-                    interfacesMap.put("Subnet Mask" , subnetMask)
-
-                }
-            }
-        }
-        return interfacesMap
-    }
-
-
-    fun getDnsServers(context: Context): List<String> {
-        val dnsServers = mutableListOf<String>()
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork
-
-        if (network != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val linkProperties: LinkProperties? = connectivityManager.getLinkProperties(network)
-            linkProperties?.dnsServers?.forEach { dns ->
-                dnsServers.add(dns.hostAddress ?: "")
-            }
-        }
-        return dnsServers
-    }
-
 
     fun getInfo(context: Context): JSONObject{
-        val networkJSON = JSONObject()
-        val ipMapInfo = getNetworkInterfaceInfo()
-        networkJSON.put("Interface Name" , ipMapInfo.get("Interface Name"))
-        networkJSON.put("MAC Address" , ipMapInfo.get("MAC Address"))
-        networkJSON.put("IP Address" , ipMapInfo.get("IP Address"))
-        networkJSON.put("Subnet Mask" , ipMapInfo.get("Subnet Mask"))
 
-        networkJSON.put("DNS Servers" , getDnsServers(context))
+        val networkJSON = JSONObject()
+
+
+        val allInterfacesJSONArray = JSONArray()
+        val wifiJSONArray = JSONArray()
+
+
+        val networkInfoReader = NetworkInfoReader(context)
+        // 获取所有网络接口信息
+        val allInterfaces = networkInfoReader.getAllNetworkInterfaces()
+
+
+        allInterfaces.forEach { info ->
+            val interfacesJSON = JSONObject()
+            Log.d("sb" , "getNetworkInfo getInfo= "+info.name)
+            interfacesJSON.put("Name:", info.name )
+            interfacesJSON.put("Display Name:", info.displayName )
+            interfacesJSON.put("IP Addresses:", info.ipAddresses.joinToString() )
+            interfacesJSON.put("MAC Address:", info.macAddress )
+            interfacesJSON.put("Subnet Mask:", info.subnetMask )
+            interfacesJSON.put("DNS Servers:", info.dnsServers.joinToString() )
+            interfacesJSON.put("Is Up:", info.isUp )
+            interfacesJSON.put("MTU:", info.mtu )
+            allInterfacesJSONArray.put(interfacesJSON)
+        }
+        networkJSON.put("allInterfaces", allInterfacesJSONArray)
+
+
+        // 获取WiFi接口信息
+        val wifiInfo = networkInfoReader.getActiveWifiInfo()
+        wifiInfo?.let {
+            Log.d("sb" , "getNetworkInfo wifiInfo= "+it)
+
+            val wifiJSON = JSONObject()
+            wifiJSON.put("Name:", it.name )
+            wifiJSON.put("Display Name:", it.displayName )
+            wifiJSON.put("IP Addresses:", it.ipAddresses.firstOrNull())
+            wifiJSON.put("MAC Address:", it.macAddress )
+            wifiJSON.put("Subnet Mask:", it.subnetMask )
+            wifiJSON.put("DNS Servers:", it.dnsServers.joinToString() )
+            wifiJSON.put("Is Up:", it.isUp )
+            wifiJSON.put("MTU:", it.mtu )
+            wifiJSONArray.put(wifiJSON)
+        }
+        networkJSON.put("wifiInterfaces", wifiJSONArray.length())
+
+
+        Log.d("sb" , "getNetworkInfo getInfo= $networkJSON")
 
         return networkJSON
 

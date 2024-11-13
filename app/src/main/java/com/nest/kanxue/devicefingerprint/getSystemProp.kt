@@ -246,7 +246,7 @@ object getSystemProp {
 
 
         val systemAllInfoSON = JSONObject();
-        systemAllInfoSON.put("name", "systemPro") ;
+        systemAllInfoSON.put("name", "SystemPro") ;
         systemAllInfoSON.put("data", Base64.encodeToString(systemProJSON.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
 
         return systemAllInfoSON

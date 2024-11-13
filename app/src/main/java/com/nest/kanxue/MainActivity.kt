@@ -1,12 +1,14 @@
 package com.nest.kanxue
 
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.FrameLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
@@ -21,19 +23,23 @@ import com.nest.kanxue.inputmethodlist.getInputMethodList
 import com.nest.kanxue.model_system_determination.CheckSIM
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
 import com.nest.kanxue.modifymachine.CheckInstallPackageChangerApps
+import com.nest.kanxue.network.NetworkInfoReader
 import com.nest.kanxue.network.getNetworkInfo
-import com.nest.kanxue.procstat.ProcStatReader
 import com.nest.kanxue.root.CheckRoot
 import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue.simulators.CheckFileDir
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.simulators.CheckSystemProp
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
+import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,7 +61,10 @@ class MainActivity : AppCompatActivity() {
         "/system/bin",
         "/vendor/lib",
         "/system/framework",
-        "/system/fonts"
+        "/system/fonts",
+//        "/proc/stat",
+//        "/sys/firmware/devicetree/base/compatible",
+//        "/dev/fuse"
     )
 
     // request to write external storage
@@ -88,7 +97,13 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
             Log.d("sb" , "getHardwareRelated = "+getHardwareRelated.getInfo(this))
-            Log.d("sb" , "getNetwork = "+getNetworkInfo.getInfo(this))
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
+            }
+
+
+
             Log.d("sb" , "getBootId = "+getBootId.getBootIdUsingCat())
             Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
             Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
@@ -101,7 +116,40 @@ class MainActivity : AppCompatActivity() {
             Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
             Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
             Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.detectChangerApps(this))
-            Log.d("sb" , "CheckRoot = "+ CheckRoot.getInfo(this))
+            Log.d("sb" , " Build.getSerial()  = "+ Build.getSerial() )
+            Log.d("sb" , " Build.getSerial()  = "+ Build.SERIAL )
+
+
+            Log.d("sb" , "getDrmId = "+ Base64.encodeToString(getDrmId.getDrmId(), Base64.DEFAULT))
+                val DrmId = getDrmId.getDrmId()
+                with(ByteArrayConverter) {
+                    // 1. 转换成十六进制
+                    println("DrmId Hex: ${DrmId?.toHexString()}")
+                    // 输出: 48656c6c6f
+
+                    val result = StringBuilder(DrmId!!.size * 2)
+                    DrmId!!.forEach { byte ->
+                        result.append(String.format("%02x", byte))
+                    }
+                    println("result result: ${DrmId?.toHexString()}")
+
+
+
+                }
+
+
+            // 在后台线程中读取文件
+            lifecycleScope.launch(Dispatchers.IO) {
+//                Log.d("sb" , "ReadProcStat = "+ ReadProcStat.getInfo())
+                val reader = com.nest.kanxue.devicefingerprint.DrmIdFetcher.readCompatible()
+                Log.d("sb" , "readCompatible = $reader")
+
+//                // 在主线程更新UI
+//                withContext(Dispatchers.Main) {
+//                    findViewById<TextView>(R.id.textView).text = content
+//                }
+            }
+
 
 
         }
@@ -139,13 +187,19 @@ class MainActivity : AppCompatActivity() {
             val devicefingerprintJsonArray = JSONArray();
             devicefingerprintJsonArray.put(getStorageInfo.getstorage_emulated_0())
             devicefingerprintJsonArray.put(getSystemProp.getPropertyAllInfo())
-            devicefingerprintJsonArray.put(JSONObject().put("DRMID", Base64.encodeToString(getDrmId.getDrmId(), Base64.DEFAULT)))
 
-            devicefingerprintson.put("name", "devicefingerprint") ;
+            with(ByteArrayConverter) {
+                // 1. 转换成十六进制
+                val DrmId = getDrmId.getDrmId()
+                devicefingerprintJsonArray.put(JSONObject().put("DRMID(已经是16进制)", DrmId?.toHexString()))
+            }
+//            devicefingerprintson.put("name", "devicefingerprint") ;
+            devicefingerprintson.put("name", "设备指纹") ;
             val devicefingerprintList: List<*>? = Gson().fromJson(devicefingerprintJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
             val devicefingerprintJsonString = Gson().toJson(devicefingerprintList) // 将 List 转换为 JSON 字符串
             devicefingerprintson.put("data", Base64.encodeToString(devicefingerprintJsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(devicefingerprintson)
+
 
 
             //5.设备标识
@@ -164,7 +218,8 @@ class MainActivity : AppCompatActivity() {
             val list: List<*>? = gson.fromJson(statJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
             val jsonString = gson.toJson(list) // 将 List 转换为 JSON 字符串
             statJson.put("data", Base64.encodeToString(jsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            DeviceIdentifiersJson.put("name", "deviceIdentifiers") ;
+//            DeviceIdentifiersJson.put("name", "deviceIdentifiers") ;
+            DeviceIdentifiersJson.put("name", "设备标识") ;
             DeviceIdentifiersJsonArray.put(statJson) ;
             DeviceIdentifiersJsonArray.put(getDeviceIdentifiers.getInfo(this)) ;
             val deviceIdentifiersList: List<*>? = Gson().fromJson(DeviceIdentifiersJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
@@ -175,17 +230,24 @@ class MainActivity : AppCompatActivity() {
 
             //6.硬件相关
             val hardwareJson = JSONObject();
-            hardwareJson.put("name", "HardwareRelated") ;
+//            hardwareJson.put("name", "HardwareRelated") ;
+            hardwareJson.put("name", "硬件相关") ;
             hardwareJson.put("data", Base64.encodeToString(getHardwareRelated.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
             uploadJsonArray.put(hardwareJson)
 
 
 
             //7.网络相关
+            val networkJson = JSONObject();
+            networkJson.put("name", "网络相关") ;
+            networkJson.put("data", Base64.encodeToString(getNetworkInfo.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+            uploadJsonArray.put(networkJson)
+
 
 
 
             //8.boot id
+            //cat命令读取/proc/sys/kernel/random/boot_id
             val BootIdJson = JSONObject();
             BootIdJson.put("name", "BootId") ;
             BootIdJson.put("data", Base64.encodeToString(getBootId.getBootIdUsingCat().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
@@ -257,33 +319,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-            //17.读取/proc/stat下的所有内容
-//            Log.d("sb", "ProcStatReader.readProcStat() = " + ProcStatReader.readProcStat())
-//            val procStatJson = JSONObject();
-//            procStatJson.put("name", "/proc/stat下的所有内容") ;
-//            procStatJson.put("data", Base64.encodeToString(ProcStatReader.readProcStat().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-//            uploadJsonArray.put(procStatJson)
-            // 方法1：获取所有原始数据
-            val allStats = ProcStatReader.readProcStat()
-            println("原始数据:")
-            allStats.forEach { (key, value) ->
-                println("$key: $value")
-            }
-
-            println("\n")
-
-            // 方法2：获取CPU详细信息
-            val cpuStats = ProcStatReader.parseCpuStats()
-            println("CPU统计信息:")
-            cpuStats.forEach { stat ->
-                println(stat)
-            }
-
-            println("\n")
-
-            // 方法3：获取格式化的完整报告
-            println(ProcStatReader.getFormattedStats())
-
+            //17.读取/proc/stat下的所有内容:没有权限
+//            Log.d("sb", "ProcStatReader.readProcStat() = " + ReadProcStat.getInfo())
 
 
             UploadData.upload(this , externalDir , uploadJsonArray)
@@ -300,6 +337,17 @@ class MainActivity : AppCompatActivity() {
         }else{
             // request to write external storage
             requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        }
+
+
+        // check has permission READ_PHONE_STATE
+        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
+            onRequestPermissionsResult(
+                RESULT_OK, arrayOf(android.Manifest.permission.READ_PHONE_STATE), intArrayOf(
+                    PackageManager.PERMISSION_GRANTED));
+        }else{
+            // request to write external storage
+            requestPermissions(arrayOf(android.Manifest.permission.READ_PHONE_STATE), 0)
         }
     }
 

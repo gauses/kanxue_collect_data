@@ -10,6 +10,7 @@ import android.hardware.SensorManager
 import android.os.BatteryManager
 import android.os.Build
 import android.provider.Settings
+import android.text.TextUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -49,7 +50,7 @@ object getHardwareRelated {
         }
     }
 
-
+    //运行内存
     fun getMemoryInfo(context: Context): Pair<Long, Long> {
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val memoryInfo = ActivityManager.MemoryInfo()
@@ -161,13 +162,25 @@ object getHardwareRelated {
 
 
         //内部存储（EMMC或UFS闪存）的序列号：/sys/block/mmcblk0/device/serial  （核心）
-        hardwareJSON.put("storageSerial" , readFileContent("/sys/block/mmcblk0/device/serial"))
+        if (TextUtils.isEmpty(readFileContent("/sys/block/mmcblk0/device/serial"))) {
+            hardwareJSON.put("storageSerial" , "没有权限，读取不到")
+        }else{
+            hardwareJSON.put("storageSerial" , readFileContent("/sys/block/mmcblk0/device/serial"))
+        }
 
         //显示设备序列号：/sys/devices/soc0/serial_number  (核心)
-        hardwareJSON.put("displaySerial" , readFileContent("/sys/devices/soc0/serial_number"))
+        if (TextUtils.isEmpty(readFileContent("/sys/devices/soc0/serial_number"))) {
+            hardwareJSON.put("displaySerial" , "没有权限，读取不到")
+        }else{
+            hardwareJSON.put("displaySerial" , readFileContent("/sys/devices/soc0/serial_number"))
+        }
 
         //内部存储SD卡的CID：/sys/block/mmcblk0/device/cid（核心）
-        hardwareJSON.put("sdCardCIDSerial" , readFileContent("/sys/block/mmcblk0/device/cid"))
+        if (TextUtils.isEmpty(readFileContent("/sys/block/mmcblk0/device/cid"))) {
+            hardwareJSON.put("sdCardCIDSerial" , "没有权限，读取不到")
+        }else{
+            hardwareJSON.put("sdCardCIDSerial" , readFileContent("/sys/block/mmcblk0/device/cid"))
+        }
 
 
         //电池相关，例如电压、电池容量、电池温度、电池健康百分比、充电状态等
@@ -180,7 +193,11 @@ object getHardwareRelated {
 
 
         //input设备相关，读取/proc/bus/input/devices，获取注册的input设备信息，比如Name和Sysfs。
-        hardwareJSON.put("InputDevicesInfo" , getInputDevicesInfo())
+        if (TextUtils.isEmpty(getInputDevicesInfo())) {
+            hardwareJSON.put("InputDevicesInfo" , "没有权限，读取不到")
+        }else{
+            hardwareJSON.put("InputDevicesInfo" , getInputDevicesInfo())
+        }
 
         return  hardwareJSON
 

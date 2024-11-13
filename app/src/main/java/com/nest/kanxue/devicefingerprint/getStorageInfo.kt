@@ -38,7 +38,8 @@ object getStorageInfo {
         println("Available Space: ${availableSpace / (1024 * 1024)} MB")
 
         val storageInfoSON = JSONObject();
-        storageInfoSON.put("name", "storage_emulated_0_space") ;
+//        storageInfoSON.put("name", "storage_emulated_0_space") ;
+        storageInfoSON.put("name", "SD卡/storage/emulated/0下可用空间大小和总空间大小") ;
 
         val storageInfoArray = JSONArray();
         storageInfoArray.put(JSONObject().put("TotalSpace", "${totalSpace / (1024 * 1024)} MB"))
