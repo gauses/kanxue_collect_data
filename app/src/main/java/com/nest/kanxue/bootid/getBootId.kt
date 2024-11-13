@@ -1,6 +1,8 @@
 package com.nest.kanxue.bootid
 
+import android.util.Log
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 
 //boot id
@@ -9,6 +11,39 @@ import java.io.InputStreamReader
 
 
 object getBootId {
+
+    fun readDeviceTreeCompatible(): String? {
+        val path = "/sys/firmware/devicetree/base/compatible"
+        val file = File(path)
+
+        if (!file.exists()) {
+            println("File Not Found At Path: $path")
+            return null
+        }
+
+        return try {
+            file.readText(Charsets.UTF_8).trim()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+
+//    fun getdevicetreeUsingCat(): String? {
+//        return try {
+//            val process = ProcessBuilder("cat", "/sys/firmware/devicetree/base/compatible").start()
+//            val reader = BufferedReader(InputStreamReader(process.inputStream))
+//            val bootId = reader.readLine().trim()
+//            reader.close()
+//            process.destroy()
+//            bootId
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            null
+//        }
+//    }
+
 
     fun getBootIdUsingCat(): String? {
         return try {

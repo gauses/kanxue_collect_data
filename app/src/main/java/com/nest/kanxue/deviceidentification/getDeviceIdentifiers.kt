@@ -21,11 +21,14 @@ import kotlin.system.measureTimeMillis
 
 object getDeviceIdentifiers {
 
+    var adId: String? = null
+    var error = ""
+    var latency: Long = 1L
+
+
     fun fetchAdIdWithLatency(context: Context, callback: (String?, Long, String?,) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            var adId: String? = null
-            var error = ""
-            val latency = measureTimeMillis {
+            latency = measureTimeMillis {
                 try {
                     val info = AdvertisingIdClient.getAdvertisingIdInfo(context)
                     adId = info.id
@@ -40,17 +43,7 @@ object getDeviceIdentifiers {
         }
     }
 
-//    suspend fun getAdvertisingId(context: Context): String? {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
-//                adInfo.id
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//                null
-//            }
-//        }
-//    }
+
 
     fun generateDeviceUUID(context: Context): String {
         val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
@@ -100,21 +93,21 @@ object getDeviceIdentifiers {
 //            println("Advertising ID: $adId")
 //            DeviceIdentifiersJSON.put("ad_aaid", adId)
 //        }
-        fetchAdIdWithLatency(context) { adId, latency, error ->
-            println("Ad ID: $adId")
-            println("Fetch Ad ID Latency: ${latency}ms")
+//        fetchAdIdWithLatency(context) { adId, latency, error ->
+//            println("Ad ID: $adId")
+//            println("Fetch Ad ID Latency: ${latency}ms")
 
             DeviceIdentifiersJSON.put("advertiserId", adId)
-            DeviceIdentifiersJSON.put("advertiserId_FetchTime" , latency) //应该是获取google ad的请求时间
+            DeviceIdentifiersJSON.put("advertiserId_FetchTime" , latency ) //应该是获取google ad的请求时间
             DeviceIdentifiersJSON.put("gaidError", error)
 
-        }
+//        }
 
-        if(!TextUtils.isEmpty(getIMEI(context))){
-            DeviceIdentifiersJSON.put("imei", ""+getIMEI(context))
-        }else{
-            DeviceIdentifiersJSON.put("imei", "高版本Android基本获取不到")
-        }
+//        if(!TextUtils.isEmpty(getIMEI(context))){
+//            DeviceIdentifiersJSON.put("imei", ""+getIMEI(context))
+//        }else{
+            DeviceIdentifiersJSON.put("imei", "获取不到")
+//        }
 
         DeviceIdentifiersJSON.put("mdm_uuid", "不知道是什么")
         DeviceIdentifiersJSON.put("ps_imei", "不知道是什么")

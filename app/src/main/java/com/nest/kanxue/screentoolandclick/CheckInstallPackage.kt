@@ -3,8 +3,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 object CheckInstallPackage {
 
-    fun checkInstalledAutoClickerApps(context: Context): Boolean {
+    fun checkInstalledAutoClickerApps(context: Context): ArrayList<String> {
         // 模拟点击应用的包名列表
+
+        var installedPackageList = ArrayList<String>()
         val targetPackages = listOf(
             "com.cygery.repetitouch.pro", "com.cyjh.mobileanjian", "com.touchsprite.android",
             "com.cjzs123.zhushou", "com.touchspriteent.android", "com.zidongdianji",
@@ -28,17 +30,17 @@ object CheckInstallPackage {
         for (packageInfo in installedPackages) {
             if (targetPackages.contains(packageInfo.packageName)) {
                 println("检测到已安装的模拟点击应用: ${packageInfo.packageName}")
-                return true
+                installedPackageList.add(packageInfo.packageName)
             }
         }
 
-        // 如果没有检测到目标包名
-        return false
+        return installedPackageList
     }
 
 
 
-    fun checkInstalledScreenshotApps(context: Context): Boolean {
+    fun checkInstalledScreenshotApps(context: Context): ArrayList<String> {
+        var installedPackageList = ArrayList<String>()
         // 目标截图应用的包名列表
         val targetScreenshotPackages = listOf(
             "com.github.uiautomator",
@@ -55,12 +57,11 @@ object CheckInstallPackage {
         for (packageInfo in installedPackages) {
             if (targetScreenshotPackages.contains(packageInfo.packageName)) {
                 println("检测到已安装的截图应用: ${packageInfo.packageName}")
-                return true
+                installedPackageList.add(packageInfo.packageName)
             }
         }
 
-        // 如果没有检测到目标包名
-        return false
+        return installedPackageList
     }
 
 }

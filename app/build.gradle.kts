@@ -7,10 +7,14 @@ android {
     namespace = "com.nest.kanxue_data"
     compileSdk = 34
 
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
     defaultConfig {
         applicationId = "com.nest.kanxue_data"
         minSdk = 31
-        targetSdk = 21
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -50,6 +54,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.ads.identifier)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,7 +64,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation ("com.google.code.gson:gson:2.8.9")
-    implementation ("com.google.android.gms:play-services-ads-identifier:18.0.1")
+//    implementation ("com.google.android.gms:play-services-ads-identifier:18.0.1")
 
 
 }

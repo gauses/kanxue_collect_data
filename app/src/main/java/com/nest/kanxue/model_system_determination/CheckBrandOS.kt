@@ -12,6 +12,44 @@ import java.io.InputStreamReader
 object CheckBrandOS {
 
 
+    fun getBrandToCheck(): String{
+        val brand = getSystemProperty("ro.product.brand")?.lowercase() ?: return "unKnown"
+        val manufacturer = getSystemProperty("ro.product.manufacturer")?.lowercase() ?: return "unKnown"
+
+        // 定义要检测的品牌名，适配为母公司品牌名称
+        val brandToCheck = when {
+            (brand == "redmi" || brand == "poco") && manufacturer == "xiaomi" -> "xiaomi"
+            (brand == "honor" || brand == "huawei") && manufacturer == "huawei" -> "huawei"
+            (brand == "galaxy" || brand == "samsung") && manufacturer == "samsung" -> "samsung"
+            brand == "vivo" && manufacturer == "vivo" -> "vivo"
+            brand == "oppo" && manufacturer == "oppo" -> "oppo"
+            else -> brand
+        }
+
+        return brandToCheck
+
+    }
+
+    fun getSystemList(): ArrayList<String>{
+        val list  = ArrayList<String>()
+        // 遍历 /system/framework/ 目录下所有 .jar 文件
+        val frameworkDir = File("/system/framework/")
+        if (frameworkDir.exists() && frameworkDir.isDirectory) {
+
+            // 查找包含品牌名的 .jar 文件
+            frameworkDir.listFiles()?.forEach { file ->
+                if (file.isFile && file.extension.equals("jar", ignoreCase = true)) {
+                    val fileName = file.name
+                    list.add(fileName)
+                }
+            }
+
+        }
+        return list
+
+    }
+
+
     fun isBrandAndSystemMatched(): Boolean {
         // 获取设备品牌和制造商信息
         val brand = getSystemProperty("ro.product.brand")?.lowercase() ?: return false

@@ -18,7 +18,7 @@ object getAPKInstallPath {
             // 过滤出指定包名的应用
             if (packageNames.contains(appInfo.packageName)) {
                 val apkPath = appInfo.sourceDir  // 获取APK的路径
-                appsWithPaths[appInfo.packageName] = apkPath
+                appsWithPaths[appInfo.packageName] = ""+apkPath
             }
         }
         return appsWithPaths
@@ -29,6 +29,7 @@ object getAPKInstallPath {
 
         val selectedPackageNames = listOf(
             "com.tencent.mm", //微信
+            "com.google.android.gms", //gms
             "com.android.vending" //google 市场
         )
 
@@ -36,8 +37,17 @@ object getAPKInstallPath {
         val appsWithPaths = getInstalledAppsWithApkPath(context, selectedPackageNames)
         appsWithPaths.forEach { (packageName, apkPath) ->
             println("Package: $packageName, APK Path: $apkPath")
-            APKPathJSON.put(packageName , apkPath)
+            APKPathJSON.put(packageName , ""+apkPath)
         }
+
+        selectedPackageNames.forEach {
+            if (!APKPathJSON.has(it)) {
+                APKPathJSON.put(it , "未安装")
+                println("Package: 未安装 = $it")
+            }
+        }
+
+
         return APKPathJSON
     }
 

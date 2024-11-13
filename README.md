@@ -30,26 +30,27 @@ input设备相关，读取/proc/bus/input/devices，获取注册的input设备�
 这一个暂时没有加
 #环境检测：
 一、HOOK环境:
-在libNetHTProtect.so中主要检测了crc校验，还有frida和Xposed的一些特征： (网易易盾手游SDK，暂时没有加)
+在libNetHTProtect.so中主要检测了crc校验，还有frida和Xposed的一些特征： (这个网易易盾手游SDK，暂时没有加)
+，
+2.检查/dev/wgzs目录下的内容是否存在，若存在则获取值：  (因为非root环境，读取不了/dev，手动cat也看不到信息，暂时没有加)
 
 
-这个暂时没有加：改机软件，
-2.检查/dev/wgzs目录下的内容是否存在，若存在则获取值：  (因为非root环境，读取不了/dev)
+7.检测seLinux安全上下文，cat /proc/%d/attr/prev检测app进程的selinux安全上下文是否为“u:r:zygote:s0(没有看懂，暂时没有加)
 
 
-这个暂时没有加：Root和Root工具，
-7.检测seLinux安全上下文，cat /proc/%d/attr/prev检测app进程的selinux安全上下文是否为“u:r:zygote:s0(没有看懂)
+ebpf检测(没有看懂，暂时没有加)
 
 
-这个暂时没有加：
-ebpf检测(没有看懂)
+//没有权限
+//出于安全原因/proc/stat，Google自 Android O 起已阻止用户应用程序访问
+https://issuetracker.google.com/issues/37140047?pli=1
+3.读取/proc/stat下的所有内容
 
 
+4.读取/sys/firmware/devicetree/base/compatible
 
 
-
-
-
+5.stat /dev/fuse
 
 
 
@@ -57,14 +58,3 @@ ebpf检测(没有看懂)
 2.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
 
 
-
-//没有权限
-3.读取/proc/stat下的所有内容
-
-
-
-4.读取/sys/firmware/devicetree/base/compatible
-
-
-
-5.stat /dev/fuse

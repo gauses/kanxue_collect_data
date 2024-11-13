@@ -2,10 +2,26 @@ package com.nest.kanxue.modifymachine
 
 import android.content.Context
 import android.content.pm.PackageManager
+import org.json.JSONObject
 
 //1.检测是否安装了改机软件:
 
 object CheckInstallPackageChangerApps {
+
+
+
+    fun getInfo(context: Context): JSONObject{
+        val jsonObject = JSONObject()
+        val list = detectChangerApps(context)
+        if (list.isNotEmpty()) {
+            jsonObject.put("是否安装改机软件", true)
+            jsonObject.put("安装改机软件列表", list)
+        }else{
+            jsonObject.put("是否安装改机软件", false)
+
+        }
+        return jsonObject
+    }
 
         private val CHANGER_PACKAGES = listOf(
             "com.yztc.studio.plugin",     // 易改机
@@ -27,12 +43,11 @@ object CheckInstallPackageChangerApps {
      * 检查是否安装了改机软件
      * @return 返回检测到的改机软件包名列表
      */
-    fun detectChangerApps(context: Context): List<String> {
+    private fun detectChangerApps(context: Context): List<String> {
         val installedChangers = mutableListOf<String>()
 
         // 方法1：通过 PackageManager 检查
         checkWithPackageManager(context, installedChangers)
-
         return installedChangers.distinct()
     }
 

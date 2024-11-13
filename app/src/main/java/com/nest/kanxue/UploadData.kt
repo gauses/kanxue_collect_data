@@ -18,7 +18,7 @@ object UploadData {
 
 
 
-    fun upload(context: Context, externalDir:String, uploadJsonArray:JSONArray){
+    fun upload(context: Context, externalDir:String, allDataFileName:String, uploadJsonArray:JSONArray){
 
 
         if (externalDir.isEmpty()){
@@ -26,11 +26,7 @@ object UploadData {
             return
         }
 
-        val allDataFileName = Build.MODEL + "_" + Utils.getCurrentDateTime() + "_" + "allData.txt"
-        val uploadTxTtoServerState = "开始保存数据到本地，文件名称是$allDataFileName————————>"
-        java.io.File("$externalDir/$allDataFileName").writeText(uploadJsonArray.toString())
-        Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
-        Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir")
+
 
 
         val apiService = RetrofitClient.create()

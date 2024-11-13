@@ -8,6 +8,7 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
@@ -36,6 +37,7 @@ import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -94,6 +96,39 @@ class MainActivity : AppCompatActivity() {
         frame.addView(mySurfaceView)
 
 
+        // check has permission WRITE_EXTERNAL_STORAGE
+        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            onRequestPermissionsResult(
+                RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+                    PackageManager.PERMISSION_GRANTED));
+        }else{
+            // request to write external storage
+            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+        }
+
+        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, ) == PackageManager.PERMISSION_GRANTED){
+            onRequestPermissionsResult(
+                RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+                    PackageManager.PERMISSION_GRANTED));
+        }else{
+            // request to write external storage
+            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+        }
+
+
+
+        // check has permission READ_PHONE_STATE
+        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
+            onRequestPermissionsResult(
+                RESULT_OK, arrayOf(android.Manifest.permission.READ_PHONE_STATE), intArrayOf(
+                    PackageManager.PERMISSION_GRANTED));
+        }else{
+            // request to write external storage
+            requestPermissions(arrayOf(android.Manifest.permission.READ_PHONE_STATE), 0)
+        }
+
+        val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
+
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
             Log.d("sb" , "getHardwareRelated = "+getHardwareRelated.getInfo(this))
@@ -105,6 +140,9 @@ class MainActivity : AppCompatActivity() {
 
 
             Log.d("sb" , "getBootId = "+getBootId.getBootIdUsingCat())
+//            Log.d("sb" , "getdevicetreeUsingCat = "+getBootId.getdevicetreeUsingCat())
+//            Log.d("sb" , "getdevicetreeUsingCat = "+getBootId.readDeviceTreeCompatible())
+
             Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
             Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
             Log.d("sb" , "checkHookEnvironment = "+ checkHookEnvironment.getInfo())
@@ -115,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("sb" , "CheckSystemProp = "+ CheckSystemProp.checkEmulatorPropsWithGetprop())
             Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
             Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
-            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.detectChangerApps(this))
+            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.getInfo(this))
             Log.d("sb" , " Build.getSerial()  = "+ Build.getSerial() )
             Log.d("sb" , " Build.getSerial()  = "+ Build.SERIAL )
 
@@ -158,6 +196,16 @@ class MainActivity : AppCompatActivity() {
 
 
         val button = findViewById<Button>(R.id.stat_file_btn)
+
+        getDeviceIdentifiers.fetchAdIdWithLatency(this) { adId, latency, error ->
+            println("Ad ID: $adId")
+            println("Fetch Ad ID Latency: ${latency}ms")
+
+            Thread.sleep(2000)
+
+//            button.performClick()
+        }
+
         // 设置点击事件
         button.setOnClickListener {
             // 在按钮点击时执行的代码
@@ -179,10 +227,11 @@ class MainActivity : AppCompatActivity() {
 //            uploadJsonArray.put(getDents64JSON)
 
 
-
+            uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
 
 
             //4.设备指纹
+            uploadStatus.text = "开始采集设备指纹————————>"
             val devicefingerprintson = JSONObject();
             val devicefingerprintJsonArray = JSONArray();
             devicefingerprintJsonArray.put(getStorageInfo.getstorage_emulated_0())
@@ -203,6 +252,7 @@ class MainActivity : AppCompatActivity() {
 
 
             //5.设备标识
+            uploadStatus.text = "开始采集设备标识————————>"
             val DeviceIdentifiersJson = JSONObject();
             val DeviceIdentifiersJsonArray = JSONArray();
 
@@ -229,6 +279,7 @@ class MainActivity : AppCompatActivity() {
 
 
             //6.硬件相关
+            uploadStatus.text = "开始采集硬件相关————————>"
             val hardwareJson = JSONObject();
 //            hardwareJson.put("name", "HardwareRelated") ;
             hardwareJson.put("name", "硬件相关") ;
@@ -238,6 +289,7 @@ class MainActivity : AppCompatActivity() {
 
 
             //7.网络相关
+            uploadStatus.text = "开始采集网络相关————————>"
             val networkJson = JSONObject();
             networkJson.put("name", "网络相关") ;
             networkJson.put("data", Base64.encodeToString(getNetworkInfo.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
@@ -257,6 +309,7 @@ class MainActivity : AppCompatActivity() {
 
 
             //9.APK Install Path
+            uploadStatus.text = "开始采集APK Install Path————————>"
             val apkInstallPathJson = JSONObject();
             apkInstallPathJson.put("name", "apkInstallPath") ;
             apkInstallPathJson.put("data", Base64.encodeToString(getAPKInstallPath.getAPKPath(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
@@ -272,28 +325,29 @@ class MainActivity : AppCompatActivity() {
 
             //11.机型和系统判定 + Bootloader解锁状态 + SIM卡
             val deviceOSListJson = JSONObject();
-            deviceOSListJson.put("name", "deviceOS") ;
-            deviceOSListJson.put("data", Base64.encodeToString(Gson().toJson(getModelSystemDeter.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+//            deviceOSListJson.put("name", "deviceOS") ;
+            deviceOSListJson.put("name", "机型") ;
+            deviceOSListJson.put("data", Base64.encodeToString(getModelSystemDeter.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(deviceOSListJson)
 
 
             //12.截图和模拟点击
             val AutoClickerJson = JSONObject();
             AutoClickerJson.put("name", "AutoClick") ;
-            AutoClickerJson.put("data", Base64.encodeToString(Gson().toJson(CheckAutoClick.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            AutoClickerJson.put("data", Base64.encodeToString(CheckAutoClick.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(AutoClickerJson)
 
 
             //13.模拟器 :扫描常见的模拟器特征
             val simulatorsJson = JSONObject();
-            simulatorsJson.put("name", "模拟器") ;
-            simulatorsJson.put("data", Base64.encodeToString(Gson().toJson(CheckSimulators.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(AutoClickerJson)
+            simulatorsJson.put("name", "模拟器特征") ;
+            simulatorsJson.put("data", Base64.encodeToString(CheckSimulators.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(simulatorsJson)
 
             //14.改机软件
             val chageAppsJson = JSONObject();
-            chageAppsJson.put("name", "改机软件") ;
-            chageAppsJson.put("data", Base64.encodeToString(Gson().toJson(CheckInstallPackageChangerApps.detectChangerApps(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            chageAppsJson.put("name", "是否安装改机软件") ;
+            chageAppsJson.put("data", Base64.encodeToString(CheckInstallPackageChangerApps.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(chageAppsJson)
 
 
@@ -322,33 +376,26 @@ class MainActivity : AppCompatActivity() {
             //17.读取/proc/stat下的所有内容:没有权限
 //            Log.d("sb", "ProcStatReader.readProcStat() = " + ReadProcStat.getInfo())
 
+            val allDataFileName = Build.MODEL + "_" + Utils.getCurrentDateTime() + "_" + "allData.txt"
+            val uploadTxTtoServerState = "开始保存数据到本地，文件名称是$allDataFileName————————>"
+            uploadStatus.text = uploadTxTtoServerState
+            var externalDir111 = this.filesDir ;
+            java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
+            Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
+//            Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir")
+            Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
+            UploadData.upload(this , externalDir111.path , allDataFileName, uploadJsonArray)
+            Thread.sleep(3000)
+            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileName————————>"
 
-            UploadData.upload(this , externalDir , uploadJsonArray)
+
+            // 在主线程更新UI
 
 
         }
 
 
-        // check has permission WRITE_EXTERNAL_STORAGE
-        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            onRequestPermissionsResult(
-                RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), intArrayOf(
-                    PackageManager.PERMISSION_GRANTED));
-        }else{
-            // request to write external storage
-            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-        }
 
-
-        // check has permission READ_PHONE_STATE
-        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
-            onRequestPermissionsResult(
-                RESULT_OK, arrayOf(android.Manifest.permission.READ_PHONE_STATE), intArrayOf(
-                    PackageManager.PERMISSION_GRANTED));
-        }else{
-            // request to write external storage
-            requestPermissions(arrayOf(android.Manifest.permission.READ_PHONE_STATE), 0)
-        }
     }
 
 
