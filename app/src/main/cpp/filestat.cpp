@@ -26,6 +26,13 @@ Java_com_nest_kanxue_devicefingerprint_DrmIdFetcher_getFileStat(JNIEnv *env, job
         char buffer[512];
         snprintf(buffer, sizeof(buffer),
                  "{"
+//                 "\"atime_sec\": %ld,"
+//                 "\"atime_nsec\": %u,"
+//                 "\"ctime_sec\": %ld,"
+//                 "\"ctime_nsec\": %u,"
+//                 "\"mtime_sec\": %ld,"
+//                 "\"mtime_nsec\": %u"
+//                 "}",
                  "\"atime_sec\": %ld,"
                  "\"atime_nsec\": %u,"
                  "\"ctime_sec\": %ld,"

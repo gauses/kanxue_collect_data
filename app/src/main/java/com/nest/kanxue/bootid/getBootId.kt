@@ -13,6 +13,13 @@ import java.io.InputStreamReader
 
 object getBootId {
 
+    fun getCgroupUsingFile(): String {
+        return try {
+            File("/proc/self/cgroup").bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            "Error reading cgroup: ${e.message}"
+        }
+    }
 
 
     fun getUnameUsingCat(): String {
@@ -90,6 +97,8 @@ object getBootId {
         jsonObject.put("uname -a", getUnameUsingCat())
         jsonObject.put("SystemInfo", DrmIdFetcher.getSystemInfo())
         jsonObject.put("Uname", DrmIdFetcher.getUname())
+        jsonObject.put("/proc/self/cgroup", getCgroupUsingFile())
+
         return jsonObject
 
     }

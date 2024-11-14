@@ -134,16 +134,14 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
 
             val fileName = "/sdcard/Android/data/com.google.android.gms"
-            val fileStat = DrmIdFetcher.getFileStat(fileName)
+
             val fileStat2 = Stat_File_Utils.getFileStat(fileName)
-            Log.d("sb" , "getFileStat DrmIdFetcher= "+fileStat)
             Log.d("sb" , "getFileStat getFileStat= "+fileStat2)
-            Log.d("sb" , "getBootId ============= ")
 
 
+            Log.d("sb" , "getCgroupUsingCat= "+getBootId.getCgroupUsingFile())
+            uploadStatus.text = getBootId.getCgroupUsingFile()
 
-
-//
 //            lifecycleScope.launch(Dispatchers.IO) {
 //                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
 //            }

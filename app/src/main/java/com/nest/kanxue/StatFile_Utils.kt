@@ -1,5 +1,6 @@
 package com.nest.kanxue
 
+import com.google.gson.Gson
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -21,7 +22,7 @@ data class FileStat(
     val DeviceType: String?,
     val Uid: String?,
     val Gid: String?,
-    val secTime: String,
+    val secTime: JSONObject?,
     val exist: Boolean
 )
 fun convertToJSONObject(user: FileStat): JSONObject {
@@ -58,7 +59,7 @@ object Stat_File_Utils {
         var DeviceType: String? = null
         var Uid: String? = null
         var Gid: String? = null
-        var secTime: String = ""
+        var secTime: JSONObject? = null
 
 
         try {
@@ -98,7 +99,7 @@ object Stat_File_Utils {
                 DeviceType = parseDeviceType(result.toString())
                 Uid = parseUid(result.toString())
                 Gid = parseGid(result.toString())
-                secTime = DrmIdFetcher.getFileStat(filePath)
+                secTime = JSONObject(DrmIdFetcher.getFileStat(filePath))
 
 
             }
