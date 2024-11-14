@@ -132,13 +132,8 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
-//            Log.d("sb" , "getBootId = "+getBootId.getSysInfoCat())
-//            Log.d("sb" , "getBootId = "+getBootId.getMeminfoUsingCat())
-//            Log.d("sb" , "getBootId = "+getBootId.getMountsUsingCat())
-//            Log.d("sb" , "DrmIdFetcher = "+DrmIdFetcher.getSystemInfo())
-//            Log.d("sb" , "DrmIdFetcher = "+DrmIdFetcher.getUname())
 
-            val fileName = "/sdcard/"
+            val fileName = "/sdcard/Android/data/com.google.android.gms"
             val fileStat = DrmIdFetcher.getFileStat(fileName)
             val fileStat2 = Stat_File_Utils.getFileStat(fileName)
             Log.d("sb" , "getFileStat DrmIdFetcher= "+fileStat)
@@ -269,8 +264,7 @@ class MainActivity : AppCompatActivity() {
 
             val statJsonArray = JSONArray();
             stat_file_path.forEach { fileName ->
-//                val fileStat = Stat_File_Utils.getFileStat(fileName)
-                val fileStat = DrmIdFetcher.getFileStat(fileName)
+                val fileStat = Stat_File_Utils.getFileStat(fileName)
                 statJsonArray.put(JSONObject().put(fileName, fileStat))
             }
 

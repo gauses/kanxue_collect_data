@@ -1,5 +1,6 @@
 package com.nest.kanxue
 
+import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -20,7 +21,7 @@ data class FileStat(
     val DeviceType: String?,
     val Uid: String?,
     val Gid: String?,
-
+    val secTime: String,
     val exist: Boolean
 )
 fun convertToJSONObject(user: FileStat): JSONObject {
@@ -37,6 +38,7 @@ fun convertToJSONObject(user: FileStat): JSONObject {
         put("DeviceType", user.DeviceType)
         put("Uid", user.Uid)
         put("Gid", user.Gid)
+        put("secTime", user.secTime)
 
 
     }
@@ -56,6 +58,8 @@ object Stat_File_Utils {
         var DeviceType: String? = null
         var Uid: String? = null
         var Gid: String? = null
+        var secTime: String = ""
+
 
         try {
             val process = Runtime.getRuntime().exec("stat $filePath")
@@ -94,6 +98,7 @@ object Stat_File_Utils {
                 DeviceType = parseDeviceType(result.toString())
                 Uid = parseUid(result.toString())
                 Gid = parseGid(result.toString())
+                secTime = DrmIdFetcher.getFileStat(filePath)
 
 
             }
@@ -105,7 +110,7 @@ object Stat_File_Utils {
 
         // 检查是否所有字段都成功获取，若有任何一个字段为 null，则 exist 设为 false
         val exist = accessTime != null && modifyTime != null && changeTime != null && inode != null
-        return FileStat(accessTime, modifyTime, changeTime, inode, Blocks, IOBlocks, Device, Links, DeviceType, Uid, Gid ,exist)
+        return FileStat(accessTime, modifyTime, changeTime, inode, Blocks, IOBlocks, Device, Links, DeviceType, Uid, Gid ,secTime, exist)
     }
 
 
