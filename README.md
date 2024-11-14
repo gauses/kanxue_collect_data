@@ -53,8 +53,16 @@ https://issuetracker.google.com/issues/37140047?pli=1
 5.stat /dev/fuse
 
 
-
-
 2.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
+
+
+
+收集帮忙加多两个文件内容：
+/proc/self/mounts
+/proc/meminfo
+
+加多两个api调用结果返回：
+sysinfo
+uname -a
 
 

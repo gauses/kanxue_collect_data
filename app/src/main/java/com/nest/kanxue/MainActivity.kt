@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.checkenvironment.checkHookEnvironment
+import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
 import com.nest.kanxue.devicefingerprint.getSystemProp
@@ -131,62 +132,72 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
-            Log.d("sb" , "getHardwareRelated = "+getHardwareRelated.getInfo(this))
+//            Log.d("sb" , "getBootId = "+getBootId.getSysInfoCat())
+//            Log.d("sb" , "getBootId = "+getBootId.getMeminfoUsingCat())
+//            Log.d("sb" , "getBootId = "+getBootId.getMountsUsingCat())
+//            Log.d("sb" , "DrmIdFetcher = "+DrmIdFetcher.getSystemInfo())
+//            Log.d("sb" , "DrmIdFetcher = "+DrmIdFetcher.getUname())
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
-            }
-
-
-
-            Log.d("sb" , "getBootId = "+getBootId.getBootIdUsingCat())
-//            Log.d("sb" , "getdevicetreeUsingCat = "+getBootId.getdevicetreeUsingCat())
-//            Log.d("sb" , "getdevicetreeUsingCat = "+getBootId.readDeviceTreeCompatible())
-
-            Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
-            Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
-            Log.d("sb" , "checkHookEnvironment = "+ checkHookEnvironment.getInfo())
-            Log.d("sb" , "CheckBrandOS = "+ getModelSystemDeter.getInfo(this))
-            Log.d("sb" , "CheckSIM = "+ CheckSIM.getSimOperator(this))
-
-            Log.d("sb" , "CheckAutoClick = "+ CheckAutoClick.getInfo(this))
-            Log.d("sb" , "CheckSystemProp = "+ CheckSystemProp.checkEmulatorPropsWithGetprop())
-            Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
-            Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
-            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.getInfo(this))
-            Log.d("sb" , " Build.getSerial()  = "+ Build.getSerial() )
-            Log.d("sb" , " Build.getSerial()  = "+ Build.SERIAL )
-
-
-            Log.d("sb" , "getDrmId = "+ Base64.encodeToString(getDrmId.getDrmId(), Base64.DEFAULT))
-                val DrmId = getDrmId.getDrmId()
-                with(ByteArrayConverter) {
-                    // 1. 转换成十六进制
-                    println("DrmId Hex: ${DrmId?.toHexString()}")
-                    // 输出: 48656c6c6f
-
-                    val result = StringBuilder(DrmId!!.size * 2)
-                    DrmId!!.forEach { byte ->
-                        result.append(String.format("%02x", byte))
-                    }
-                    println("result result: ${DrmId?.toHexString()}")
+            val fileName = "/sdcard/"
+            val fileStat = DrmIdFetcher.getFileStat(fileName)
+            val fileStat2 = Stat_File_Utils.getFileStat(fileName)
+            Log.d("sb" , "getFileStat DrmIdFetcher= "+fileStat)
+            Log.d("sb" , "getFileStat getFileStat= "+fileStat2)
+            Log.d("sb" , "getBootId ============= ")
 
 
 
-                }
+
+//
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
+//            }
 
 
-            // 在后台线程中读取文件
-            lifecycleScope.launch(Dispatchers.IO) {
-//                Log.d("sb" , "ReadProcStat = "+ ReadProcStat.getInfo())
-                val reader = com.nest.kanxue.devicefingerprint.DrmIdFetcher.readCompatible()
-                Log.d("sb" , "readCompatible = $reader")
 
-//                // 在主线程更新UI
-//                withContext(Dispatchers.Main) {
-//                    findViewById<TextView>(R.id.textView).text = content
+//
+//            Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
+//            Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
+//            Log.d("sb" , "checkHookEnvironment = "+ checkHookEnvironment.getInfo())
+//            Log.d("sb" , "CheckBrandOS = "+ getModelSystemDeter.getInfo(this))
+//            Log.d("sb" , "CheckSIM = "+ CheckSIM.getSimOperator(this))
+//
+//            Log.d("sb" , "CheckAutoClick = "+ CheckAutoClick.getInfo(this))
+//            Log.d("sb" , "CheckSystemProp = "+ CheckSystemProp.checkEmulatorPropsWithGetprop())
+//            Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
+//            Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
+//            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.getInfo(this))
+//            Log.d("sb" , " Build.getSerial()  = "+ Build.SERIAL )
+//
+//
+//            Log.d("sb" , "getDrmId = "+ Base64.encodeToString(getDrmId.getDrmId(), Base64.DEFAULT))
+//                val DrmId = getDrmId.getDrmId()
+//                with(ByteArrayConverter) {
+//                    // 1. 转换成十六进制
+//                    println("DrmId Hex: ${DrmId?.toHexString()}")
+//                    // 输出: 48656c6c6f
+//
+//                    val result = StringBuilder(DrmId!!.size * 2)
+//                    DrmId!!.forEach { byte ->
+//                        result.append(String.format("%02x", byte))
+//                    }
+//                    println("result result: ${DrmId?.toHexString()}")
+//
+//
+//
 //                }
-            }
+
+
+//            // 在后台线程中读取文件
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                val reader = com.nest.kanxue.devicefingerprint.DrmIdFetcher.readCompatible()
+//                Log.d("sb" , "readCompatible = $reader")
+//
+////                // 在主线程更新UI
+////                withContext(Dispatchers.Main) {
+////                    findViewById<TextView>(R.id.textView).text = content
+////                }
+//            }
 
 
 
@@ -258,8 +269,9 @@ class MainActivity : AppCompatActivity() {
 
             val statJsonArray = JSONArray();
             stat_file_path.forEach { fileName ->
-                val fileStat = Stat_File_Utils.getFileStat(fileName)
-                statJsonArray.put(JSONObject().put(fileName, convertToJSONObject(fileStat)))
+//                val fileStat = Stat_File_Utils.getFileStat(fileName)
+                val fileStat = DrmIdFetcher.getFileStat(fileName)
+                statJsonArray.put(JSONObject().put(fileName, fileStat))
             }
 
             val statJson = JSONObject();
@@ -299,10 +311,12 @@ class MainActivity : AppCompatActivity() {
 
 
             //8.boot id
+            //cat命令读取/proc/self/mounts
             //cat命令读取/proc/sys/kernel/random/boot_id
+            ///proc/meminfo
             val BootIdJson = JSONObject();
-            BootIdJson.put("name", "BootId") ;
-            BootIdJson.put("data", Base64.encodeToString(getBootId.getBootIdUsingCat().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+            BootIdJson.put("name", "/proc目录相关信息") ;
+            BootIdJson.put("data", Base64.encodeToString(getBootId.getInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
             uploadJsonArray.put(BootIdJson)
 
 

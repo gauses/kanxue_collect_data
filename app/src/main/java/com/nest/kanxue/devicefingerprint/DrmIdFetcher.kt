@@ -20,6 +20,11 @@ object DrmIdFetcher {
         }
     }
 
+    external fun getSystemInfo(): String?
+    external fun getUname(): String?
+
+    external fun getFileStat(path: String): String
+
 
 
 }

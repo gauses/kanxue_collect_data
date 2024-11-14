@@ -1,6 +1,7 @@
 package com.nest.kanxue.root
 
 import android.content.Context
+import android.util.Log
 import com.nest.kanxue.root.CheckMagiskFile.checkMagiskFiles
 import com.nest.kanxue.root.CheckSuFile.checkSuFiles
 import com.nest.kanxue.screentoolandclick.BuildTagsChecker
@@ -25,16 +26,25 @@ object CheckRoot {
 
         //su
         if (checkSuFiles().isNotEmpty()){
-            rootJSON.put("检查su文件是否存在" , "不存在")
-        }else{
             rootJSON.put("检查su文件是否存在" , "存在")
+            checkSuFiles().forEach {
+                rootJSON.put("检查su文件存在的路径" , it)
+                Log.d("sb", "checkSuFiles su文件 = $it")
+            }
+        }else{
+            rootJSON.put("检查su文件是否存在" , "不存在")
         }
 
         //magisk
         if (checkMagiskFiles().isNotEmpty()){
-            rootJSON.put("检查magisk文件是否存在" , "不存在")
-        }else{
             rootJSON.put("检查magisk文件是否存在" , "存在")
+            checkSuFiles().forEach {
+                rootJSON.put("检查magisk文件存在的路径" , it)
+                Log.d("sb", "checkSuFiles magisk文件 = $it")
+            }
+        }else{
+            rootJSON.put("检查magisk文件是否存在" , "不存在")
+
         }
 
 
