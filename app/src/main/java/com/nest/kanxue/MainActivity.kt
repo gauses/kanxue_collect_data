@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
@@ -33,6 +36,7 @@ import com.nest.kanxue.simulators.CheckFileDir
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.simulators.CheckSystemProp
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
+import com.nest.kanxue.statprocpath.FileStatsAdapter
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
@@ -46,6 +50,12 @@ import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
+
+
+    private lateinit var pathInput: EditText
+    private lateinit var confirmButton: Button
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var statsAdapter: FileStatsAdapter
 
 
 
@@ -65,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         "/vendor/lib",
         "/system/framework",
         "/system/fonts",
+        "/proc/self/mounts"
 //        "/proc/stat",
 //        "/sys/firmware/devicetree/base/compatible",
 //        "/dev/fuse"
@@ -130,13 +141,41 @@ class MainActivity : AppCompatActivity() {
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
 
+        pathInput = findViewById(R.id.pathInput)
+        confirmButton = findViewById(R.id.confirmButton)
+        recyclerView = findViewById(R.id.recyclerView)
+        pathInput.setText("/proc/self/mounts")
+        // 设置 RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        statsAdapter = FileStatsAdapter()
+        recyclerView.adapter = statsAdapter
+
+        confirmButton.setOnClickListener {
+            val path = pathInput.text.toString()
+//            if (path.isNotEmpty() && path.startsWith("/proc")) {
+            if (path.isNotEmpty() ) {
+                val file = File(path)
+                if (file.exists()) {
+                    val fileList = mutableListOf<FileStat>()
+                    val statFile = Stat_File_Utils.getFileStat(path)
+                    Log.d("sb" , "confirmButton statFile = $statFile")
+                    fileList.add(statFile)
+                    statsAdapter.submitList(fileList)
+                }
+            }
+        }
+
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
-            val fileName = "/sdcard/Android/data/com.google.android.gms"
 
-            val fileStat2 = Stat_File_Utils.getFileStat(fileName)
-            Log.d("sb" , "getFileStat getFileStat= "+fileStat2)
+            stat_file_path.forEach { fileName ->
+                val fileStat = Stat_File_Utils.getFileStat(fileName)
+                Log.d("sb" , "getFileStat getFileStat= "+fileName)
+                Log.d("sb" , "getFileStat getFileStat= "+fileStat)
+                Log.d("sb" , "getFileStat getFileStat================")
+            }
+
 
 
             Log.d("sb" , "getCgroupUsingCat= "+getBootId.getCgroupUsingFile())

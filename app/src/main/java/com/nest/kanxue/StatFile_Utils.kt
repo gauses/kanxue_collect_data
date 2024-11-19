@@ -11,28 +11,37 @@ import java.util.regex.Pattern
 //这个也有很多大厂用了，主要针对以下一些文件和文件目录，读取文件结构体，然后上传修改时间等信息。
 
 data class FileStat(
+    val fileName: String,
+
     val accessTime: String?,
     val modifyTime: String?,
     val changeTime: String?,
+
     val inode: String?,
     val Blocks:  String?,
     val IOBlocks:  String?,
+
     val Device: String?,
     val Links: String?,
     val DeviceType: String?,
     val Uid: String?,
     val Gid: String?,
     val secTime: JSONObject?,
-    val exist: Boolean
-)
+    val exist: Boolean,
+
+    val Size:  String?
+
+    )
 fun convertToJSONObject(user: FileStat): JSONObject {
     return JSONObject().apply {
+        put("fileName", user.fileName)
         put("accessTime", user.accessTime)
         put("modifyTime", user.modifyTime)
         put("changeTime", user.changeTime)
         put("exist", user.exist)
         put("inode", user.inode)
         put("Blocks", user.Blocks)
+        put("Size", user.Size)
         put("IOBlocks", user.IOBlocks)
         put("Device", user.Device)
         put("Links", user.Links)
@@ -48,6 +57,7 @@ fun convertToJSONObject(user: FileStat): JSONObject {
 object Stat_File_Utils {
 
     fun getFileStat(filePath: String): FileStat {
+        var fileName: String = ""
         var accessTime: String? = null
         var modifyTime: String? = null
         var changeTime: String? = null
@@ -60,6 +70,7 @@ object Stat_File_Utils {
         var Uid: String? = null
         var Gid: String? = null
         var secTime: JSONObject? = null
+        var Size: String? = ""
 
 
         try {
@@ -100,6 +111,8 @@ object Stat_File_Utils {
                 Uid = parseUid(result.toString())
                 Gid = parseGid(result.toString())
                 secTime = JSONObject(DrmIdFetcher.getFileStat(filePath))
+                fileName = parseFile(result.toString())
+                Size = parseSize(result.toString())
 
 
             }
@@ -111,7 +124,8 @@ object Stat_File_Utils {
 
         // 检查是否所有字段都成功获取，若有任何一个字段为 null，则 exist 设为 false
         val exist = accessTime != null && modifyTime != null && changeTime != null && inode != null
-        return FileStat(accessTime, modifyTime, changeTime, inode, Blocks, IOBlocks, Device, Links, DeviceType, Uid, Gid ,secTime, exist)
+        return FileStat(fileName, accessTime, modifyTime, changeTime, inode, Blocks, IOBlocks,
+            Device, Links, DeviceType, Uid, Gid ,secTime, exist, Size)
     }
 
 
@@ -122,11 +136,11 @@ object Stat_File_Utils {
         return if (matcher.find()) matcher.group(1) else ""
     }
 
-    fun parseBlocks(statOutput: String): String? {
+    fun parseBlocks(statOutput: String): String {
         // 使用正则表达式来匹配 Blocks 字段
         val pattern = Pattern.compile("Blocks:\\s*(\\d+)")
         val matcher = pattern.matcher(statOutput)
-        return if (matcher.find()) matcher.group(1) else ""
+        return if (matcher.find()) matcher.group(1).trim() else ""
     }
 
     fun parseIOBlocks(statOutput: String): String? {
@@ -138,7 +152,7 @@ object Stat_File_Utils {
 
     fun parseDevice(statOutput: String): String? {
         // 使用正则表达式来匹配 Blocks 字段
-        val pattern = Pattern.compile("Device:\\s*(\\d+)")
+        val pattern = Pattern.compile("Device:\\s*([^\\s]+)")
         val matcher = pattern.matcher(statOutput)
         return if (matcher.find()) matcher.group(1) else ""
     }
@@ -152,21 +166,41 @@ object Stat_File_Utils {
 
     fun parseDeviceType(statOutput: String): String? {
         // 使用正则表达式来匹配 Blocks 字段
-        val pattern = Pattern.compile("DeviceType:\\s*(\\d+)")
+        val pattern = Pattern.compile("Device type:\\s*(\\d+,\\d+)")
         val matcher = pattern.matcher(statOutput)
         return if (matcher.find()) matcher.group(1) else ""
     }
 
     fun parseUid(statOutput: String): String? {
-        // 使用正则表达式来匹配 Blocks 字段
-        val pattern = Pattern.compile("Uid:\\s*(\\d+)")
+        // 使用正则表达式来匹配 Uid 字段
+        val pattern = Pattern.compile("Uid:\\s*\\(\\s*(\\d+/\\s*\\w+)\\)")
+        // 解析:
+        // Uid: - 匹配 Uid: 字面值
+        // \\s* - 匹配任意空白字符
+        // \\( - 匹配左括号
+        // (\\d+/\\s*\\w+) - 捕获组：匹配数字+斜杠+空白字符+文字
+        // \\) - 匹配右括号
         val matcher = pattern.matcher(statOutput)
         return if (matcher.find()) matcher.group(1) else ""
     }
 
     fun parseGid(statOutput: String): String? {
         // 使用正则表达式来匹配 Blocks 字段
-        val pattern = Pattern.compile("Gid:\\s*(\\d+)")
+        val pattern = Pattern.compile("Gid:\\s*\\(\\s*(\\d+/\\s*\\w+)\\)")
+        val matcher = pattern.matcher(statOutput)
+        return if (matcher.find()) matcher.group(1) else ""
+    }
+
+    fun parseFile(statOutput: String): String {
+        // 使用正则表达式来匹配 Blocks 字段
+        val pattern = Pattern.compile("File:\\s*([^\\n]+)")
+        val matcher = pattern.matcher(statOutput)
+        return if (matcher.find()) matcher.group(1).trim() else ""
+    }
+
+    fun parseSize(statOutput: String): String {
+        // 使用正则表达式来匹配 Blocks 字段
+        val pattern = Pattern.compile("Size:\\s*(\\d+)")
         val matcher = pattern.matcher(statOutput)
         return if (matcher.find()) matcher.group(1) else ""
     }
