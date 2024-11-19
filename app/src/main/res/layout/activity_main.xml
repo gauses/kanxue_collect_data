@@ -32,7 +32,7 @@
         android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="debu测试，不用点击"
+        android:text="debug测试，不用点击"
         app:layout_constraintLeft_toRightOf="@id/stat_file_btn"
         app:layout_constraintRight_toRightOf="parent"
  />
@@ -48,7 +48,7 @@
         tools:layout_editor_absoluteY="115dp" />
 
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
         android:id="@+id/pathInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

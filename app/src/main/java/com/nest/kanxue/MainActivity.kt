@@ -4,8 +4,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -16,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.getBootId
+import com.nest.kanxue.cert.CertificateReader
 import com.nest.kanxue.checkenvironment.checkHookEnvironment
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
@@ -52,7 +57,7 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
 
 
-    private lateinit var pathInput: EditText
+    private lateinit var autoCompleteTextView: AutoCompleteTextView
     private lateinit var confirmButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var statsAdapter: FileStatsAdapter
@@ -141,18 +146,62 @@ class MainActivity : AppCompatActivity() {
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
 
-        pathInput = findViewById(R.id.pathInput)
+        autoCompleteTextView = findViewById(R.id.pathInput)
+        // 获取/proc目录下的所有文件和目录
+        fun getProcPaths(): List<String> {
+            val paths = mutableListOf<String>()
+            try {
+                val procDir = File("/proc")
+                procDir.listFiles()?.forEach { file ->
+                    paths.add("/proc/${file.name}")
+                    // 如果是目录，添加其子目录
+                    if (file.isDirectory) {
+                        file.listFiles()?.forEach { subFile ->
+                            paths.add("/proc/${file.name}/${subFile.name}")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return paths
+        }
+        // 创建适配器
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            getProcPaths()
+        )
+        // 设置适配器
+        autoCompleteTextView.setAdapter(adapter)
+        // 设置触发自动完成的最小字符数
+        autoCompleteTextView.threshold = 1
+        // 设置输入监听
+        autoCompleteTextView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // 如果输入的不是以/proc开头，自动添加/proc/
+                if (!s.toString().startsWith("/proc")) {
+                    autoCompleteTextView.setText("/proc/${s.toString()}")
+                    autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
+                }
+            }
+        })
+
+
         confirmButton = findViewById(R.id.confirmButton)
         recyclerView = findViewById(R.id.recyclerView)
-        pathInput.setText("/proc/self/mounts")
+        autoCompleteTextView.setText("/proc/")
         // 设置 RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         statsAdapter = FileStatsAdapter()
         recyclerView.adapter = statsAdapter
 
         confirmButton.setOnClickListener {
-            val path = pathInput.text.toString()
-//            if (path.isNotEmpty() && path.startsWith("/proc")) {
+            val path = autoCompleteTextView.text.toString()
             if (path.isNotEmpty() ) {
                 val file = File(path)
                 if (file.exists()) {
@@ -185,6 +234,37 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
 //            }
 
+            // 在 Activity 或 Fragment 中使用
+            val certificateReader = CertificateReader()
+
+//            // 读取系统证书
+//            val systemCerts = certificateReader.readSystemCertificates()
+//            systemCerts.forEach { cert ->
+//                println("证书别名: ${cert.alias}")
+//                println("主题: ${cert.subject}")
+//                println("颁发者: ${cert.issuer}")
+//                println("有效期从: ${cert.validFrom}")
+//                println("有效期至: ${cert.validTo}")
+//                println("序列号: ${cert.serialNumber}")
+//                println("版本: ${cert.version}")
+//                println("文件路径: ${cert.path}")
+//                println("----------------")
+//            }
+
+            // 读取用户安装的证书
+            val userCerts = certificateReader.readUserCertificates()
+            println("证书: ${userCerts.size}")
+            userCerts.forEach { cert ->
+                println("证书别名: ${cert.alias}")
+                println("主题: ${cert.subject}")
+                println("颁发者: ${cert.issuer}")
+                println("有效期从: ${cert.validFrom}")
+                println("有效期至: ${cert.validTo}")
+                println("序列号: ${cert.serialNumber}")
+                println("版本: ${cert.version}")
+                println("文件路径: ${cert.path}")
+                println("----------------")
+            }
 
 
 //
@@ -404,6 +484,13 @@ class MainActivity : AppCompatActivity() {
             uploadJsonArray.put(rootJson)
 
 
+            //16.证书
+            val certJson = JSONObject();
+            certJson.put("name", "证书(System + User)") ;
+            certJson.put("data", Base64.encodeToString(CertificateReader().getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(certJson)
+
+
             //16.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
             try {
                 val sishuiliuyunJson = JSONObject();
@@ -427,7 +514,6 @@ class MainActivity : AppCompatActivity() {
             var externalDir111 = this.filesDir ;
             java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
             Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
-//            Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir")
             Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
             UploadData.upload(this , externalDir111.path , allDataFileName, uploadJsonArray)
             Thread.sleep(3000)
