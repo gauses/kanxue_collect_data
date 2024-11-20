@@ -1,6 +1,8 @@
 package com.nest.kanxue
 
+import ScreenUtils
 import android.content.pm.PackageManager
+import android.hardware.display.DisplayManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -51,6 +53,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.concurrent.thread
 
 
@@ -218,28 +223,46 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
 
 
-            stat_file_path.forEach { fileName ->
-                val fileStat = Stat_File_Utils.getFileStat(fileName)
-                Log.d("sb" , "getFileStat getFileStat= "+fileName)
-                Log.d("sb" , "getFileStat getFileStat= "+fileStat)
-                Log.d("sb" , "getFileStat getFileStat================")
-            }
+//            stat_file_path.forEach { fileName ->
+//                val fileStat = Stat_File_Utils.getFileStat(fileName)
+//                Log.d("sb" , "getFileStat getFileStat= "+fileName)
+//                Log.d("sb" , "getFileStat getFileStat= "+fileStat)
+//                Log.d("sb" , "getFileStat getFileStat================")
+//            }
 
 
 
             Log.d("sb" , "getCgroupUsingCat= "+getBootId.getCgroupUsingFile())
             uploadStatus.text = getBootId.getCgroupUsingFile()
 
+
+// 注册显示器监听
+            val displayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
+            displayManager.registerDisplayListener(displayListener, null)
+            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
+
 //            lifecycleScope.launch(Dispatchers.IO) {
 //                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
 //            }
 
             // 在 Activity 或 Fragment 中使用
-            val certificateReader = CertificateReader()
+//            val certificateReader = CertificateReader()
 
-//            // 读取系统证书
+            // 读取系统证书
 //            val systemCerts = certificateReader.readSystemCertificates()
 //            systemCerts.forEach { cert ->
+//                println("证书别名: ${cert.alias}")
+//                println("证书内容: ${cert}")
+//                println("----------------")
+//
+//            }
+//            Log.d("sb" , "证书 = "+CertificateReader().getInfo(this).toString())
+
+
+//            // 读取用户安装的证书
+//            val userCerts = certificateReader.readUserCertificates()
+//            println("证书: ${userCerts.size}")
+//            userCerts.forEach { cert ->
 //                println("证书别名: ${cert.alias}")
 //                println("主题: ${cert.subject}")
 //                println("颁发者: ${cert.issuer}")
@@ -250,21 +273,6 @@ class MainActivity : AppCompatActivity() {
 //                println("文件路径: ${cert.path}")
 //                println("----------------")
 //            }
-
-            // 读取用户安装的证书
-            val userCerts = certificateReader.readUserCertificates()
-            println("证书: ${userCerts.size}")
-            userCerts.forEach { cert ->
-                println("证书别名: ${cert.alias}")
-                println("主题: ${cert.subject}")
-                println("颁发者: ${cert.issuer}")
-                println("有效期从: ${cert.validFrom}")
-                println("有效期至: ${cert.validTo}")
-                println("序列号: ${cert.serialNumber}")
-                println("版本: ${cert.version}")
-                println("文件路径: ${cert.path}")
-                println("----------------")
-            }
 
 
 //
@@ -491,7 +499,14 @@ class MainActivity : AppCompatActivity() {
             uploadJsonArray.put(certJson)
 
 
-            //16.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
+            //17.screen (主屏 + 副屏)
+            val screenJson = JSONObject();
+            screenJson.put("name", "屏幕(主屏+副屏)") ;
+            screenJson.put("data", Base64.encodeToString(updateDisplaysInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(screenJson)
+
+
+            //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
             try {
                 val sishuiliuyunJson = JSONObject();
                 sishuiliuyunJson.put("name", "sishuiliuyun-系统相关属性") ;
@@ -559,4 +574,66 @@ class MainActivity : AppCompatActivity() {
 //
 //        return result
 //    }
+
+
+    private val displayListener = object : DisplayManager.DisplayListener {
+        override fun onDisplayAdded(displayId: Int) {
+            Log.d("MainActivity", "新增显示器，ID: $displayId")
+            updateDisplaysInfo()
+            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
+        }
+
+        override fun onDisplayRemoved(displayId: Int) {
+            Log.d("MainActivity", "移除显示器，ID: $displayId")
+            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
+        }
+
+        override fun onDisplayChanged(displayId: Int) {
+            Log.d("MainActivity", "显示器变化，ID: $displayId")
+            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
+        }
+    }
+
+    private fun updateDisplaysInfo() : JSONObject{
+
+        val jsonObject = JSONObject()
+
+        // 获取显示模式
+        val displayMode = ScreenUtils(this).getDisplayMode()
+
+        val info = buildString {
+            appendLine("═══════════════ 显示状态 ═══════════════")
+            appendLine("屏幕镜像状态: ${if (displayMode.isScreenMirroring) "正在进行屏幕镜像" else "未进行屏幕镜像"}")
+            appendLine()
+
+            // 显示主屏信息
+            val (main, secondary) = ScreenUtils(this@MainActivity).getScreensInfo()
+            appendLine("═══════════════ 主屏信息 ═══════════════")
+            appendLine(main.toString())
+
+            jsonObject.put("主屏", main.toString())
+            jsonObject.put("主屏正在scrcpy或其他工具进行镜像显示", displayMode.isScreenMirroring)
+
+            // 显示副屏信息
+            appendLine("\n═══════════════ 副屏信息 ═══════════════")
+            if (secondary.isEmpty()) {
+                appendLine("当前未连接副屏")
+                if (displayMode.isScreenMirroring) {
+                    appendLine("(检测到屏幕正在通过scrcpy或其他工具进行镜像显示)")
+                }
+            } else {
+                secondary.forEachIndexed { index, screen ->
+                    if (index > 0) appendLine("\n——————— 副屏 ${index + 1} ———————")
+                    appendLine(screen.toString())
+                    jsonObject.put("副屏 - $index", screen.toString())
+                }
+            }
+        }
+
+
+        // 打印到日志
+        Log.d("DisplayInfo", info)
+
+        return jsonObject
+    }
 }

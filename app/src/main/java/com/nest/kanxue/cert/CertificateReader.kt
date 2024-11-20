@@ -3,6 +3,7 @@ package com.nest.kanxue.cert
 import android.content.Context
 import android.security.KeyChain
 import android.util.Log
+import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -44,6 +45,19 @@ class CertificateReader() {
             systemJSONObject.put("cert.serialNumber", cert.serialNumber)
             systemJSONObject.put("cert.version", cert.version)
             systemJSONObject.put("cert.path", cert.path)
+
+            systemJSONObject.put("cert.tBSCertificate", cert.tBSCertificate?.toList())
+            systemJSONObject.put("cert.signature", cert.signature?.toList())
+            systemJSONObject.put("cert.sigAlgName", cert.sigAlgName)
+            systemJSONObject.put("cert.sigAlgOID", cert.sigAlgOID)
+            systemJSONObject.put("cert.sigAlgParams", cert.sigAlgParams?.toList())
+            systemJSONObject.put("cert.issuerUniqueID", cert.issuerUniqueID?.toList())
+            systemJSONObject.put("cert.subjectUniqueID", cert.subjectUniqueID?.toList())
+            systemJSONObject.put("cert.keyUsage", cert.keyUsage?.toList())
+            systemJSONObject.put("cert.extendedKeyUsage", cert.extendedKeyUsage)
+            systemJSONObject.put("cert.basicConstraints", cert.basicConstraints)
+            systemJSONObject.put("cert.subjectAlternativeNames", cert.subjectAlternativeNames)
+            systemJSONObject.put("cert.issuerAlternativeNames", cert.issuerAlternativeNames)
             systemJSONOArray.put(systemJSONObject)
         }
         return systemJSONOArray
@@ -63,6 +77,22 @@ class CertificateReader() {
             userJSONObject.put("cert.serialNumber", cert.serialNumber)
             userJSONObject.put("cert.version", cert.version)
             userJSONObject.put("cert.path", cert.path)
+
+            userJSONObject.put("cert.tBSCertificate", cert.tBSCertificate)
+
+            userJSONObject.put("cert.signature", cert.signature)
+            
+            userJSONObject.put("cert.sigAlgName", cert.sigAlgName)
+            userJSONObject.put("cert.sigAlgOID", cert.sigAlgOID)
+            userJSONObject.put("cert.sigAlgParams", cert.sigAlgParams?.decodeToString())
+            userJSONObject.put("cert.issuerUniqueID", cert.issuerUniqueID)
+            userJSONObject.put("cert.subjectUniqueID", cert.subjectUniqueID)
+            userJSONObject.put("cert.keyUsage", cert.keyUsage)
+            userJSONObject.put("cert.extendedKeyUsage", cert.extendedKeyUsage)
+            userJSONObject.put("cert.basicConstraints", cert.basicConstraints)
+            userJSONObject.put("cert.subjectAlternativeNames", cert.subjectAlternativeNames)
+            userJSONObject.put("cert.issuerAlternativeNames", cert.issuerAlternativeNames)
+
             userJSONOArray.put(userJSONObject)
         }
         return userJSONOArray
@@ -77,127 +107,47 @@ class CertificateReader() {
         val certificates = mutableListOf<CertificateInfo>()
 
         try {
-            // 方法1：通过 KeyStore 读取
-            val keyStore = KeyStore.getInstance(KEYSTORE_TYPE)
-            keyStore.load(null, null)
-
-            val aliases = keyStore.aliases()
-            while (aliases.hasMoreElements()) {
-                val alias = aliases.nextElement()
-                val cert = keyStore.getCertificate(alias) as? X509Certificate
-
-                cert?.let {
-                    certificates.add(
-                        CertificateInfo(
-                            alias = alias,
-                            subject = it.subjectDN.name,
-                            issuer = it.issuerDN.name,
-                            validFrom = it.notBefore,
-                            validTo = it.notAfter,
-                            serialNumber = it.serialNumber.toString(16),
-                            version = it.version
-                        )
-                    )
-                }
-            }
-
-//            // 方法2：直接读取证书文件
-//            val systemCaDir = File(SYSTEM_CA_PATH)
-//            if (systemCaDir.exists() && systemCaDir.isDirectory) {
-//                systemCaDir.listFiles()?.forEach { file ->
-//                    if (file.isFile && file.extension == "0") {
-//                        try {
-//                            FileInputStream(file).use { fis ->
-//                                val cert = java.security.cert.CertificateFactory
-//                                    .getInstance("X.509")
-//                                    .generateCertificate(fis) as X509Certificate
-//
-//                                certificates.add(
-//                                    CertificateInfo(
-//                                        alias = file.nameWithoutExtension,
-//                                        subject = cert.subjectDN.name,
-//                                        issuer = cert.issuerDN.name,
-//                                        validFrom = cert.notBefore,
-//                                        validTo = cert.notAfter,
-//                                        serialNumber = cert.serialNumber.toString(16),
-//                                        version = cert.version,
-//                                        path = file.absolutePath
-//                                    )
-//                                )
-//                            }
-//                        } catch (e: Exception) {
-//                            e.printStackTrace()
-//                        }
-//                    }
-//                }
-//            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        return certificates
-    }
-
-
-//    /**
-//     * 读取用户安装的证书
-//     */
-//    fun readUserCertificates1(): List<CertificateInfo> {
-//        val certificates = mutableListOf<CertificateInfo>()
-//
-//        try {
-//            // 使用 AndroidCAStore 类型的 KeyStore
-//            val keyStore = KeyStore.getInstance("AndroidCAStore")
+//            // 方法1：通过 KeyStore 读取
+//            val keyStore = KeyStore.getInstance(KEYSTORE_TYPE)
 //            keyStore.load(null, null)
 //
-//
-//            val path: String? = null
-//
-//            // 获取所有别名
 //            val aliases = keyStore.aliases()
 //            while (aliases.hasMoreElements()) {
 //                val alias = aliases.nextElement()
-//                try {
-//                    // 只获取用户安装的证书（通常以 "user:" 开头）
-//                    if (alias.startsWith("user:")) {
-//                        val cert = keyStore.getCertificate(alias) as? X509Certificate
-//                        cert?.let {
-//                            certificates.add(
-//                                CertificateInfo(
-//                                    alias = alias,
-//                                    subject = it.subjectDN.name,
-//                                    issuer = it.issuerDN.name,
-//                                    serialNumber = it.serialNumber.toString(),
-//                                    validFrom = it.notBefore,
-//                                    validTo = it.notAfter,
-//                                    version = it.version,
-//                                    path = ""
-//                                )
-//                            )
-//                        }
-//                    }
-//                } catch (e: Exception) {
-//                    Log.e("", "Error reading certificate for alias: $alias", e)
+//                val cert = keyStore.getCertificate(alias) as? X509Certificate
+//
+//                cert?.let {
+//                    certificates.add(
+//                        CertificateInfo(
+//                            alias = alias,
+//                            subject = it.subjectDN.name,
+//                            issuer = it.issuerDN.name,
+//                            validFrom = it.notBefore,
+//                            validTo = it.notAfter,
+//                            serialNumber = it.serialNumber.toString(16),
+//                            version = it.version,
+//                            tBSCertificate = it.tbsCertificate,
+//                            signature = it.signature,
+//                            sigAlgName = it.sigAlgName,
+//                            sigAlgOID = it.sigAlgOID,
+//                            sigAlgParams = it.sigAlgParams,
+//                            issuerUniqueID = it.issuerUniqueID,
+//                            subjectUniqueID = it.subjectUniqueID,
+//                            keyUsage = it.keyUsage,
+//                            extendedKeyUsage = it.extendedKeyUsage,
+//                            basicConstraints = it.basicConstraints,
+//                            subjectAlternativeNames = it.subjectAlternativeNames,
+//                            issuerAlternativeNames = it.issuerAlternativeNames
+//                        )
+//                    )
 //                }
 //            }
-//        } catch (e: Exception) {
-//            Log.e("", "Error reading user certificates", e)
-//        }
-//
-//        return certificates
-//    }
 
-    /**
-     * 读取用户安装的证书
-     */
-    fun readUserCertificates(): List<CertificateInfo> {
-        val certificates = mutableListOf<CertificateInfo>()
-
-        try {
-            val userCaDir = File(USER_CA_PATH)
-            if (userCaDir.exists() && userCaDir.isDirectory) {
-                userCaDir.listFiles()?.forEach { file ->
-                    if (file.isFile) {
+            // 方法2：直接读取证书文件
+            val systemCaDir = File(SYSTEM_CA_PATH)
+            if (systemCaDir.exists() && systemCaDir.isDirectory) {
+                systemCaDir.listFiles()?.forEach { file ->
+                    if (file.isFile && file.extension == "0") {
                         try {
                             FileInputStream(file).use { fis ->
                                 val cert = java.security.cert.CertificateFactory
@@ -213,7 +163,75 @@ class CertificateReader() {
                                         validTo = cert.notAfter,
                                         serialNumber = cert.serialNumber.toString(16),
                                         version = cert.version,
-                                        path = file.absolutePath
+                                        path = file.absolutePath,
+                                        tBSCertificate = cert.tbsCertificate,
+                                        signature = cert.signature,
+                                        sigAlgName = cert.sigAlgName,
+                                        sigAlgOID = cert.sigAlgOID,
+                                        sigAlgParams = cert.sigAlgParams,
+                                        issuerUniqueID = cert.issuerUniqueID,
+                                        subjectUniqueID = cert.subjectUniqueID,
+                                        keyUsage = cert.keyUsage,
+                                        extendedKeyUsage = cert.extendedKeyUsage,
+                                        basicConstraints = cert.basicConstraints,
+                                        subjectAlternativeNames = cert.subjectAlternativeNames,
+                                        issuerAlternativeNames = cert.issuerAlternativeNames
+                                        )
+                                )
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return certificates
+    }
+
+
+    /**
+     * 读取用户安装的证书
+     */
+    fun readUserCertificates(): List<CertificateInfo> {
+        val certificates = mutableListOf<CertificateInfo>()
+
+        try {
+            val userCaDir = File(USER_CA_PATH)
+            if (userCaDir.exists() && userCaDir.isDirectory) {
+                userCaDir.listFiles()?.forEach { file ->
+                    if (file.isFile) {
+                        try {
+                            FileInputStream(file).use { fis ->
+                                val it = java.security.cert.CertificateFactory
+                                    .getInstance("X.509")
+                                    .generateCertificate(fis) as X509Certificate
+
+                                certificates.add(
+                                    CertificateInfo(
+                                        alias = file.nameWithoutExtension,
+                                        subject = it.subjectDN.name,
+                                        issuer = it.issuerDN.name,
+                                        validFrom = it.notBefore,
+                                        validTo = it.notAfter,
+                                        serialNumber = it.serialNumber.toString(16),
+                                        version = it.version,
+                                        path = file.absolutePath,
+                                        tBSCertificate = it.tbsCertificate,
+                                        signature = it.signature,
+                                        sigAlgName = it.sigAlgName,
+                                        sigAlgOID = it.sigAlgOID,
+                                        sigAlgParams = it.sigAlgParams,
+                                        issuerUniqueID = it.issuerUniqueID,
+                                        subjectUniqueID = it.subjectUniqueID,
+                                        keyUsage = it.keyUsage,
+                                        extendedKeyUsage = it.extendedKeyUsage,
+                                        basicConstraints = it.basicConstraints,
+                                        subjectAlternativeNames = it.subjectAlternativeNames,
+                                        issuerAlternativeNames = it.issuerAlternativeNames
                                     )
                                 )
                             }
@@ -231,16 +249,3 @@ class CertificateReader() {
     }
 }
 
-/**
- * 证书信息数据类
- */
-data class CertificateInfo(
-    val alias: String,
-    val subject: String,
-    val issuer: String,
-    val validFrom: java.util.Date,
-    val validTo: java.util.Date,
-    val serialNumber: String,
-    val version: Int,
-    val path: String? = null
-)

@@ -22,6 +22,17 @@
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!-- 如果是 Android 11 及以上，还需要在 manifest 中添加 queries 标签 -->
+
+    <!-- 基本显示器权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- 用于检测显示器变化 -->
+    <uses-permission android:name="android.permission.OBSERVE_DISPLAY" />
+
+    <!-- 对外显示权限 -->
+    <uses-permission android:name="android.permission.PRESENTATION_CONTENT_TO_SECONDARY_DISPLAYS" />
+
+
     <queries>
         <package android:name="com.yztc.studio.plugin" />
         <package android:name="com.soft.apk008v" />
@@ -57,6 +68,8 @@
 
         <activity
             android:name="com.nest.kanxue.MainActivity"
+            android:configChanges="screenSize|orientation|screenLayout"
+            android:supportsPictureInPicture="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
