@@ -1,5 +1,6 @@
 package com.nest.kanxue
 
+import CodecInfoCollector
 import ScreenUtils
 import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
@@ -235,11 +236,17 @@ class MainActivity : AppCompatActivity() {
             Log.d("sb" , "getCgroupUsingCat= "+getBootId.getCgroupUsingFile())
             uploadStatus.text = getBootId.getCgroupUsingFile()
 
+            // 在 Activity 或其他地方使用
+            val collector = CodecInfoCollector()
+            // 收集所有编解码器信息
+            val allCodecInfo = collector.collectCodecInfo()
+            Log.d("sb" , "allCodecInfo= $allCodecInfo")
+            collector.logCodecInfo()
 
 // 注册显示器监听
-            val displayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
-            displayManager.registerDisplayListener(displayListener, null)
-            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
+//            val displayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
+//            displayManager.registerDisplayListener(displayListener, null)
+//            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
 
 //            lifecycleScope.launch(Dispatchers.IO) {
 //                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
@@ -506,6 +513,14 @@ class MainActivity : AppCompatActivity() {
             uploadJsonArray.put(screenJson)
 
 
+            //18.codec (系统编码器和解码器列表)
+            val codecJson = JSONObject();
+            codecJson.put("name", "系统编码器和解码器列表") ;
+            codecJson.put("data", Base64.encodeToString(CodecInfoCollector().collectCodecInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(codecJson)
+
+
+
             //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
             try {
                 val sishuiliuyunJson = JSONObject();
@@ -520,7 +535,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-            //17.读取/proc/stat下的所有内容:没有权限
+            //19.读取/proc/stat下的所有内容:没有权限
 //            Log.d("sb", "ProcStatReader.readProcStat() = " + ReadProcStat.getInfo())
 
             val allDataFileName = Build.MODEL + "_" + Utils.getCurrentDateTime() + "_" + "allData.txt"
