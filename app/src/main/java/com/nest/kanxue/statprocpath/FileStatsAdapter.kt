@@ -1,5 +1,6 @@
 package com.nest.kanxue.statprocpath
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,11 +11,14 @@ import java.util.Locale
 
 // FileStatsAdapter.kt
 class FileStatsAdapter : RecyclerView.Adapter<StatsViewHolder>() {
-    private var statsList: List<FileStat> = emptyList()
+    private var statsList: List<FileStat> = mutableListOf()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     fun submitList(list: List<FileStat>) {
         statsList = list
+        Log.d("sb" , "submitList statFile = ${list.size}")
+        Log.d("sb" , "submitList statsList = ${statsList.size}")
+
         notifyDataSetChanged()
     }
 

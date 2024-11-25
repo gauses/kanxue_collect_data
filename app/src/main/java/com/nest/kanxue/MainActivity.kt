@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
+import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
+import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.cert.CertificateReader
 import com.nest.kanxue.checkenvironment.checkHookEnvironment
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
@@ -54,6 +56,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var confirmButton: Button
     private lateinit var recyclerView: RecyclerView
     private lateinit var statsAdapter: FileStatsAdapter
+    private lateinit var fileContent : TextView
 
 
 
@@ -190,21 +194,25 @@ class MainActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 // 如果输入的不是以/proc开头，自动添加/proc/
-                if (!s.toString().startsWith("/proc")) {
-                    autoCompleteTextView.setText("/proc/${s.toString()}")
-                    autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
-                }
+//                if (!s.toString().startsWith("/proc")) {
+//                    autoCompleteTextView.setText("/proc/${s.toString()}")
+//                    autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
+//                }
             }
         })
 
 
         confirmButton = findViewById(R.id.confirmButton)
         recyclerView = findViewById(R.id.recyclerView)
-        autoCompleteTextView.setText("/proc/")
-        // 设置 RecyclerView
+        fileContent = findViewById(R.id.file_content)
+//        autoCompleteTextView.setText("/proc/self/net/arp")
+        autoCompleteTextView.setText("/proc/self/mounts")
         recyclerView.layoutManager = LinearLayoutManager(this)
         statsAdapter = FileStatsAdapter()
         recyclerView.adapter = statsAdapter
+
+
+
 
         confirmButton.setOnClickListener {
             val path = autoCompleteTextView.text.toString()
@@ -215,7 +223,12 @@ class MainActivity : AppCompatActivity() {
                     val statFile = Stat_File_Utils.getFileStat(path)
                     Log.d("sb" , "confirmButton statFile = $statFile")
                     fileList.add(statFile)
+                    Log.d("sb" , "confirmButton statFile fileList = ${fileList.size}")
+
                     statsAdapter.submitList(fileList)
+
+                    fileContent.text = getFileContentUsingFile(path)
+
                 }
             }
         }
@@ -232,9 +245,27 @@ class MainActivity : AppCompatActivity() {
 //            }
 
 
+            val reader = TunInfoReader()
 
-            Log.d("sb" , "getCgroupUsingCat= "+getBootId.getCgroupUsingFile())
-            uploadStatus.text = getBootId.getCgroupUsingFile()
+            try {
+                // 读取所有 TUN 信息
+                val allInfo = reader.readTunInfo()
+                println("所有 TUN 信息:")
+                allInfo.forEach { (name, value) ->
+                    println("$name: $value")
+                }
+
+                // 读取特定属性，例如 dev_id
+                val devId = reader.readTunProperty("dev_id")
+                println("\n设备 ID: $devId")
+
+            } catch (e: IOException) {
+                println("错误: ${e.message}")
+            }
+
+
+            Log.d("sb" , "getCgroupUsingCat= "+getBootId.getARPUsingFile())
+            uploadStatus.text = getBootId.getARPUsingFile()
 
             // 在 Activity 或其他地方使用
             val collector = CodecInfoCollector()

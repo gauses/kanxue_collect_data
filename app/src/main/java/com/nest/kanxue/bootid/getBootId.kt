@@ -13,11 +13,35 @@ import java.io.InputStreamReader
 
 object getBootId {
 
+
+    fun getFileContentUsingFile(path: String): String {
+        return try {
+            File(path).bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            "${e.message}  "
+        }
+    }
+
+
+
+
+    fun getARPUsingFile(): String {
+        return try {
+            File("/proc/fs/ext4").bufferedReader().use { it.readText() }
+        } catch (e: Exception) {
+            "${e.message}  "
+        }
+    }
+
+
+
+
+
     fun getCgroupUsingFile(): String {
         return try {
             File("/proc/self/cgroup").bufferedReader().use { it.readText() }
         } catch (e: Exception) {
-            "Error reading cgroup: ${e.message}"
+            "${e.message}  "
         }
     }
 
@@ -32,7 +56,7 @@ object getBootId {
                 result =  unameOutput
             }
         } catch (e: Exception) {
-            result = "\nKernel Information: Unable to retrieve (requires root access)"
+            "${e.message}  "
         }
 
         return result
@@ -52,8 +76,7 @@ object getBootId {
             process.waitFor()
             result.trim().takeIf { it.isNotEmpty() } ?: "unknown"
         } catch (e: Exception) {
-            e.printStackTrace()
-            "unknown"
+            "${e.message}  "
         }
     }
 
@@ -68,8 +91,7 @@ object getBootId {
             process.waitFor()
             result.trim().takeIf { it.isNotEmpty() } ?: "unknown"
         } catch (e: Exception) {
-            e.printStackTrace()
-            "unknown"
+            "${e.message}  "
         }
     }
 
@@ -83,8 +105,7 @@ object getBootId {
             process.destroy()
             bootId
         } catch (e: Exception) {
-            e.printStackTrace()
-            null
+            "${e.message}  "
         }
     }
 
@@ -98,6 +119,7 @@ object getBootId {
         jsonObject.put("SystemInfo", DrmIdFetcher.getSystemInfo())
         jsonObject.put("Uname", DrmIdFetcher.getUname())
         jsonObject.put("/proc/self/cgroup", getCgroupUsingFile())
+        jsonObject.put("/proc/self/net/arp", getCgroupUsingFile())
 
         return jsonObject
 

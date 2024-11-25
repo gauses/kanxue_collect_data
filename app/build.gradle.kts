@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.ads.identifier)
+    implementation(libs.androidx.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -65,6 +66,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation ("com.google.code.gson:gson:2.8.9")
 //    implementation ("com.google.android.gms:play-services-ads-identifier:18.0.1")
-
-
+//    implementation ("androidx.core:core-ktx:1.12.0")  // 如果使用 Kotlin
+//    implementation ("androidx.core:core:1.12.0")  // 最新版本
 }

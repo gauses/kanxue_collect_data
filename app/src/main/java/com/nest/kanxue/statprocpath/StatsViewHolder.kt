@@ -1,5 +1,6 @@
 package com.nest.kanxue.statprocpath
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,18 +11,25 @@ class StatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val nameText: TextView = view.findViewById(R.id.nameText)
     private val basicInfoText: TextView = view.findViewById(R.id.basicInfoText)
     private val timeInfoText: TextView = view.findViewById(R.id.timeInfoText)
+    private val secTimeInfoText: TextView = view.findViewById(R.id.secTimeInfoText)
     private val deviceInfoText: TextView = view.findViewById(R.id.deviceInfoText)
     private val inodeInfoText: TextView = view.findViewById(R.id.inodeInfoText)
 
 
     fun bind(stats: FileStat) {
 
+        Log.d("sb" , "confirmButton bind = $stats")
+
         if (stats.accessTime == null && stats.modifyTime == null && stats.changeTime == null) {
-            nameText.text =  """
+            nameText.text =  """    
                 文件路径: ${stats.fileName}
-                该目录所有数据为空，可能是没有权限，导致读取失败
+                出错：${stats.error}
             """.trimIndent()
-            return
+            timeInfoText.text = ""
+            secTimeInfoText.text = ""
+            inodeInfoText.text = ""
+            deviceInfoText.text = ""
+
         }else{
             nameText.text = """
                 文件路径: ${stats.fileName}
@@ -33,7 +41,7 @@ class StatsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 Change Time: ${stats.changeTime}
             """.trimIndent()
 
-            basicInfoText.text = """
+            secTimeInfoText.text = """
                 secTime: ${stats.secTime}
             """.trimIndent()
 

@@ -1,9 +1,11 @@
 package com.nest.kanxue
 
+import android.util.Log
 import com.google.gson.Gson
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.util.regex.Pattern
 
@@ -29,7 +31,8 @@ data class FileStat(
     val secTime: JSONObject?,
     val exist: Boolean,
 
-    val Size:  String?
+    val Size:  String?,
+    val error: String?
 
     )
 fun convertToJSONObject(user: FileStat): JSONObject {
@@ -49,6 +52,7 @@ fun convertToJSONObject(user: FileStat): JSONObject {
         put("Uid", user.Uid)
         put("Gid", user.Gid)
         put("secTime", user.secTime)
+        put("errorMsg", user.error)
 
 
     }
@@ -71,33 +75,45 @@ object Stat_File_Utils {
         var Gid: String? = null
         var secTime: JSONObject? = null
         var Size: String? = ""
+        var errorMSG: String? = ""
+
+
+
 
 
         try {
+
+
             val process = Runtime.getRuntime().exec("stat $filePath")
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             var line: String?
 
             val result = StringBuilder()
+            Log.d("sb" , "confirmButton result = ${reader.lines()}")
+
+
 
             // 读取命令输出的每一行，匹配并提取字段
             while (reader.readLine().also { line = it } != null) {
                 result.append(line).append("\n")
                 // 输出命令结果
-                println(result.toString())
+                Log.d("sb" , "confirmButton result = ${result.toString()}")
+
 
                 line?.let {
                     when {
+
                         it.startsWith("Access:") && !it.contains("Birth") -> {
                             accessTime = it.split("Access:")[1].trim()
                         }
+
                         it.startsWith("Modify:") -> {
                             modifyTime = it.split("Modify:")[1].trim()
                         }
+
                         it.startsWith("Change:") -> {
                             changeTime = it.split("Change:")[1].trim()
                         }
-
                     }
                 }
                 //解析Inode
@@ -115,17 +131,36 @@ object Stat_File_Utils {
                 Size = parseSize(result.toString())
 
 
+
             }
-            process.waitFor()
+
+
+            // 检查进程执行结果
+            val exitCode = process.waitFor()
+            if (exitCode != 0) {
+                // 读取错误流
+                val errorReader = BufferedReader(InputStreamReader(process.errorStream))
+                val errorMessage = errorReader.readText()
+                fileName = filePath
+                errorMSG = "命令执行失败，退出码: $exitCode, 错误信息: $errorMessage"
+            }
+
         } catch (e: Exception) {
-            e.printStackTrace()
+            errorMSG = e.message ?: "Unknown error"
+            Log.e("FileStatError", """
+            错误类型: ${e.javaClass.simpleName}
+            错误信息: ${e.message}
+            文件路径: $filePath
+            堆栈信息: ${Log.getStackTraceString(e)}
+        """.trimIndent())
+
         }
 
 
         // 检查是否所有字段都成功获取，若有任何一个字段为 null，则 exist 设为 false
         val exist = accessTime != null && modifyTime != null && changeTime != null && inode != null
         return FileStat(fileName, accessTime, modifyTime, changeTime, inode, Blocks, IOBlocks,
-            Device, Links, DeviceType, Uid, Gid ,secTime, exist, Size)
+            Device, Links, DeviceType, Uid, Gid ,secTime, exist, Size, errorMSG)
     }
 
 
