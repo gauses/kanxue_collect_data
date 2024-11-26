@@ -27,4 +27,17 @@ object DrmIdFetcher {
 
 
 
+
+    external fun getCnameInfoHex(): String?
+
+    external fun getBootTime(): LongArray?
+
+    // 定义 native 方法
+//    external fun getStatFsInfo(path: String?): String?
+    external fun getStatFsInfo(path: String): String
+
+
+
+    // 声明本地方法
+//    external fun getFileSystemStats(): Map<String, StatFs64>
 }

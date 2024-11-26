@@ -5,7 +5,6 @@ import ScreenUtils
 import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,10 +13,9 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -26,7 +24,6 @@ import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.cert.CertificateReader
-import com.nest.kanxue.checkenvironment.checkHookEnvironment
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -35,32 +32,21 @@ import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.inputmethodlist.getInputMethodList
-import com.nest.kanxue.model_system_determination.CheckSIM
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
 import com.nest.kanxue.modifymachine.CheckInstallPackageChangerApps
-import com.nest.kanxue.network.NetworkInfoReader
 import com.nest.kanxue.network.getNetworkInfo
 import com.nest.kanxue.root.CheckRoot
 import com.nest.kanxue.screentoolandclick.CheckAutoClick
-import com.nest.kanxue.simulators.CheckFileDir
 import com.nest.kanxue.simulators.CheckSimulators
-import com.nest.kanxue.simulators.CheckSystemProp
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
 import com.nest.kanxue.statprocpath.FileStatsAdapter
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -133,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
         }
 
-        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, ) == PackageManager.PERMISSION_GRANTED){
+        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
             onRequestPermissionsResult(
                 RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
                     PackageManager.PERMISSION_GRANTED));
@@ -206,7 +192,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         fileContent = findViewById(R.id.file_content)
 //        autoCompleteTextView.setText("/proc/self/net/arp")
-        autoCompleteTextView.setText("/proc/self/mounts")
+//        autoCompleteTextView.setText("/proc/self/mounts")
         recyclerView.layoutManager = LinearLayoutManager(this)
         statsAdapter = FileStatsAdapter()
         recyclerView.adapter = statsAdapter
@@ -242,7 +228,29 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("sb" , "getFileStat getFileStat= "+fileName)
 //                Log.d("sb" , "getFileStat getFileStat= "+fileStat)
 //                Log.d("sb" , "getFileStat getFileStat================")
+
 //            }
+
+            val paths = listOf(
+                "/data", "/odm", "/odm_dlkm", "/product",
+                "/system", "/system_ext", "/vendor", "/vendor_dlkm"
+            )
+
+
+            paths.forEach { path ->
+                val info = DrmIdFetcher.getStatFsInfo(path)
+                println("Path: $path\nStatFs64 Info: $info\n")
+                println("Path: $path\nStatFs64 Info: ${JSONObject(info)}\n")
+
+            }
+
+
+
+
+
+
+            val bootTime: LongArray? = DrmIdFetcher.getBootTime()
+            System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
 
 
             val reader = TunInfoReader()
@@ -550,6 +558,42 @@ class MainActivity : AppCompatActivity() {
             codecJson.put("data", Base64.encodeToString(CodecInfoCollector().collectCodecInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(codecJson)
 
+
+            //19、通过JNI读取内容
+
+//            Log.d("sb" , "get Cname info = "+DrmIdFetcher.getCnameInfoHex())
+            val bootTime: LongArray? = DrmIdFetcher.getBootTime()
+            System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
+            val jniJson = JSONObject();
+
+            val jniDataInfo  = JSONObject();
+            jniDataInfo.put("Cname info - Hex", DrmIdFetcher.getCnameInfoHex())
+            jniDataInfo.put("Boot Time - seconds", bootTime?.get(0))
+            jniDataInfo.put("Boot Time - nanoseconds", bootTime?.get(1))
+
+
+            val paths = listOf(
+                "/data", "/odm", "/odm_dlkm", "/product",
+                "/system", "/system_ext", "/vendor", "/vendor_dlkm"
+            )
+            val statfs64JSON = JSONObject()
+            paths.forEach { path ->
+                try {
+                    val hexOutput = DrmIdFetcher.getStatFsInfo(path)
+                    println("Path: $path")
+                    println("StatFs64 Hex Dump:\n$hexOutput")
+                    statfs64JSON.put(path, hexOutput)
+                } catch (e: Exception) {
+                    println("Failed to fetch statfs64 info for path: $path")
+                    println("Error: ${e.message}")
+                }
+            }
+            jniDataInfo.put("statfs64", statfs64JSON)
+
+
+            jniJson.put("name", "通过JNI读取Cname + BootTime") ;
+            jniJson.put("data", Base64.encodeToString(jniDataInfo.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(jniJson)
 
 
             //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html

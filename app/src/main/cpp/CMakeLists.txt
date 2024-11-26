@@ -14,6 +14,9 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         SHARED
         sysinfo.cpp
         filestat.cpp
+        cname.cpp
+        statfs64_jni.cpp
+        boottime.cpp
         getdrmid.cpp
         readCompatibleNative.cpp
         getdents64.cpp)
