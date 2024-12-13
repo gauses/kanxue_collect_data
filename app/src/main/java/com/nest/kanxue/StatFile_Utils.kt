@@ -41,17 +41,21 @@ fun convertToJSONObject(user: FileStat): JSONObject {
         put("accessTime", user.accessTime)
         put("modifyTime", user.modifyTime)
         put("changeTime", user.changeTime)
-        put("exist", user.exist)
+
+//        put("exist", user.exist)
+
         put("inode", user.inode)
         put("Blocks", user.Blocks)
-        put("Size", user.Size)
         put("IOBlocks", user.IOBlocks)
+
         put("Device", user.Device)
         put("Links", user.Links)
         put("DeviceType", user.DeviceType)
         put("Uid", user.Uid)
         put("Gid", user.Gid)
         put("secTime", user.secTime)
+        put("Size", user.Size)
+
         put("errorMsg", user.error)
 
 
@@ -76,7 +80,6 @@ object Stat_File_Utils {
         var secTime: JSONObject? = null
         var Size: String? = ""
         var errorMSG: String? = ""
-
 
 
 

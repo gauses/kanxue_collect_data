@@ -39,6 +39,7 @@ import com.nest.kanxue.root.CheckRoot
 import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
+import com.nest.kanxue.statfs64.Statfs64Parser
 import com.nest.kanxue.statprocpath.FileStatsAdapter
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
@@ -237,12 +238,19 @@ class MainActivity : AppCompatActivity() {
             )
 
 
-            paths.forEach { path ->
-                val info = DrmIdFetcher.getStatFsInfo(path)
-                println("Path: $path\nStatFs64 Info: $info\n")
-                println("Path: $path\nStatFs64 Info: ${JSONObject(info)}\n")
+//            paths.forEach { path ->
+////                val info = DrmIdFetcher.getStatFsInfo(path)
+//                val info = DrmIdFetcher.getStatFsInfo("/data")
+//                println("Path: $path\nStatFs64 Info: $info\n")
+//                val parser = Statfs64Parser()
+//                val bytes: ByteArray = info.toByteArray()
+//                val statfs = parser.parse(bytes)
+//                println(parser.toString(statfs))
+//            }
 
-            }
+
+
+            val info = DrmIdFetcher.getStatFsInfoParse("/data")
 
 
 
@@ -436,7 +444,9 @@ class MainActivity : AppCompatActivity() {
             val statJsonArray = JSONArray();
             stat_file_path.forEach { fileName ->
                 val fileStat = Stat_File_Utils.getFileStat(fileName)
-                statJsonArray.put(JSONObject().put(fileName, fileStat))
+
+//                statJsonArray.put(JSONObject().put(fileName, fileStat))
+                statJsonArray.put(JSONObject().put(fileName, convertToJSONObject(fileStat)))
             }
 
             val statJson = JSONObject();
@@ -445,7 +455,6 @@ class MainActivity : AppCompatActivity() {
             val list: List<*>? = gson.fromJson(statJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
             val jsonString = gson.toJson(list) // 将 List 转换为 JSON 字符串
             statJson.put("data", Base64.encodeToString(jsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-//            DeviceIdentifiersJson.put("name", "deviceIdentifiers") ;
             DeviceIdentifiersJson.put("name", "设备标识") ;
             DeviceIdentifiersJsonArray.put(statJson) ;
             DeviceIdentifiersJsonArray.put(getDeviceIdentifiers.getInfo(this)) ;

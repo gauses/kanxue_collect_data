@@ -33,8 +33,8 @@ object DrmIdFetcher {
     external fun getBootTime(): LongArray?
 
     // 定义 native 方法
-//    external fun getStatFsInfo(path: String?): String?
     external fun getStatFsInfo(path: String): String
+    external fun getStatFsInfoParse(path: String)
 
 
 
