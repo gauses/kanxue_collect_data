@@ -1,11 +1,18 @@
 package com.nest.kanxue
 
 import CodecInfoCollector
+import LocationHelper
 import ScreenUtils
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
@@ -15,7 +22,10 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -48,9 +58,47 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var locationHelper: LocationHelper
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100000  // 可以是任意整数，通常从100开始
+    }
+    // 检查并请求所需权限
+    private fun checkAndRequestPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.READ_PHONE_STATE
+        )
+
+        val missingPermissions = permissions.filter {
+            ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (missingPermissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, missingPermissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+        } else {
+            startLocationTracking()
+        }
+    }
+
+    private fun startLocationTracking() {
+        if (!checkLocationEnabled()) {
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+            return
+        }
+        locationHelper.startLocationUpdates()
+    }
+
+    private fun checkLocationEnabled(): Boolean {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
 
 
     private lateinit var autoCompleteTextView: AutoCompleteTextView
@@ -58,6 +106,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var statsAdapter: FileStatsAdapter
     private lateinit var fileContent : TextView
+
+    //地理位置属性
+    var locationJSONObject = JSONObject();
+
 
 
 
@@ -100,6 +152,7 @@ class MainActivity : AppCompatActivity() {
 
     private var mySurfaceView: CustomGLSurfaceView? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -131,15 +184,56 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        // check has permission READ_PHONE_STATE
-        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
-            onRequestPermissionsResult(
-                RESULT_OK, arrayOf(android.Manifest.permission.READ_PHONE_STATE), intArrayOf(
-                    PackageManager.PERMISSION_GRANTED));
-        }else{
-            // request to write external storage
-            requestPermissions(arrayOf(android.Manifest.permission.READ_PHONE_STATE), 0)
-        }
+
+        locationHelper = LocationHelper(
+            context = this,
+            onLocationUpdate = { location ->
+                Log.d("LocationActivity", "Location updated: $location")
+                locationJSONObject.apply {
+                    put("latitude", location.latitude)
+                    put("longitude", location.longitude)
+                    put("altitude", location.altitude)
+                    put("speed", location.speed)
+                    put("speedAccuracyMetersPerSecond", location.speedAccuracyMetersPerSecond)
+                    put("bearingAccuracyDegrees", location.bearingAccuracyDegrees)
+                    put("accuracy", location.accuracy)
+                    put("verticalAccuracy", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        location.verticalAccuracy
+                    } else {
+                        0f
+                    })
+                    put("horizontalAccuracy", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        location.accuracy
+                    } else {
+                        0f
+                    })
+                }
+
+            },
+            onSatelliteUpdate = { satelliteInfo ->
+                Log.d("LocationActivity", "Satellite info updated: $satelliteInfo")
+                locationJSONObject.apply {
+                    put("satelliteInfo", locationHelper.currentSatelliteInfo)
+                    put("number of satellite", locationHelper.currentSatelliteCount)
+                    put("PDOP", locationHelper.currentPdop)
+                    put("HDOP", locationHelper.currentHdop)
+                    put("VDOP", locationHelper.currentVdop)
+
+                }
+            },
+            onError = { error ->
+                Log.e("LocationActivity", "Location error: $error")
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                // 如果是GPS未开启，提示用户去设置
+                if (error.contains("GPS is disabled")) {
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(intent)
+                }
+            }
+        )
+
+        checkAndRequestPermissions()
+
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
 
@@ -415,6 +509,7 @@ class MainActivity : AppCompatActivity() {
             uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
 
 
+
             //4.设备指纹
             uploadStatus.text = "开始采集设备指纹————————>"
             val devicefingerprintson = JSONObject();
@@ -566,6 +661,15 @@ class MainActivity : AppCompatActivity() {
             codecJson.put("name", "系统编码器和解码器列表") ;
             codecJson.put("data", Base64.encodeToString(CodecInfoCollector().collectCodecInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(codecJson)
+
+
+            //19.location
+            val locationInfoJson = JSONObject();
+            Log.d("sb" , "locationJSONObject = $locationJSONObject")
+            locationInfoJson.put("name", "地理位置") ;
+            locationInfoJson.put("data", Base64.encodeToString(locationJSONObject.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(locationInfoJson)
+
 
 
             //19、通过JNI读取内容

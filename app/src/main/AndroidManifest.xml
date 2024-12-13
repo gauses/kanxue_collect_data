@@ -22,6 +22,8 @@
 
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <!-- 如果是 Android 11 及以上，还需要在 manifest 中添加 queries 标签 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- 基本显示器权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
