@@ -51,6 +51,9 @@ import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
 import com.nest.kanxue.statfs64.Statfs64Parser
 import com.nest.kanxue.statprocpath.FileStatsAdapter
+import com.nest.kanxue.testsh.testShellBuildId
+import com.nest.kanxue.testsh.testShellGetProp
+import com.nest.kanxue.testsh.testShellSTAT
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
@@ -322,13 +325,9 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
 
 
-//            stat_file_path.forEach { fileName ->
-//                val fileStat = Stat_File_Utils.getFileStat(fileName)
-//                Log.d("sb" , "getFileStat getFileStat= "+fileName)
-//                Log.d("sb" , "getFileStat getFileStat= "+fileStat)
-//                Log.d("sb" , "getFileStat getFileStat================")
-
-//            }
+            Log.d("testShellGetProp" , "getSystemProperties= "+ testShellGetProp.getSystemProps())
+            Log.d("testShellGetProp" , "getSystemBuildId= "+ testShellBuildId.getSystemBuildId())
+            Log.d("testShellGetProp" , "getPathStatsAsJson= "+ testShellSTAT.getPathStatsAsJson())
 
             val paths = listOf(
                 "/data", "/odm", "/odm_dlkm", "/product",
@@ -336,22 +335,10 @@ class MainActivity : AppCompatActivity() {
             )
 
 
-//            paths.forEach { path ->
-////                val info = DrmIdFetcher.getStatFsInfo(path)
-//                val info = DrmIdFetcher.getStatFsInfo("/data")
-//                println("Path: $path\nStatFs64 Info: $info\n")
-//                val parser = Statfs64Parser()
-//                val bytes: ByteArray = info.toByteArray()
-//                val statfs = parser.parse(bytes)
-//                println(parser.toString(statfs))
-//            }
 
 
 
             val info = DrmIdFetcher.getStatFsInfoParse("/data")
-
-
-
 
 
 
@@ -689,19 +676,26 @@ class MainActivity : AppCompatActivity() {
             //19.location
             val locationInfoJson = JSONObject();
             Log.d("sb" , "locationJSONObject = $locationJSONObject")
-//            if (locationJSONObject.length() == 0) {
-//                checkAndRequestPermissions()
-//            }
-//            thread {
-//                Thread.sleep(3000)
-//            }
             locationInfoJson.put("name", "地理位置") ;
             locationInfoJson.put("data", Base64.encodeToString(locationJSONObject.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(locationInfoJson)
 
 
+            //20、一些shell相关的内容
+//            Log.d("testShellGetProp" , "getSystemProperties= "+ testShellGetProp.getSystemProps())
+//            Log.d("testShellGetProp" , "getSystemBuildId= "+ testShellBuildId.getSystemBuildId())
+//            Log.d("testShellGetProp" , "getPathStatsAsJson= "+ testShellSTAT.getPathStatsAsJson())
+            val shellJson = JSONObject();
+            shellJson.put("name", "shell相关") ;
+            var subShellJson = JSONObject()
+            subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps())
+            subShellJson.put("sh -c getprop ro.system.build.id", testShellBuildId.getSystemBuildId())
+            subShellJson.put("sh -c stat", testShellSTAT.getPathStatsAsJson())
+            shellJson.put("data", Base64.encodeToString(subShellJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(shellJson)
 
-            //19、通过JNI读取内容
+
+            //21、通过JNI读取内容
 
 //            Log.d("sb" , "get Cname info = "+DrmIdFetcher.getCnameInfoHex())
             val bootTime: LongArray? = DrmIdFetcher.getBootTime()
