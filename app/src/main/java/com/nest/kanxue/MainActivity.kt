@@ -152,6 +152,10 @@ class MainActivity : AppCompatActivity() {
 
     private var mySurfaceView: CustomGLSurfaceView? = null
 
+    override fun onResume() {
+        super.onResume()
+        checkAndRequestPermissions()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,24 +167,24 @@ class MainActivity : AppCompatActivity() {
         frame.addView(mySurfaceView)
 
 
-        // check has permission WRITE_EXTERNAL_STORAGE
-        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            onRequestPermissionsResult(
-                RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-                    PackageManager.PERMISSION_GRANTED));
-        }else{
-            // request to write external storage
-            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-        }
-
-        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            onRequestPermissionsResult(
-                RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-                    PackageManager.PERMISSION_GRANTED));
-        }else{
-            // request to write external storage
-            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
-        }
+//        // check has permission WRITE_EXTERNAL_STORAGE
+//        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+//            onRequestPermissionsResult(
+//                RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+//                    PackageManager.PERMISSION_GRANTED));
+//        }else{
+//            // request to write external storage
+//            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+//        }
+//
+//        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+//            onRequestPermissionsResult(
+//                RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+//                    PackageManager.PERMISSION_GRANTED));
+//        }else{
+//            // request to write external storage
+//            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+//        }
 
 
 
@@ -505,6 +509,25 @@ class MainActivity : AppCompatActivity() {
 //            getDents64JSON.put("data", Base64.encodeToString(Gson().toJson(Gson().fromJson(dents64Array.toString(), List::class.java)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
 //            uploadJsonArray.put(getDents64JSON)
 
+            // check has permission WRITE_EXTERNAL_STORAGE
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                onRequestPermissionsResult(
+                    RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+                        PackageManager.PERMISSION_GRANTED));
+            }else{
+                // request to write external storage
+                requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+            }
+
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                onRequestPermissionsResult(
+                    RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
+                        PackageManager.PERMISSION_GRANTED));
+            }else{
+                // request to write external storage
+                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+            }
+
 
             uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
 
@@ -666,6 +689,12 @@ class MainActivity : AppCompatActivity() {
             //19.location
             val locationInfoJson = JSONObject();
             Log.d("sb" , "locationJSONObject = $locationJSONObject")
+//            if (locationJSONObject.length() == 0) {
+//                checkAndRequestPermissions()
+//            }
+//            thread {
+//                Thread.sleep(3000)
+//            }
             locationInfoJson.put("name", "地理位置") ;
             locationInfoJson.put("data", Base64.encodeToString(locationJSONObject.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(locationInfoJson)

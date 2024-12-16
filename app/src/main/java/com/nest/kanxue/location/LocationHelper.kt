@@ -88,6 +88,7 @@ class LocationHelper(
                 val satellites = mutableListOf<SatellitePosition>()
                 val satelliteInfo = mutableMapOf(
                     "GPS" to 0,
+                    "SBAS" to 0,
                     "GLONASS" to 0,
                     "GALILEO" to 0,
                     "BEIDOU" to 0,
@@ -118,31 +119,42 @@ class LocationHelper(
                         satellites.add(position)
                     }
 
+                    Log.d("LocationHelper", "status.getConstellationType: " + status.getConstellationType(i)) //
+
+
 
                     // 更新卫星计数
                     when (status.getConstellationType(i)) {
                         GnssStatus.CONSTELLATION_GPS -> //1
-                            if (usedInFix) satelliteInfo["GPS"] = satelliteInfo["GPS"]!! + 1
+//                            if (usedInFix) satelliteInfo["GPS"] = satelliteInfo["GPS"]!! + 1 //只处理用于定位的卫星
+                              satelliteInfo["GPS"] = satelliteInfo["GPS"]!! + 1
+
 
                         GnssStatus.CONSTELLATION_SBAS -> //2
-                            if (usedInFix) satelliteInfo["SBAS"] = satelliteInfo["SBAS"]!! + 1
+//                            if (usedInFix) satelliteInfo["SBAS"] = satelliteInfo["SBAS"]!! + 1
+                            satelliteInfo["SBAS"] = satelliteInfo["SBAS"]!! + 1
 
                         GnssStatus.CONSTELLATION_GLONASS -> //3
-                            if (usedInFix) satelliteInfo["GLONASS"] = satelliteInfo["GLONASS"]!! + 1
+//                            if (usedInFix) satelliteInfo["GLONASS"] = satelliteInfo["GLONASS"]!! + 1
+                            satelliteInfo["GLONASS"] = satelliteInfo["GLONASS"]!! + 1
 
                         GnssStatus.CONSTELLATION_QZSS -> //4
-                            if (usedInFix) satelliteInfo["QZSS"] = satelliteInfo["QZSS"]!! + 1
+//                            if (usedInFix) satelliteInfo["QZSS"] = satelliteInfo["QZSS"]!! + 1
+                            satelliteInfo["QZSS"] = satelliteInfo["QZSS"]!! + 1
 
 
                         GnssStatus.CONSTELLATION_BEIDOU -> //5
-                            if (usedInFix) satelliteInfo["BEIDOU"] = satelliteInfo["BEIDOU"]!! + 1
+//                            if (usedInFix) satelliteInfo["BEIDOU"] = satelliteInfo["BEIDOU"]!! + 1
+                            satelliteInfo["BEIDOU"] = satelliteInfo["BEIDOU"]!! + 1
 
                         GnssStatus.CONSTELLATION_GALILEO -> //6
-                            if (usedInFix) satelliteInfo["GALILEO"] = satelliteInfo["GALILEO"]!! + 1
+//                            if (usedInFix) satelliteInfo["GALILEO"] = satelliteInfo["GALILEO"]!! + 1
+                            satelliteInfo["GALILEO"] = satelliteInfo["GALILEO"]!! + 1
 
 
                         GnssStatus.CONSTELLATION_IRNSS -> //7
-                            if (usedInFix) satelliteInfo["IRNSS"] = satelliteInfo["IRNSS"]!! + 1
+//                            if (usedInFix) satelliteInfo["IRNSS"] = satelliteInfo["IRNSS"]!! + 1
+                            satelliteInfo["IRNSS"] = satelliteInfo["IRNSS"]!! + 1
                     }
                 }
 
@@ -239,7 +251,7 @@ class LocationHelper(
         try {
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                1000L,
+                3000L,
                 1f,
                 locationListener,
                 Looper.getMainLooper()
@@ -256,9 +268,10 @@ class LocationHelper(
                 override fun onNmeaMessage(message: String, timestamp: Long) {
                     Log.d("onNmeaMessage", "message: $message")
                     // $GPGSA,A,1,,,,,,,,,,,,,140.0,99.0,99.0*35
-                    if (message.startsWith("\$GPGSA")) {
-                        // GPGSA 语句包含 PDOP、HDOP 和 VDOP 值
-
+//                    $GNGSA,A,3,03,16,31,,,,,,,,,,2.2,2.0,0.9,1*3C
+                    if (message.startsWith("\$GPGSA") || message.startsWith("\$GNGSA")  ) {
+                        // GPGSA 语句包含 PDOP、HDOP 和 VDOP 值 ------------小米
+                        // $GNGSA 语句包含 PDOP、HDOP 和 VDOP 值 -----------oppo
 
                         val parts = message.split(",")
                         if (parts.size >= 17) {
