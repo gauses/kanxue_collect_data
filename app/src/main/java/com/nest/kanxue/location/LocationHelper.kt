@@ -36,6 +36,7 @@ class LocationHelper(
     var currentSatelliteCount: Int = 0
     var currentSatelliteInfo: JSONObject = JSONObject()  // 添加默认值
 
+
     private val locationListener = LocationListener { location ->
         Log.d("LocationHelper", "Location update received: $location")
         Log.d("LocationHelper", "Location location.latitude: " + location.latitude)
@@ -117,41 +118,46 @@ class LocationHelper(
                         satellites.add(position)
                     }
 
+
                     // 更新卫星计数
                     when (status.getConstellationType(i)) {
-                        GnssStatus.CONSTELLATION_GPS ->
+                        GnssStatus.CONSTELLATION_GPS -> //1
                             if (usedInFix) satelliteInfo["GPS"] = satelliteInfo["GPS"]!! + 1
 
-                        GnssStatus.CONSTELLATION_GLONASS ->
+                        GnssStatus.CONSTELLATION_SBAS -> //2
+                            if (usedInFix) satelliteInfo["SBAS"] = satelliteInfo["SBAS"]!! + 1
+
+                        GnssStatus.CONSTELLATION_GLONASS -> //3
                             if (usedInFix) satelliteInfo["GLONASS"] = satelliteInfo["GLONASS"]!! + 1
 
-                        GnssStatus.CONSTELLATION_BEIDOU ->
-                            if (usedInFix) satelliteInfo["BEIDOU"] = satelliteInfo["BEIDOU"]!! + 1
-
-                        GnssStatus.CONSTELLATION_GALILEO ->
-                            if (usedInFix) satelliteInfo["GALILEO"] = satelliteInfo["GALILEO"]!! + 1
-
-                        GnssStatus.CONSTELLATION_QZSS ->
+                        GnssStatus.CONSTELLATION_QZSS -> //4
                             if (usedInFix) satelliteInfo["QZSS"] = satelliteInfo["QZSS"]!! + 1
 
-                        GnssStatus.CONSTELLATION_IRNSS ->
+
+                        GnssStatus.CONSTELLATION_BEIDOU -> //5
+                            if (usedInFix) satelliteInfo["BEIDOU"] = satelliteInfo["BEIDOU"]!! + 1
+
+                        GnssStatus.CONSTELLATION_GALILEO -> //6
+                            if (usedInFix) satelliteInfo["GALILEO"] = satelliteInfo["GALILEO"]!! + 1
+
+
+                        GnssStatus.CONSTELLATION_IRNSS -> //7
                             if (usedInFix) satelliteInfo["IRNSS"] = satelliteInfo["IRNSS"]!! + 1
                     }
                 }
 
-                satelliteInfo.forEach { t, u ->
-                    var jsonObject = JSONObject()
-                    jsonObject.put(t, u)
-                    currentSatelliteInfo = jsonObject
 
-                }
-
-                // 计算PDOP并保存
-                Log.d("LocationHelper", "status satellites $satellites")
                 Log.d("LocationHelper", "status satelliteInfo $satelliteInfo")
 
-//                currentPdop = calculatePDOP(satellites).toFloat()
-//                Log.d("LocationHelper", "Calculated PDOP: $currentPdop")
+                // 按照指定顺序添加键值对
+                val orderedKeys = listOf("GPS", "SBAS", "GLONASS", "GALILEO", "BEIDOU", "QZSS", "IRNSS")
+                orderedKeys.forEach { key ->
+                    satelliteInfo[key]?.let { value ->
+                        currentSatelliteInfo.put(key, value)
+                    }
+                }
+                Log.d("LocationHelper", "currentSatelliteInfo $currentSatelliteInfo")
+
 
                 // 更新卫星信息
                 onSatelliteUpdate(satelliteInfo)
