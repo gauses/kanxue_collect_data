@@ -34,6 +34,10 @@ import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.cert.CertificateReader
+import com.nest.kanxue.cpu_battery.BatteryFilesCopier
+import com.nest.kanxue.cpu_battery.BatteryReader
+import com.nest.kanxue.cpu_battery.CpuFilesCopier
+import com.nest.kanxue.cpu_battery.CpuReader
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -57,6 +61,10 @@ import com.nest.kanxue.testsh.testShellSTAT
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -323,6 +331,47 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+
+            // 使用示例：
+            CoroutineScope(Dispatchers.IO).launch {
+//                val content = CpuReader.readCpuDevices()
+//                Log.d("CPUInfo12", content)
+//
+//                val content2 = BatteryReader.readBatteryInfo()
+//                Log.d("BatteryInfo12", content2)
+
+            }
+
+
+//            // 在后台线程中执行复制CPU文件
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val copier = CpuFilesCopier(this@MainActivity)
+//                val result = copier.copyCpuFiles()
+//
+//                withContext(Dispatchers.Main) {
+//                    Log.d("CpuCopier", result)
+//                }
+//            }
+
+
+            // 在后台线程中执行复制
+            CoroutineScope(Dispatchers.IO).launch {
+                val copier = BatteryFilesCopier(this@MainActivity)
+
+                // 选择使用普通方式或 Root 方式
+                val result = try {
+                    copier.copyBatteryFiles() // 普通方式
+                    // 或者
+                    // copier.copyBatteryFilesWithRoot() // Root 方式
+                } catch (e: Exception) {
+                    "复制失败: ${e.message}"
+                }
+
+                withContext(Dispatchers.Main) {
+                    Log.d("BatteryCopier", result)
+                }
+            }
+
 
 
             Log.d("testShellGetProp" , "getSystemProperties= "+ testShellGetProp.getSystemProps())
@@ -695,6 +744,7 @@ class MainActivity : AppCompatActivity() {
             uploadJsonArray.put(shellJson)
 
 
+
             //21、通过JNI读取内容
 
 //            Log.d("sb" , "get Cname info = "+DrmIdFetcher.getCnameInfoHex())
@@ -730,6 +780,19 @@ class MainActivity : AppCompatActivity() {
             jniJson.put("name", "通过JNI读取Cname + BootTime") ;
             jniJson.put("data", Base64.encodeToString(jniDataInfo.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
             uploadJsonArray.put(jniJson)
+
+
+
+
+            //22、读取CPU和battery
+            val cpu_batteryJson = JSONObject();
+            cpu_batteryJson.put("name", "CPU和Battery") ;
+            var sub_cpu_batteryJson = JSONObject()
+            sub_cpu_batteryJson.put("/sys/devices/system/cpu", CpuReader.readCpuDevices())
+            sub_cpu_batteryJson.put("/sys/class/power_supply/battery", BatteryReader.readBatteryInfo())
+            cpu_batteryJson.put("data", Base64.encodeToString(sub_cpu_batteryJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(cpu_batteryJson)
+
 
 
             //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
