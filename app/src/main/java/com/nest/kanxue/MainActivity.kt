@@ -46,6 +46,7 @@ import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.inputmethodlist.getInputMethodList
+import com.nest.kanxue.mcc.TelephonyPropertyCollector
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
 import com.nest.kanxue.modifymachine.CheckInstallPackageChangerApps
 import com.nest.kanxue.network.getNetworkInfo
@@ -83,7 +84,9 @@ class MainActivity : AppCompatActivity() {
         val permissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.READ_PHONE_NUMBERS
         )
 
         val missingPermissions = permissions.filter {
@@ -251,6 +254,8 @@ class MainActivity : AppCompatActivity() {
 
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
+        val testText = findViewById<TextView>(R.id.test_text)
+
 
         autoCompleteTextView = findViewById(R.id.pathInput)
         // 获取/proc目录下的所有文件和目录
@@ -332,6 +337,7 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
+
             // 使用示例：
             CoroutineScope(Dispatchers.IO).launch {
 //                val content = CpuReader.readCpuDevices()
@@ -355,22 +361,22 @@ class MainActivity : AppCompatActivity() {
 
 
             // 在后台线程中执行复制
-            CoroutineScope(Dispatchers.IO).launch {
-                val copier = BatteryFilesCopier(this@MainActivity)
-
-                // 选择使用普通方式或 Root 方式
-                val result = try {
-                    copier.copyBatteryFiles() // 普通方式
-                    // 或者
-                    // copier.copyBatteryFilesWithRoot() // Root 方式
-                } catch (e: Exception) {
-                    "复制失败: ${e.message}"
-                }
-
-                withContext(Dispatchers.Main) {
-                    Log.d("BatteryCopier", result)
-                }
-            }
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val copier = BatteryFilesCopier(this@MainActivity)
+//
+//                // 选择使用普通方式或 Root 方式
+//                val result = try {
+//                    copier.copyBatteryFiles() // 普通方式
+//                    // 或者
+//                    // copier.copyBatteryFilesWithRoot() // Root 方式
+//                } catch (e: Exception) {
+//                    "复制失败: ${e.message}"
+//                }
+//
+//                withContext(Dispatchers.Main) {
+//                    Log.d("BatteryCopier", result)
+//                }
+//            }
 
 
 
@@ -563,6 +569,24 @@ class MainActivity : AppCompatActivity() {
                 // request to write external storage
                 requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
             }
+
+
+
+//            val sim_permissions = arrayOf(
+//                Manifest.permission.READ_SMS,
+//                Manifest.permission.READ_PHONE_NUMBERS,
+//            )
+//
+//            val sim_missingPermissions = sim_permissions.filter {
+//                ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+//            }
+//
+//            if (sim_missingPermissions.isNotEmpty()) {
+//                ActivityCompat.requestPermissions(this, sim_missingPermissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+//            } else {
+//
+//            }
+
 
 
             uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
@@ -784,14 +808,24 @@ class MainActivity : AppCompatActivity() {
 
 
 
-            //22、读取CPU和battery
-            val cpu_batteryJson = JSONObject();
-            cpu_batteryJson.put("name", "CPU和Battery") ;
-            var sub_cpu_batteryJson = JSONObject()
-            sub_cpu_batteryJson.put("/sys/devices/system/cpu", CpuReader.readCpuDevices())
-            sub_cpu_batteryJson.put("/sys/class/power_supply/battery", BatteryReader.readBatteryInfo())
-            cpu_batteryJson.put("data", Base64.encodeToString(sub_cpu_batteryJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(cpu_batteryJson)
+//            //22、读取CPU和battery
+//            val cpu_batteryJson = JSONObject();
+//            cpu_batteryJson.put("name", "CPU和Battery") ;
+//            var sub_cpu_batteryJson = JSONObject()
+//            sub_cpu_batteryJson.put("/sys/devices/system/cpu", CpuReader.readCpuDevices())
+//            sub_cpu_batteryJson.put("/sys/class/power_supply/battery", BatteryReader.readBatteryInfo())
+//            cpu_batteryJson.put("data", Base64.encodeToString(sub_cpu_batteryJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+//            uploadJsonArray.put(cpu_batteryJson)
+
+
+            //23、读取SIM卡
+            // 获取运营商信息 , 获取所有属性并以JSON格式输出
+            val propertyCollector = TelephonyPropertyCollector(this)
+            val jsonResult = propertyCollector.getTelephonyPropertiesJson()
+            val simJson = JSONObject();
+            simJson.put("name", "SIM卡信息相关") ;
+            simJson.put("data", Base64.encodeToString(jsonResult.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(simJson)
 
 
 

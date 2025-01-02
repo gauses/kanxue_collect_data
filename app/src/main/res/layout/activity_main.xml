@@ -45,8 +45,17 @@
             />
 
         <TextView
-            android:id="@+id/uploadStatusText"
+            android:id="@+id/test_text"
             app:layout_constraintTop_toBottomOf="@id/stat_file_btn"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            />
+
+        <TextView
+            android:id="@+id/uploadStatusText"
+            app:layout_constraintTop_toBottomOf="@id/test_text"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
