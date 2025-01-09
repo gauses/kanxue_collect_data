@@ -5,6 +5,8 @@ import LocationHelper
 import ScreenUtils
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +14,7 @@ import android.hardware.display.DisplayManager
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -43,6 +46,9 @@ import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
 import com.nest.kanxue.devicefingerprint.getSystemProp
 import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
+import com.nest.kanxue.exec.InstrumentationUtil
+import com.nest.kanxue.exec.ProcessGrep
+import com.nest.kanxue.exec.ShellCommandExecutor
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.inputmethodlist.getInputMethodList
@@ -76,8 +82,12 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
 
     private lateinit var locationHelper: LocationHelper
+
+
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100000  // 可以是任意整数，通常从100开始
+        private const val PACKAGE_USAGE_STATS_REQUEST = 10012
+
     }
     // 检查并请求所需权限
     private fun checkAndRequestPermissions() {
@@ -170,6 +180,81 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         checkAndRequestPermissions()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PACKAGE_USAGE_STATS_REQUEST) {
+            if (hasUsageStatsPermission()) {
+                getMemoryInfo()
+            } else {
+                Toast.makeText(this, "Permission required to get memory info", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+
+    private fun hasUsageStatsPermission(): Boolean {
+        val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            appOps.unsafeCheckOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(),
+                packageName
+            )
+        } else {
+            appOps.checkOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(),
+                packageName
+            )
+        }
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun requestUsageStatsPermission() {
+        val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+        startActivityForResult(intent, PACKAGE_USAGE_STATS_REQUEST)
+    }
+
+    private fun getMemoryInfo() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // 获取 ActivityManager
+                val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+                // 获取所有运行中的进程
+                val runningProcesses = activityManager.runningAppProcesses
+
+                // 查找 adbd 进程
+                val adbdProcess = runningProcesses?.find { it.processName.contains("adbd") }
+
+                if (adbdProcess != null) {
+                    // 获取进程的内存信息
+                    val memoryInfo = Debug.MemoryInfo()
+//                    Debug.getMemoryInfo(adbdProcess.pid, memoryInfo)
+
+                    val processMemoryInfo = """
+                        Process: ${adbdProcess.processName}
+                        PID: ${adbdProcess.pid}
+                        Total PSS: ${memoryInfo.totalPss}kB
+                        Native PSS: ${memoryInfo.nativePss}kB
+                        Java PSS: ${memoryInfo.dalvikPss}kB
+                        Other PSS: ${memoryInfo.otherPss}kB
+                        
+                    """.trimIndent()
+
+
+                } else {
+                    Log.d("adbd",  "adbd process not found")
+                }
+            } catch (e: Exception) {
+                Log.d("adbd",  "adbd error = " + e.message)
+
+            }
+        }
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -336,6 +421,30 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+
+
+            val executor = ShellCommandExecutor()
+            val wechatPath = executor.getPackagePath("com.tencent.mm")
+            Log.d("wechatPath", wechatPath+"")
+
+
+
+            Log.d("processGrep11", ProcessGrep().executeShellCommand())
+            Log.d("processGrep12", ProcessGrep().executeShellCommandAlternative())
+            Log.d("processGrep13", ProcessGrep().getProcessInfoViaProc())
+            Log.d("processGrep14", ProcessGrep().getProcessInfoViaActivityManager(this))
+            Log.d("processGrep15", ProcessGrep().getProcessInfoViaProcPidCmdline())
+//            Log.d("processGrep16", ProcessGrep().getProcessMemoryInfo())
+
+            // 检查权限
+            if (!hasUsageStatsPermission()) {
+                requestUsageStatsPermission()
+            } else {
+                getMemoryInfo()
+            }
+
+
+
 
 
             // 使用示例：
@@ -768,8 +877,22 @@ class MainActivity : AppCompatActivity() {
             uploadJsonArray.put(shellJson)
 
 
+            //21、一些exec相关的内容
+            val executor = ShellCommandExecutor()
 
-            //21、通过JNI读取内容
+            val execJson = JSONObject();
+            execJson.put("name", "exec sh相关") ;
+            var subExecJson = JSONObject()
+            subExecJson.put("exec sh -c pm path com.tencent.mm", executor.getPackagePath("com.tencent.mm"))
+            subExecJson.put("exec sh -c ps | grep adbd", ProcessGrep().executeShellCommandAlternative())
+            subExecJson.put("exec sh -c pm path com.xiaomi.market", executor.getPackagePath("com.xiaomi.market"))
+            subExecJson.put("exec pm list instrumentation", InstrumentationUtil().getInstrumentationList())
+            subExecJson.put("exec sh -c pm path com.android.vending", executor.getPackagePath("com.android.vending"))
+            execJson.put("data", Base64.encodeToString(subExecJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+            uploadJsonArray.put(execJson)
+
+
+            //22、通过JNI读取内容
 
 //            Log.d("sb" , "get Cname info = "+DrmIdFetcher.getCnameInfoHex())
             val bootTime: LongArray? = DrmIdFetcher.getBootTime()
