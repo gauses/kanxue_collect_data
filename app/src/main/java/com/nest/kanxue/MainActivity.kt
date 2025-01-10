@@ -871,6 +871,7 @@ class MainActivity : AppCompatActivity() {
             shellJson.put("name", "shell相关") ;
             var subShellJson = JSONObject()
             subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps())
+//            subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps1())
             subShellJson.put("sh -c getprop ro.system.build.id", testShellBuildId.getSystemBuildId())
             subShellJson.put("sh -c stat", testShellSTAT.getPathStatsAsJson())
             shellJson.put("data", Base64.encodeToString(subShellJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))

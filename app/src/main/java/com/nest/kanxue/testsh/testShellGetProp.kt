@@ -40,6 +40,17 @@ object testShellGetProp {
         }
     }
 
+    fun getSystemProps1(): String {
+        return try {
+            val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", "/system/bin/getprop"))
+            process.inputStream.bufferedReader().use { reader ->
+                reader.readText().replace("[", "").replace("]", "")
+            }
+        } catch (e: Exception) {
+            "Error: ${e.message}"
+        }
+    }
+
 
 
 }
