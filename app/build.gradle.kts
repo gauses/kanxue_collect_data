@@ -19,6 +19,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters  += listOf("arm64-v8a")
+        }
     }
 
     buildTypes {
@@ -42,6 +46,8 @@ android {
             path = file("src/main/cpp/CMakeLists.txt")
             version = "3.22.1"
         }
+
+        ndkVersion = "21.4.7075529"
     }
     buildFeatures {
         viewBinding = true

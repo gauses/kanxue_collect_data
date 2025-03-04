@@ -10,6 +10,8 @@ import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.hardware.display.DisplayManager
 import android.location.LocationManager
 import android.os.Build
@@ -68,6 +70,8 @@ import com.nest.kanxue.testsh.testShellSTAT
 import com.nest.kanxue.utils.ByteArrayConverter
 import com.nest.kanxue_data.R
 import com.nest.kanxue_data.databinding.ActivityMainBinding
+import com.test.ndk.SensorInfo
+import com.test.ndk.Testor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,6 +84,9 @@ import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
+
+    val testor = Testor()
+
 
     private lateinit var locationHelper: LocationHelper
 
@@ -284,6 +291,16 @@ class MainActivity : AppCompatActivity() {
 //            // request to write external storage
 //            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
 //        }
+
+
+        thread {
+            //先清除
+            Utils.clearFilesDir(this)
+            //写入sensor
+            saveSensorList(this, this.filesDir.absolutePath)
+            testor.testSensor(this.filesDir.absolutePath,  intArrayOf(Sensor.TYPE_ALL))
+        }
+
 
 
 
@@ -967,25 +984,88 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
             //19.读取/proc/stat下的所有内容:没有权限
 //            Log.d("sb", "ProcStatReader.readProcStat() = " + ReadProcStat.getInfo())
 
-            val allDataFileName = Build.MODEL + "_" + Utils.getCurrentDateTime() + "_" + "allData.txt"
+
+            val allDataFileNameSuffix = Build.MODEL + "_" + Utils.getCurrentDateTime()
+            val allDataFileName = allDataFileNameSuffix + "_" + "allData.txt"
             val uploadTxTtoServerState = "开始保存数据到本地，文件名称是$allDataFileName————————>"
             uploadStatus.text = uploadTxTtoServerState
             var externalDir111 = this.filesDir ;
+            //写入
             java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
+
+
+
+            //20.NDK - 传感器
+            val sensorFileDir = File(externalDir111.absolutePath)
+            Thread.sleep(3000)
+            UploadData.printAllFiles(sensorFileDir.absolutePath)
+
+
+
             Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
             Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
-            UploadData.upload(this , externalDir111.path , allDataFileName, uploadJsonArray)
-            Thread.sleep(3000)
-            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileName————————>"
 
+            // 继续上传操作
+            UploadData.upload(this, externalDir111.path, allDataFileNameSuffix,
+                onSuccess = {
+                    // 上传成功后才更新状态
+                    uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                },
+                onFailure = { errorMessage ->
+                    // 上传失败时更新状态，显示具体错误信息
+                    uploadStatus.text = "上传数据到服务器失败: $errorMessage————————>"
+                }
+            )
 
-            // 在主线程更新UI
 
 
         }
+
+
+
+    }
+
+
+    fun saveSensorList(context: Context, sensorFileDir: String){
+
+        var sm: SensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+        var sensors = sm!!.getSensorList(Sensor.TYPE_ALL)
+        var x = ArrayList<SensorInfo>()
+        for (sensor in sensors){
+            Log.d("sb", "sensor=${sensor.name}, handle=${testor.getSensorHandle(sensor.name, sensor.type)}")
+            x.add(
+                SensorInfo(
+                    testor.getSensorHandle(sensor.name, sensor.type),
+                    sensor.name,
+                    sensor.type,
+                    sensor.vendor,
+                    sensor.resolution,
+                    sensor.stringType,
+                    sensor.reportingMode,
+                    sensor.maximumRange,
+                    sensor.maxDelay,
+                    sensor.fifoReservedEventCount,
+                    sensor.highestDirectReportRateLevel,
+                    sensor.fifoMaxEventCount,
+                    sensor.power,
+                    sensor.minDelay,
+                    sensor.version
+                )
+            )
+        }
+
+        // write json to externaldir/sensors.txt
+        var json = Gson().toJson(x)
+        Log.d("sb", "json=${json}")
+        java.io.File("$sensorFileDir/sensors.txt").writeText(json)
+
+
+
 
 
 

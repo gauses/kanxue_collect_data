@@ -5,6 +5,8 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.activity.ComponentActivity.WINDOW_SERVICE
 import java.io.File
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.math.sqrt
@@ -47,5 +49,31 @@ object Utils {
         // 使用勾股定理计算对角线的长度 (英寸)
         return sqrt(widthInches * widthInches + heightInches * heightInches)
     }
+
+
+
+    fun clearFilesDir(context: Context) {
+        val filesDir = context.filesDir
+        if (filesDir.exists() && filesDir.isDirectory) {
+            filesDir.listFiles()?.forEach { file ->
+                if (file.isFile) {
+                    file.delete()
+                }
+            }
+        }
+    }
+
+
+    fun getMsg(e: Exception): String{
+        // 或者转换为字符串
+        val sw = StringWriter()
+        val pw = PrintWriter(sw)
+        e.printStackTrace(pw)
+        val fullStackTrace = sw.toString()
+        return fullStackTrace;
+
+    }
+
+    
 
 }
