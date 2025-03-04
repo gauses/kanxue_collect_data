@@ -1,15 +1,12 @@
 package com.nest.kanxue
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import com.nest.kanxue.Utils.getMsg
-import http.RetrofitClient
+import com.nest.kanxue.http.RetrofitClient
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +38,9 @@ object UploadData {
             val sourceFile = File(sourceDir)
             if (sourceFile.exists()) {
                 sourceFile.walkTopDown().forEach { file ->
-                    if (!file.isDirectory && !file.name.endsWith(".zip")) {  // 排除zip文件
+                    // 排除zip文件
+                    // 排除profileInstalled文件
+                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.contains("profileInstalled")) {
                         val entryPath = file.absolutePath.substring(sourceFile.absolutePath.length + 1)
                         val entry = ZipEntry(entryPath)
                         zipOut.putNextEntry(entry)
@@ -83,6 +82,9 @@ object UploadData {
             call.enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     try {
+                        Log.d("sb", "File uploaded response = " + response.code())
+                        Log.d("sb", "File uploaded response = " + response.message())
+
                         if (response.isSuccessful) {
                             Log.d("sb", "File uploaded successfully")
                             // 上传完成后删除临时zip文件

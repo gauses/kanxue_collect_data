@@ -1,4 +1,4 @@
-package http
+package com.nest.kanxue.http
 
 import okhttp3.MultipartBody
 import retrofit2.Call

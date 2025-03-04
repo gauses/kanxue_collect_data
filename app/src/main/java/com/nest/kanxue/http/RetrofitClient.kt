@@ -1,4 +1,4 @@
-package http
+package com.nest.kanxue.http
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1014,13 +1014,18 @@ class MainActivity : AppCompatActivity() {
             UploadData.upload(this, externalDir111.path, allDataFileNameSuffix,
                 onSuccess = {
                     // 上传成功后才更新状态
-                    uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+//                    uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
                 },
                 onFailure = { errorMessage ->
                     // 上传失败时更新状态，显示具体错误信息
-                    uploadStatus.text = "上传数据到服务器失败: $errorMessage————————>"
+//                    uploadStatus.text = "上传数据到服务器失败: $errorMessage————————>"
                 }
             )
+
+
+            Thread.sleep(3000)
+            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+
 
 
 
