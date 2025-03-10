@@ -19,6 +19,10 @@ import java.util.zip.ZipOutputStream
 object UploadData {
 
     fun printAllFiles(directory: String) {
+
+        Log.d("FileList", "目录文件遍历开始")
+
+
         val dir = File(directory)
         if (dir.exists() && dir.isDirectory) {
             Log.d("FileList", "开始遍历目录: $directory")
@@ -63,8 +67,12 @@ object UploadData {
         }
 
         try {
+            Log.d("FileList", "开始遍历文件....")
+
+
             // 先遍历并打印所有文件
             printAllFiles(externalDir)
+            Log.d("FileList", "开始压缩文件....")
 
             // 创建zip文件的完整路径
             val zipFilePath = "$externalDir/$allDataFileNameSuffix.zip"

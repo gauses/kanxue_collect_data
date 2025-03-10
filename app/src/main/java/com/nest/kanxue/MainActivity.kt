@@ -4,10 +4,10 @@ import CodecInfoCollector
 import LocationHelper
 import ScreenUtils
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.content.Context
+import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -28,21 +28,26 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.cert.CertificateReader
-import com.nest.kanxue.cpu_battery.BatteryFilesCopier
-import com.nest.kanxue.cpu_battery.BatteryReader
-import com.nest.kanxue.cpu_battery.CpuFilesCopier
-import com.nest.kanxue.cpu_battery.CpuReader
+import com.nest.kanxue.core.CpuFilesCopier
+import com.nest.kanxue.core.ShellGetCgroup
+import com.nest.kanxue.core.ShellGetCpuInfo
+import com.nest.kanxue.core.ShellGetDiskstats
+import com.nest.kanxue.core.ShellGetMounts
+import com.nest.kanxue.core.ShellGetProp
+import com.nest.kanxue.core.Shell_lshal
+import com.nest.kanxue.core.Shell_lspci
+import com.nest.kanxue.core.Shell_lsusb
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -62,7 +67,6 @@ import com.nest.kanxue.root.CheckRoot
 import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
-import com.nest.kanxue.statfs64.Statfs64Parser
 import com.nest.kanxue.statprocpath.FileStatsAdapter
 import com.nest.kanxue.testsh.testShellBuildId
 import com.nest.kanxue.testsh.testShellGetProp
@@ -74,6 +78,7 @@ import com.test.ndk.SensorInfo
 import com.test.ndk.Testor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -86,6 +91,9 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
 
     val testor = Testor()
+
+    private lateinit var mCpuFilesCopier: com.nest.kanxue.core.CpuFilesCopier
+    private lateinit var mPower_SupplyFilesCopier: Power_SupplyFilesCopier
 
 
     private lateinit var locationHelper: LocationHelper
@@ -296,7 +304,7 @@ class MainActivity : AppCompatActivity() {
         thread {
             //先清除
             Utils.clearFilesDir(this)
-            //写入sensor
+//            //写入sensor
             saveSensorList(this, this.filesDir.absolutePath)
             testor.testSensor(this.filesDir.absolutePath,  intArrayOf(Sensor.TYPE_ALL))
         }
@@ -1002,29 +1010,87 @@ class MainActivity : AppCompatActivity() {
 
             //20.NDK - 传感器
             val sensorFileDir = File(externalDir111.absolutePath)
-            Thread.sleep(3000)
-            UploadData.printAllFiles(sensorFileDir.absolutePath)
 
+            //21.唐哥要求的本地文件
+            // 使用协程处理延迟和文件操作
+            CoroutineScope(Dispatchers.IO).launch {
+                mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+                mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
+                withContext(Dispatchers.IO) {
+                    ShellGetProp.saveSystemPropsToFile(File(externalDir111.absolutePath ))
+                    ShellGetCgroup.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    ShellGetMounts.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    ShellGetDiskstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                    mCpuFilesCopier.copyCpuFiles()
+                    mPower_SupplyFilesCopier.copyPower_SupplyFiles()
 
-
-            Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
-            Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
-
-            // 继续上传操作
-            UploadData.upload(this, externalDir111.path, allDataFileNameSuffix,
-                onSuccess = {
-                    // 上传成功后才更新状态
-//                    uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
-                },
-                onFailure = { errorMessage ->
-                    // 上传失败时更新状态，显示具体错误信息
-//                    uploadStatus.text = "上传数据到服务器失败: $errorMessage————————>"
                 }
-            )
+                delay(5000)
+                UploadData.printAllFiles(sensorFileDir.absolutePath)
 
 
-            Thread.sleep(3000)
-            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                // 继续上传操作
+                Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
+                Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
+
+                Log.d("sb", "UploadData.upload start....")
+                UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
+                    onSuccess = {
+                        // 在主线程更新UI
+                        runOnUiThread {
+                            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                        }
+                    },
+                    onFailure = { errorMsg ->
+                        // 在主线程更新UI
+                        runOnUiThread {
+                            if (!errorMsg.contains("Expected a string but was BEGIN_OBJECT")) {
+                                uploadStatus.text = "上传失败: $errorMsg————————>"
+                            }else{
+                                uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                            }
+                        }
+                    }
+                )
+
+
+            }
+
+
+
+//            // 使用协程处理延迟和UI更新
+//            CoroutineScope(Dispatchers.IO).launch {
+//
+//                // 继续上传操作
+//                Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
+//                Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
+//
+//                Log.d("sb", "UploadData.upload start....")
+//                UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
+//                    onSuccess = {
+//                        // 在主线程更新UI
+//                        runOnUiThread {
+//                            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+//                        }
+//                    },
+//                    onFailure = { errorMsg ->
+//                        // 在主线程更新UI
+//                        runOnUiThread {
+////                            uploadStatus.text = "上传失败: $errorMsg————————>"
+//                            // 在主线程更新UI
+//                            runOnUiThread {
+//                                uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+//                                testText.text = errorMsg
+//                            }
+//                        }
+//                    }
+//                )
+//
+//            }
 
 
 
