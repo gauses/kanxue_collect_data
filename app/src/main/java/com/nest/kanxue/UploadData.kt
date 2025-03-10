@@ -44,7 +44,7 @@ object UploadData {
                 sourceFile.walkTopDown().forEach { file ->
                     // 排除zip文件
                     // 排除profileInstalled文件
-                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.contains("profileInstalled")) {
+                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.toUpperCase().contains("profileinstall")) {
                         val entryPath = file.absolutePath.substring(sourceFile.absolutePath.length + 1)
                         val entry = ZipEntry(entryPath)
                         zipOut.putNextEntry(entry)

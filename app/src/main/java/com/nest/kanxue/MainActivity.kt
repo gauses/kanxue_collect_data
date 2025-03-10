@@ -346,7 +346,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
-        val testText = findViewById<TextView>(R.id.test_text)
 
 
         autoCompleteTextView = findViewById(R.id.pathInput)
@@ -607,291 +606,252 @@ class MainActivity : AppCompatActivity() {
 
         // 设置点击事件
         button.setOnClickListener {
-            // 在按钮点击时执行的代码
+            // 使用协程来处理耗时操作
+            CoroutineScope(Dispatchers.IO).launch {
+                // 在主线程更新UI
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
+                }
 
-            //2，readDirectoryEntries来调用,获取某一目录下的文件和文件夹
-//            val dents64Array = JSONArray();
-//            stat_file_path.forEach { fileName ->
-//                if (File(fileName).exists() && File(fileName).canRead()) {
-//                    var byteArray = readDirectoryEntries(fileName)
-//                    dents64Array.put(JSONObject().put(fileName,
-//                        java.lang.String(byteArray, StandardCharsets.UTF_8)
-//                    ))
-//                }
-//            }
-//
-//            val getDents64JSON = JSONObject();
-//            getDents64JSON.put("name", "getDents64") ;
-//            getDents64JSON.put("data", Base64.encodeToString(Gson().toJson(Gson().fromJson(dents64Array.toString(), List::class.java)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-//            uploadJsonArray.put(getDents64JSON)
+                //4.设备指纹
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集设备指纹————————>"
+                }
 
-            // check has permission WRITE_EXTERNAL_STORAGE
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                onRequestPermissionsResult(
-                    RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-                        PackageManager.PERMISSION_GRANTED));
-            }else{
-                // request to write external storage
-                requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-            }
+                val devicefingerprintson = JSONObject()
+                val devicefingerprintJsonArray = JSONArray()
+                devicefingerprintJsonArray.put(getStorageInfo.getstorage_emulated_0())
+                devicefingerprintJsonArray.put(getSystemProp.getPropertyAllInfo())
 
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-                onRequestPermissionsResult(
-                    RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-                        PackageManager.PERMISSION_GRANTED));
-            }else{
-                // request to write external storage
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
-            }
+                with(ByteArrayConverter) {
+                    // 1. 转换成十六进制
+                    val DrmId = getDrmId.getDrmId()
+                    devicefingerprintJsonArray.put(JSONObject().put("DRMID(已经是16进制)", DrmId?.toHexString()))
+                }
+                devicefingerprintson.put("name", "设备指纹") ;
+                val devicefingerprintList: List<*>? = Gson().fromJson(devicefingerprintJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
+                val devicefingerprintJsonString = Gson().toJson(devicefingerprintList) // 将 List 转换为 JSON 字符串
+                devicefingerprintson.put("data", Base64.encodeToString(devicefingerprintJsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(devicefingerprintson)
 
 
+                //5.设备标识
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集设备标识————————>"
+                }
 
-//            val sim_permissions = arrayOf(
-//                Manifest.permission.READ_SMS,
-//                Manifest.permission.READ_PHONE_NUMBERS,
-//            )
-//
-//            val sim_missingPermissions = sim_permissions.filter {
-//                ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-//            }
-//
-//            if (sim_missingPermissions.isNotEmpty()) {
-//                ActivityCompat.requestPermissions(this, sim_missingPermissions.toTypedArray(), PERMISSION_REQUEST_CODE)
-//            } else {
-//
-//            }
+                val DeviceIdentifiersJson = JSONObject();
+                val DeviceIdentifiersJsonArray = JSONArray();
 
-
-            runOnUiThread { uploadStatus.text = "开始采集sensor，等待5秒钟————————>" }
-
-
-
-            //4.设备指纹
-            uploadStatus.text = "开始采集设备指纹————————>"
-            val devicefingerprintson = JSONObject();
-            val devicefingerprintJsonArray = JSONArray();
-            devicefingerprintJsonArray.put(getStorageInfo.getstorage_emulated_0())
-            devicefingerprintJsonArray.put(getSystemProp.getPropertyAllInfo())
-
-            with(ByteArrayConverter) {
-                // 1. 转换成十六进制
-                val DrmId = getDrmId.getDrmId()
-                devicefingerprintJsonArray.put(JSONObject().put("DRMID(已经是16进制)", DrmId?.toHexString()))
-            }
-//            devicefingerprintson.put("name", "devicefingerprint") ;
-            devicefingerprintson.put("name", "设备指纹") ;
-            val devicefingerprintList: List<*>? = Gson().fromJson(devicefingerprintJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
-            val devicefingerprintJsonString = Gson().toJson(devicefingerprintList) // 将 List 转换为 JSON 字符串
-            devicefingerprintson.put("data", Base64.encodeToString(devicefingerprintJsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(devicefingerprintson)
-
-
-
-            //5.设备标识
-            uploadStatus.text = "开始采集设备标识————————>"
-            val DeviceIdentifiersJson = JSONObject();
-            val DeviceIdentifiersJsonArray = JSONArray();
-
-            val statJsonArray = JSONArray();
-            stat_file_path.forEach { fileName ->
-                val fileStat = Stat_File_Utils.getFileStat(fileName)
+                val statJsonArray = JSONArray();
+                stat_file_path.forEach { fileName ->
+                    val fileStat = Stat_File_Utils.getFileStat(fileName)
 
 //                statJsonArray.put(JSONObject().put(fileName, fileStat))
-                statJsonArray.put(JSONObject().put(fileName, convertToJSONObject(fileStat)))
-            }
+                    statJsonArray.put(JSONObject().put(fileName, convertToJSONObject(fileStat)))
+                }
 
-            val statJson = JSONObject();
-            statJson.put("name", "statFile") ;
-            val gson = Gson()
-            val list: List<*>? = gson.fromJson(statJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
-            val jsonString = gson.toJson(list) // 将 List 转换为 JSON 字符串
-            statJson.put("data", Base64.encodeToString(jsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            DeviceIdentifiersJson.put("name", "设备标识") ;
-            DeviceIdentifiersJsonArray.put(statJson) ;
-            DeviceIdentifiersJsonArray.put(getDeviceIdentifiers.getInfo(this)) ;
-            val deviceIdentifiersList: List<*>? = Gson().fromJson(DeviceIdentifiersJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
-            val deviceIdentifiersJsonString = Gson().toJson(deviceIdentifiersList) // 将 List 转换为 JSON 字符串
-            DeviceIdentifiersJson.put("data", Base64.encodeToString(deviceIdentifiersJsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(DeviceIdentifiersJson)
+                val statJson = JSONObject();
+                statJson.put("name", "statFile") ;
+                val gson = Gson()
+                val list: List<*>? = gson.fromJson(statJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
+                val jsonString = gson.toJson(list) // 将 List 转换为 JSON 字符串
+                statJson.put("data", Base64.encodeToString(jsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                DeviceIdentifiersJson.put("name", "设备标识") ;
+                DeviceIdentifiersJsonArray.put(statJson) ;
+                DeviceIdentifiersJsonArray.put(getDeviceIdentifiers.getInfo(this@MainActivity)) ;
+                val deviceIdentifiersList: List<*>? = Gson().fromJson(DeviceIdentifiersJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
+                val deviceIdentifiersJsonString = Gson().toJson(deviceIdentifiersList) // 将 List 转换为 JSON 字符串
+                DeviceIdentifiersJson.put("data", Base64.encodeToString(deviceIdentifiersJsonString.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(DeviceIdentifiersJson)
 
 
-            //6.硬件相关
-            uploadStatus.text = "开始采集硬件相关————————>"
-            val hardwareJson = JSONObject();
+                //6.硬件相关
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集硬件相关————————>"
+                }
+
+                val hardwareJson = JSONObject();
 //            hardwareJson.put("name", "HardwareRelated") ;
-            hardwareJson.put("name", "硬件相关") ;
-            hardwareJson.put("data", Base64.encodeToString(getHardwareRelated.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
-            uploadJsonArray.put(hardwareJson)
+                hardwareJson.put("name", "硬件相关") ;
+                hardwareJson.put("data", Base64.encodeToString(getHardwareRelated.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+                uploadJsonArray.put(hardwareJson)
 
 
 
-            //7.网络相关
-            uploadStatus.text = "开始采集网络相关————————>"
-            val networkJson = JSONObject();
-            networkJson.put("name", "网络相关") ;
-            networkJson.put("data", Base64.encodeToString(getNetworkInfo.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
-            uploadJsonArray.put(networkJson)
+                //7.网络相关
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集网络相关————————>"
+                }
 
-
-
-
-            //8.boot id
-            //cat命令读取/proc/self/mounts
-            //cat命令读取/proc/sys/kernel/random/boot_id
-            ///proc/meminfo
-            val BootIdJson = JSONObject();
-            BootIdJson.put("name", "/proc目录相关信息") ;
-            BootIdJson.put("data", Base64.encodeToString(getBootId.getInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
-            uploadJsonArray.put(BootIdJson)
+                val networkJson = JSONObject();
+                networkJson.put("name", "网络相关") ;
+                networkJson.put("data", Base64.encodeToString(getNetworkInfo.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+                uploadJsonArray.put(networkJson)
 
 
 
 
-            //9.APK Install Path
-            uploadStatus.text = "开始采集APK Install Path————————>"
-            val apkInstallPathJson = JSONObject();
-            apkInstallPathJson.put("name", "apkInstallPath") ;
-            apkInstallPathJson.put("data", Base64.encodeToString(getAPKInstallPath.getAPKPath(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
-            uploadJsonArray.put(apkInstallPathJson)
+                //8.boot id
+                //cat命令读取/proc/self/mounts
+                //cat命令读取/proc/sys/kernel/random/boot_id
+                ///proc/meminfo
+                val BootIdJson = JSONObject();
+                BootIdJson.put("name", "/proc目录相关信息") ;
+                BootIdJson.put("data", Base64.encodeToString(getBootId.getInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+                uploadJsonArray.put(BootIdJson)
 
 
-            //10.输入法
-            val InputMethodListJson = JSONObject();
-            InputMethodListJson.put("name", "InputMethodList") ;
-            InputMethodListJson.put("data", Base64.encodeToString(Gson().toJson(getInputMethodList.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(InputMethodListJson)
 
 
-            //11.机型和系统判定 + Bootloader解锁状态 + SIM卡
-            val deviceOSListJson = JSONObject();
+                //9.APK Install Path
+                withContext(Dispatchers.Main) {
+                    uploadStatus.text = "开始采集APK Install Path————————>"
+                }
+
+                val apkInstallPathJson = JSONObject();
+                apkInstallPathJson.put("name", "apkInstallPath") ;
+                apkInstallPathJson.put("data", Base64.encodeToString(getAPKInstallPath.getAPKPath(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT) ) ;
+                uploadJsonArray.put(apkInstallPathJson)
+
+
+                //10.输入法
+                val InputMethodListJson = JSONObject();
+                InputMethodListJson.put("name", "InputMethodList") ;
+                InputMethodListJson.put("data", Base64.encodeToString(Gson().toJson(getInputMethodList.getInfo(this@MainActivity)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(InputMethodListJson)
+
+
+                //11.机型和系统判定 + Bootloader解锁状态 + SIM卡
+                val deviceOSListJson = JSONObject();
 //            deviceOSListJson.put("name", "deviceOS") ;
-            deviceOSListJson.put("name", "机型") ;
-            deviceOSListJson.put("data", Base64.encodeToString(getModelSystemDeter.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(deviceOSListJson)
+                deviceOSListJson.put("name", "机型") ;
+                deviceOSListJson.put("data", Base64.encodeToString(getModelSystemDeter.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(deviceOSListJson)
 
 
-            //12.截图和模拟点击
-            val AutoClickerJson = JSONObject();
-            AutoClickerJson.put("name", "AutoClick") ;
-            AutoClickerJson.put("data", Base64.encodeToString(CheckAutoClick.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(AutoClickerJson)
+                //12.截图和模拟点击
+                val AutoClickerJson = JSONObject();
+                AutoClickerJson.put("name", "AutoClick") ;
+                AutoClickerJson.put("data", Base64.encodeToString(CheckAutoClick.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(AutoClickerJson)
 
 
-            //13.模拟器 :扫描常见的模拟器特征
-            val simulatorsJson = JSONObject();
-            simulatorsJson.put("name", "模拟器特征") ;
-            simulatorsJson.put("data", Base64.encodeToString(CheckSimulators.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(simulatorsJson)
+                //13.模拟器 :扫描常见的模拟器特征
+                val simulatorsJson = JSONObject();
+                simulatorsJson.put("name", "模拟器特征") ;
+                simulatorsJson.put("data", Base64.encodeToString(CheckSimulators.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(simulatorsJson)
 
-            //14.改机软件
-            val chageAppsJson = JSONObject();
-            chageAppsJson.put("name", "是否安装改机软件") ;
-            chageAppsJson.put("data", Base64.encodeToString(CheckInstallPackageChangerApps.getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(chageAppsJson)
-
-
-
-            //15.root
-            val rootJson = JSONObject();
-            rootJson.put("name", "ROOT") ;
-            rootJson.put("data", Base64.encodeToString(Gson().toJson(CheckRoot.getInfo(this)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(rootJson)
+                //14.改机软件
+                val chageAppsJson = JSONObject();
+                chageAppsJson.put("name", "是否安装改机软件") ;
+                chageAppsJson.put("data", Base64.encodeToString(CheckInstallPackageChangerApps.getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(chageAppsJson)
 
 
-            //16.证书
-            val certJson = JSONObject();
-            certJson.put("name", "证书(System + User)") ;
-            certJson.put("data", Base64.encodeToString(CertificateReader().getInfo(this).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(certJson)
+
+                //15.root
+                val rootJson = JSONObject();
+                rootJson.put("name", "ROOT") ;
+                rootJson.put("data", Base64.encodeToString(Gson().toJson(CheckRoot.getInfo(this@MainActivity)).toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(rootJson)
 
 
-            //17.screen (主屏 + 副屏)
-            val screenJson = JSONObject();
-            screenJson.put("name", "屏幕(主屏+副屏)") ;
-            screenJson.put("data", Base64.encodeToString(updateDisplaysInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(screenJson)
+                //16.证书
+                val certJson = JSONObject();
+                certJson.put("name", "证书(System + User)") ;
+                certJson.put("data", Base64.encodeToString(CertificateReader().getInfo(this@MainActivity).toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(certJson)
 
 
-            //18.codec (系统编码器和解码器列表)
-            val codecJson = JSONObject();
-            codecJson.put("name", "系统编码器和解码器列表") ;
-            codecJson.put("data", Base64.encodeToString(CodecInfoCollector().collectCodecInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(codecJson)
+                //17.screen (主屏 + 副屏)
+                val screenJson = JSONObject();
+                screenJson.put("name", "屏幕(主屏+副屏)") ;
+                screenJson.put("data", Base64.encodeToString(updateDisplaysInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(screenJson)
 
 
-            //19.location
-            val locationInfoJson = JSONObject();
-            Log.d("sb" , "locationJSONObject = $locationJSONObject")
-            locationInfoJson.put("name", "地理位置") ;
-            locationInfoJson.put("data", Base64.encodeToString(locationJSONObject.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(locationInfoJson)
+                //18.codec (系统编码器和解码器列表)
+                val codecJson = JSONObject();
+                codecJson.put("name", "系统编码器和解码器列表") ;
+                codecJson.put("data", Base64.encodeToString(CodecInfoCollector().collectCodecInfo().toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(codecJson)
 
 
-            //20、一些shell相关的内容
+                //19.location
+                val locationInfoJson = JSONObject();
+                Log.d("sb" , "locationJSONObject = $locationJSONObject")
+                locationInfoJson.put("name", "地理位置") ;
+                locationInfoJson.put("data", Base64.encodeToString(locationJSONObject.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(locationInfoJson)
+
+
+                //20、一些shell相关的内容
 //            Log.d("testShellGetProp" , "getSystemProperties= "+ testShellGetProp.getSystemProps())
 //            Log.d("testShellGetProp" , "getSystemBuildId= "+ testShellBuildId.getSystemBuildId())
 //            Log.d("testShellGetProp" , "getPathStatsAsJson= "+ testShellSTAT.getPathStatsAsJson())
-            val shellJson = JSONObject();
-            shellJson.put("name", "shell相关") ;
-            var subShellJson = JSONObject()
-            subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps())
+                val shellJson = JSONObject();
+                shellJson.put("name", "shell相关") ;
+                var subShellJson = JSONObject()
+                subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps())
 //            subShellJson.put("sh -c /system/bin/getprop", testShellGetProp.getSystemProps1())
-            subShellJson.put("sh -c getprop ro.system.build.id", testShellBuildId.getSystemBuildId())
-            subShellJson.put("sh -c stat", testShellSTAT.getPathStatsAsJson())
-            shellJson.put("data", Base64.encodeToString(subShellJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(shellJson)
+                subShellJson.put("sh -c getprop ro.system.build.id", testShellBuildId.getSystemBuildId())
+                subShellJson.put("sh -c stat", testShellSTAT.getPathStatsAsJson())
+                shellJson.put("data", Base64.encodeToString(subShellJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(shellJson)
 
 
-            //21、一些exec相关的内容
-            val executor = ShellCommandExecutor()
+                //21、一些exec相关的内容
+                val executor = ShellCommandExecutor()
 
-            val execJson = JSONObject();
-            execJson.put("name", "exec sh相关") ;
-            var subExecJson = JSONObject()
-            subExecJson.put("exec sh -c pm path com.tencent.mm", executor.getPackagePath("com.tencent.mm"))
-            subExecJson.put("exec sh -c ps | grep adbd", ProcessGrep().executeShellCommandAlternative())
-            subExecJson.put("exec sh -c pm path com.xiaomi.market", executor.getPackagePath("com.xiaomi.market"))
-            subExecJson.put("exec pm list instrumentation", InstrumentationUtil().getInstrumentationList())
-            subExecJson.put("exec sh -c pm path com.android.vending", executor.getPackagePath("com.android.vending"))
-            execJson.put("data", Base64.encodeToString(subExecJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(execJson)
+                val execJson = JSONObject();
+                execJson.put("name", "exec sh相关") ;
+                var subExecJson = JSONObject()
+                subExecJson.put("exec sh -c pm path com.tencent.mm", executor.getPackagePath("com.tencent.mm"))
+                subExecJson.put("exec sh -c ps | grep adbd", ProcessGrep().executeShellCommandAlternative())
+                subExecJson.put("exec sh -c pm path com.xiaomi.market", executor.getPackagePath("com.xiaomi.market"))
+                subExecJson.put("exec pm list instrumentation", InstrumentationUtil().getInstrumentationList())
+                subExecJson.put("exec sh -c pm path com.android.vending", executor.getPackagePath("com.android.vending"))
+                execJson.put("data", Base64.encodeToString(subExecJson.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(execJson)
 
 
-            //22、通过JNI读取内容
+                //22、通过JNI读取内容
 
 //            Log.d("sb" , "get Cname info = "+DrmIdFetcher.getCnameInfoHex())
-            val bootTime: LongArray? = DrmIdFetcher.getBootTime()
-            System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
-            val jniJson = JSONObject();
+                val bootTime: LongArray? = DrmIdFetcher.getBootTime()
+                System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
+                val jniJson = JSONObject();
 
-            val jniDataInfo  = JSONObject();
-            jniDataInfo.put("Cname info - Hex", DrmIdFetcher.getCnameInfoHex())
-            jniDataInfo.put("Boot Time - seconds", bootTime?.get(0))
-            jniDataInfo.put("Boot Time - nanoseconds", bootTime?.get(1))
+                val jniDataInfo  = JSONObject();
+                jniDataInfo.put("Cname info - Hex", DrmIdFetcher.getCnameInfoHex())
+                jniDataInfo.put("Boot Time - seconds", bootTime?.get(0))
+                jniDataInfo.put("Boot Time - nanoseconds", bootTime?.get(1))
 
 
-            val paths = listOf(
-                "/data", "/odm", "/odm_dlkm", "/product",
-                "/system", "/system_ext", "/vendor", "/vendor_dlkm"
-            )
-            val statfs64JSON = JSONObject()
-            paths.forEach { path ->
-                try {
-                    val hexOutput = DrmIdFetcher.getStatFsInfo(path)
-                    println("Path: $path")
-                    println("StatFs64 Hex Dump:\n$hexOutput")
-                    statfs64JSON.put(path, hexOutput)
-                } catch (e: Exception) {
-                    println("Failed to fetch statfs64 info for path: $path")
-                    println("Error: ${e.message}")
+                val paths = listOf(
+                    "/data", "/odm", "/odm_dlkm", "/product",
+                    "/system", "/system_ext", "/vendor", "/vendor_dlkm"
+                )
+                val statfs64JSON = JSONObject()
+                paths.forEach { path ->
+                    try {
+                        val hexOutput = DrmIdFetcher.getStatFsInfo(path)
+                        println("Path: $path")
+                        println("StatFs64 Hex Dump:\n$hexOutput")
+                        statfs64JSON.put(path, hexOutput)
+                    } catch (e: Exception) {
+                        println("Failed to fetch statfs64 info for path: $path")
+                        println("Error: ${e.message}")
+                    }
                 }
-            }
-            jniDataInfo.put("statfs64", statfs64JSON)
+                jniDataInfo.put("statfs64", statfs64JSON)
 
 
-            jniJson.put("name", "通过JNI读取Cname + BootTime") ;
-            jniJson.put("data", Base64.encodeToString(jniDataInfo.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(jniJson)
+                jniJson.put("name", "通过JNI读取Cname + BootTime") ;
+                jniJson.put("data", Base64.encodeToString(jniDataInfo.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(jniJson)
 
 
 
@@ -906,134 +866,112 @@ class MainActivity : AppCompatActivity() {
 //            uploadJsonArray.put(cpu_batteryJson)
 
 
-            //23、读取SIM卡
-            // 获取运营商信息 , 获取所有属性并以JSON格式输出
-            val propertyCollector = TelephonyPropertyCollector(this)
-            val jsonResult = propertyCollector.getTelephonyPropertiesJson()
-            val simJson = JSONObject();
-            simJson.put("name", "SIM卡信息相关") ;
-            simJson.put("data", Base64.encodeToString(jsonResult.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-            uploadJsonArray.put(simJson)
+                //23、读取SIM卡
+                // 获取运营商信息 , 获取所有属性并以JSON格式输出
+                val propertyCollector = TelephonyPropertyCollector(this@MainActivity)
+                val jsonResult = propertyCollector.getTelephonyPropertiesJson()
+                val simJson = JSONObject();
+                simJson.put("name", "SIM卡信息相关") ;
+                simJson.put("data", Base64.encodeToString(jsonResult.toString().toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                uploadJsonArray.put(simJson)
 
 
 
-            //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
-            try {
-                val sishuiliuyunJson = JSONObject();
-                sishuiliuyunJson.put("name", "sishuiliuyun-系统相关属性") ;
-                val sishuiliuyun = Gson().toJson(sishuiliuyunCpuManager().getInfo(this@MainActivity))
-                Log.d("sb", "sishuiliuyun = $sishuiliuyun")
-                sishuiliuyunJson.put("data", Base64.encodeToString(sishuiliuyun.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
-                uploadJsonArray.put(sishuiliuyunJson)
-            }catch (e: Exception){
-                e.printStackTrace()
-            }
+                //18.https://www.cnblogs.com/sishuiliuyun/p/3245599.html
+                try {
+                    val sishuiliuyunJson = JSONObject();
+                    sishuiliuyunJson.put("name", "sishuiliuyun-系统相关属性") ;
+                    val sishuiliuyun = Gson().toJson(sishuiliuyunCpuManager().getInfo(this@MainActivity))
+                    Log.d("sb", "sishuiliuyun = $sishuiliuyun")
+                    sishuiliuyunJson.put("data", Base64.encodeToString(sishuiliuyun.toByteArray(Charsets.UTF_8), Base64.DEFAULT))
+                    uploadJsonArray.put(sishuiliuyunJson)
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
 
 
 
 
 
-            //19.读取/proc/stat下的所有内容:没有权限
+                //19.读取/proc/stat下的所有内容:没有权限
 //            Log.d("sb", "ProcStatReader.readProcStat() = " + ReadProcStat.getInfo())
 
 
-            val allDataFileNameSuffix = Build.MODEL + "_" + Utils.getCurrentDateTime()
-            val allDataFileName = allDataFileNameSuffix + "_" + "allData.txt"
-            val uploadTxTtoServerState = "开始保存数据到本地，文件名称是$allDataFileName————————>"
-            uploadStatus.text = uploadTxTtoServerState
-            var externalDir111 = this.filesDir ;
-            //写入
-            java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
-
-
-
-            //20.NDK - 传感器
-            val sensorFileDir = File(externalDir111.absolutePath)
-
-            //21.唐哥要求的本地文件
-            // 使用协程处理延迟和文件操作
-            CoroutineScope(Dispatchers.IO).launch {
-                mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
-                mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
-                withContext(Dispatchers.IO) {
-                    ShellGetProp.saveSystemPropsToFile(File(externalDir111.absolutePath ))
-                    ShellGetCgroup.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    ShellGetMounts.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    ShellGetDiskstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                    mCpuFilesCopier.copyCpuFiles()
-                    mPower_SupplyFilesCopier.copyPower_SupplyFiles()
-
+                val allDataFileNameSuffix = Build.MODEL + "_" + Utils.getCurrentDateTime()
+                val allDataFileName = allDataFileNameSuffix + "_" + "allData.txt"
+                val uploadTxTtoServerState = "开始保存数据到本地，文件名称是$allDataFileName————————>"
+                runOnUiThread {
+                    uploadStatus.text = uploadTxTtoServerState
                 }
-                delay(5000)
-                UploadData.printAllFiles(sensorFileDir.absolutePath)
+                var externalDir111 = this@MainActivity.filesDir ;
+                //写入
+                java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
 
 
-                // 继续上传操作
-                Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
-                Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
 
-                Log.d("sb", "UploadData.upload start....")
-                UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
-                    onSuccess = {
-                        // 在主线程更新UI
+                //20.NDK - 传感器
+                runOnUiThread {
+                    uploadStatus.text = "开始收集传感器文件..."
+                }
+                val sensorFileDir = File(externalDir111.absolutePath)
+                delay(3000)
+
+                //21.唐哥要求的本地文件
+                // 使用协程处理延迟和文件操作
+                CoroutineScope(Dispatchers.IO).launch {
+                    mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+                    mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
+                    withContext(Dispatchers.IO) {
                         runOnUiThread {
-                            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                            uploadStatus.text = "开始复制cpu，电池等文件到本地...."
                         }
-                    },
-                    onFailure = { errorMsg ->
-                        // 在主线程更新UI
-                        runOnUiThread {
-                            if (!errorMsg.contains("Expected a string but was BEGIN_OBJECT")) {
-                                uploadStatus.text = "上传失败: $errorMsg————————>"
-                            }else{
+                        ShellGetProp.saveSystemPropsToFile(File(externalDir111.absolutePath ))
+                        ShellGetCgroup.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetMounts.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetDiskstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        mCpuFilesCopier.copyCpuFiles()
+                        mPower_SupplyFilesCopier.copyPower_SupplyFiles()
+
+                    }
+                    delay(5000)
+                    UploadData.printAllFiles(sensorFileDir.absolutePath)
+
+
+                    // 继续上传操作
+                    Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
+                    Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
+
+                    Log.d("sb", "UploadData.upload start....")
+                    runOnUiThread {
+                        uploadStatus.text = "开始准备上传文件到服务器..."
+                    }
+                    UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
+                        onSuccess = {
+                            // 在主线程更新UI
+                            runOnUiThread {
                                 uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
                             }
+                        },
+                        onFailure = { errorMsg ->
+                            // 在主线程更新UI
+                            runOnUiThread {
+                                if (!errorMsg.contains("Expected a string but was BEGIN_OBJECT")) {
+                                    uploadStatus.text = "上传失败: $errorMsg————————>"
+                                }else{
+                                    uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
+                                }
+                            }
                         }
-                    }
-                )
+                    )
 
+
+                }
 
             }
-
-
-
-//            // 使用协程处理延迟和UI更新
-//            CoroutineScope(Dispatchers.IO).launch {
-//
-//                // 继续上传操作
-//                Log.d("sb", "uploadTxTtoServerState  = $uploadTxTtoServerState")
-//                Log.d("sb", "uploadTxTtoServerState externalDir = $externalDir111")
-//
-//                Log.d("sb", "UploadData.upload start....")
-//                UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
-//                    onSuccess = {
-//                        // 在主线程更新UI
-//                        runOnUiThread {
-//                            uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
-//                        }
-//                    },
-//                    onFailure = { errorMsg ->
-//                        // 在主线程更新UI
-//                        runOnUiThread {
-////                            uploadStatus.text = "上传失败: $errorMsg————————>"
-//                            // 在主线程更新UI
-//                            runOnUiThread {
-//                                uploadStatus.text = "已经上传数据到服务器，文件名称是$allDataFileNameSuffix.zip————————>"
-//                                testText.text = errorMsg
-//                            }
-//                        }
-//                    }
-//                )
-//
-//            }
-
-
-
-
         }
 
 
