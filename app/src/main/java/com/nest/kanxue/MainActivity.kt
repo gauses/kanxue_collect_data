@@ -281,24 +281,6 @@ class MainActivity : AppCompatActivity() {
         frame.addView(mySurfaceView)
 
 
-//        // check has permission WRITE_EXTERNAL_STORAGE
-//        if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-//            onRequestPermissionsResult(
-//                RESULT_OK, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-//                    PackageManager.PERMISSION_GRANTED));
-//        }else{
-//            // request to write external storage
-//            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-//        }
-//
-//        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-//            onRequestPermissionsResult(
-//                RESULT_OK, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), intArrayOf(
-//                    PackageManager.PERMISSION_GRANTED));
-//        }else{
-//            // request to write external storage
-//            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 0)
-//        }
 
 
         thread {
@@ -469,48 +451,6 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-
-
-
-            // 使用示例：
-            CoroutineScope(Dispatchers.IO).launch {
-//                val content = CpuReader.readCpuDevices()
-//                Log.d("CPUInfo12", content)
-//
-//                val content2 = BatteryReader.readBatteryInfo()
-//                Log.d("BatteryInfo12", content2)
-
-            }
-
-
-//            // 在后台线程中执行复制CPU文件
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val copier = CpuFilesCopier(this@MainActivity)
-//                val result = copier.copyCpuFiles()
-//
-//                withContext(Dispatchers.Main) {
-//                    Log.d("CpuCopier", result)
-//                }
-//            }
-
-
-            // 在后台线程中执行复制
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val copier = BatteryFilesCopier(this@MainActivity)
-//
-//                // 选择使用普通方式或 Root 方式
-//                val result = try {
-//                    copier.copyBatteryFiles() // 普通方式
-//                    // 或者
-//                    // copier.copyBatteryFilesWithRoot() // Root 方式
-//                } catch (e: Exception) {
-//                    "复制失败: ${e.message}"
-//                }
-//
-//                withContext(Dispatchers.Main) {
-//                    Log.d("BatteryCopier", result)
-//                }
-//            }
 
 
 
@@ -722,8 +662,7 @@ class MainActivity : AppCompatActivity() {
 //            }
 
 
-
-            uploadStatus.text = "开始采集sensor，等待5秒钟————————>"
+            runOnUiThread { uploadStatus.text = "开始采集sensor，等待5秒钟————————>" }
 
 
 
