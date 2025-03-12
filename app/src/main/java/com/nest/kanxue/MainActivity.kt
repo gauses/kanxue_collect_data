@@ -7,7 +7,6 @@ import android.Manifest
 import android.app.ActivityManager
 import android.app.AppOpsManager
 import android.content.Context
-import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -33,16 +32,17 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.cert.CertificateReader
 import com.nest.kanxue.core.CpuFilesCopier
+import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
+import com.nest.kanxue.core.ShellGetKernel
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
 import com.nest.kanxue.core.Shell_lshal
@@ -83,7 +83,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 import java.io.IOException
 import kotlin.concurrent.thread
 
@@ -282,11 +284,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         thread {
             //先清除
             Utils.clearFilesDir(this)
-//            //写入sensor
+            //写入sensor
             saveSensorList(this, this.filesDir.absolutePath)
             testor.testSensor(this.filesDir.absolutePath,  intArrayOf(Sensor.TYPE_ALL))
         }
@@ -930,6 +931,7 @@ class MainActivity : AppCompatActivity() {
                         ShellGetMounts.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         ShellGetDiskstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetKernel.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))

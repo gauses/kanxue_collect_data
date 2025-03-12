@@ -43,6 +43,11 @@
     <!-- 对外显示权限 -->
     <uses-permission android:name="android.permission.PRESENTATION_CONTENT_TO_SECONDARY_DISPLAYS" />
 
+    <uses-permission android:name="android.permission.DUMP"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
+        tools:ignore="ProtectedPermissions" />
+
 
     <queries>
         <package android:name="com.yztc.studio.plugin" />
