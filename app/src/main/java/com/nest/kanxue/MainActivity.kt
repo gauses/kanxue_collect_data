@@ -36,6 +36,7 @@ import com.nest.kanxue.apkinstallpath.getAPKInstallPath
 import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
+import com.nest.kanxue.camera.GetCameraInfo
 import com.nest.kanxue.cert.CertificateReader
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.Power_SupplyFilesCopier
@@ -104,17 +105,19 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100000  // 可以是任意整数，通常从100开始
         private const val PACKAGE_USAGE_STATS_REQUEST = 10012
+        private const val requestCodeCameraPermission = 100013
 
     }
     // 检查并请求所需权限
-    private fun checkAndRequestPermissions() {
+    private fun checkAndRequestPermissions(context: Context) {
         val permissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_SMS,
-            Manifest.permission.READ_PHONE_NUMBERS
-        )
+            Manifest.permission.READ_PHONE_NUMBERS,
+            Manifest.permission.CAMERA
+            )
 
         val missingPermissions = permissions.filter {
             ActivityCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -195,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkAndRequestPermissions()
+        checkAndRequestPermissions(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -343,7 +346,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        checkAndRequestPermissions()
+        checkAndRequestPermissions(this)
 
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
@@ -429,46 +432,18 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
-
-            val executor = ShellCommandExecutor()
-            val wechatPath = executor.getPackagePath("com.tencent.mm")
-            Log.d("wechatPath", wechatPath+"")
-
-
-
-            Log.d("processGrep11", ProcessGrep().executeShellCommand())
-            Log.d("processGrep12", ProcessGrep().executeShellCommandAlternative())
-            Log.d("processGrep13", ProcessGrep().getProcessInfoViaProc())
-            Log.d("processGrep14", ProcessGrep().getProcessInfoViaActivityManager(this))
-            Log.d("processGrep15", ProcessGrep().getProcessInfoViaProcPidCmdline())
-//            Log.d("processGrep16", ProcessGrep().getProcessMemoryInfo())
-
-            // 检查权限
-            if (!hasUsageStatsPermission()) {
-                requestUsageStatsPermission()
+            val cameraInfo = GetCameraInfo.getCameraResolutions(this)
+            if (cameraInfo.has("error")) {
+                // 处理错误
+                Log.e("Camera", cameraInfo.getString("error"))
             } else {
-                getMemoryInfo()
+                // 处理相机信息
+                Log.d("Camera", cameraInfo.toString()
+                )
+                val cameras = cameraInfo.getJSONArray("cameras")
+                // ... 使用相机信息
+
             }
-
-
-
-
-
-            Log.d("testShellGetProp" , "getSystemProperties= "+ testShellGetProp.getSystemProps())
-            Log.d("testShellGetProp" , "getSystemBuildId= "+ testShellBuildId.getSystemBuildId())
-            Log.d("testShellGetProp" , "getPathStatsAsJson= "+ testShellSTAT.getPathStatsAsJson())
-
-            val paths = listOf(
-                "/data", "/odm", "/odm_dlkm", "/product",
-                "/system", "/system_ext", "/vendor", "/vendor_dlkm"
-            )
-
-
-
-
-
-            val info = DrmIdFetcher.getStatFsInfoParse("/data")
-
 
 
             val bootTime: LongArray? = DrmIdFetcher.getBootTime()
@@ -503,89 +478,6 @@ class MainActivity : AppCompatActivity() {
             val allCodecInfo = collector.collectCodecInfo()
             Log.d("sb" , "allCodecInfo= $allCodecInfo")
             collector.logCodecInfo()
-
-// 注册显示器监听
-//            val displayManager = getSystemService(DISPLAY_SERVICE) as DisplayManager
-//            displayManager.registerDisplayListener(displayListener, null)
-//            Log.d("MainActivity", "updateDisplaysInfo() =  " + updateDisplaysInfo())
-
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                Log.d("sb" , "getNetworkInfo = "+getNetworkInfo.getInfo(this@MainActivity))
-//            }
-
-            // 在 Activity 或 Fragment 中使用
-//            val certificateReader = CertificateReader()
-
-            // 读取系统证书
-//            val systemCerts = certificateReader.readSystemCertificates()
-//            systemCerts.forEach { cert ->
-//                println("证书别名: ${cert.alias}")
-//                println("证书内容: ${cert}")
-//                println("----------------")
-//
-//            }
-//            Log.d("sb" , "证书 = "+CertificateReader().getInfo(this).toString())
-
-
-//            // 读取用户安装的证书
-//            val userCerts = certificateReader.readUserCertificates()
-//            println("证书: ${userCerts.size}")
-//            userCerts.forEach { cert ->
-//                println("证书别名: ${cert.alias}")
-//                println("主题: ${cert.subject}")
-//                println("颁发者: ${cert.issuer}")
-//                println("有效期从: ${cert.validFrom}")
-//                println("有效期至: ${cert.validTo}")
-//                println("序列号: ${cert.serialNumber}")
-//                println("版本: ${cert.version}")
-//                println("文件路径: ${cert.path}")
-//                println("----------------")
-//            }
-
-
-//
-//            Log.d("sb" , "getAPKPath = "+ getAPKInstallPath.getAPKPath(this))
-//            Log.d("sb" , "getInputMethodList = "+ getInputMethodList.getInfo(this))
-//            Log.d("sb" , "checkHookEnvironment = "+ checkHookEnvironment.getInfo())
-//            Log.d("sb" , "CheckBrandOS = "+ getModelSystemDeter.getInfo(this))
-//            Log.d("sb" , "CheckSIM = "+ CheckSIM.getSimOperator(this))
-//
-//            Log.d("sb" , "CheckAutoClick = "+ CheckAutoClick.getInfo(this))
-//            Log.d("sb" , "CheckSystemProp = "+ CheckSystemProp.checkEmulatorPropsWithGetprop())
-//            Log.d("sb" , "CheckFileDir = "+ CheckFileDir.checkEmulatorFiles())
-//            Log.d("sb" , "CheckSimulators = "+ CheckSimulators.getInfo(this))
-//            Log.d("sb" , "CheckInstallPackage = "+ CheckInstallPackageChangerApps.getInfo(this))
-//            Log.d("sb" , " Build.getSerial()  = "+ Build.SERIAL )
-//
-//
-//            Log.d("sb" , "getDrmId = "+ Base64.encodeToString(getDrmId.getDrmId(), Base64.DEFAULT))
-//                val DrmId = getDrmId.getDrmId()
-//                with(ByteArrayConverter) {
-//                    // 1. 转换成十六进制
-//                    println("DrmId Hex: ${DrmId?.toHexString()}")
-//                    // 输出: 48656c6c6f
-//
-//                    val result = StringBuilder(DrmId!!.size * 2)
-//                    DrmId!!.forEach { byte ->
-//                        result.append(String.format("%02x", byte))
-//                    }
-//                    println("result result: ${DrmId?.toHexString()}")
-//
-//
-//
-//                }
-
-
-//            // 在后台线程中读取文件
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                val reader = com.nest.kanxue.devicefingerprint.DrmIdFetcher.readCompatible()
-//                Log.d("sb" , "readCompatible = $reader")
-//
-////                // 在主线程更新UI
-////                withContext(Dispatchers.Main) {
-////                    findViewById<TextView>(R.id.textView).text = content
-////                }
-//            }
 
 
 
@@ -935,6 +827,7 @@ class MainActivity : AppCompatActivity() {
                         Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        GetCameraInfo.saveSystemPropsToFile(this@MainActivity, File(externalDir111.absolutePath))
                         mCpuFilesCopier.copyCpuFiles()
                         mPower_SupplyFilesCopier.copyPower_SupplyFiles()
 
