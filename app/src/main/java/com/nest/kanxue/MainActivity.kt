@@ -295,10 +295,6 @@ class MainActivity : AppCompatActivity() {
             testor.testSensor(this.filesDir.absolutePath,  intArrayOf(Sensor.TYPE_ALL))
         }
 
-
-
-
-
         locationHelper = LocationHelper(
             context = this,
             onLocationUpdate = { location ->
@@ -867,6 +863,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+        }
+
+        findViewById<Button>(R.id.stop_sensor_btn).setOnClickListener {
+            testor.stop()
         }
 
 

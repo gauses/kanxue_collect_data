@@ -11,6 +11,7 @@
 #include <vector>
 #include <fcntl.h>
 #include <json/json.h>
+#include <sys/stat.h>
 
 
 #define ALOGD(...)     __android_log_print(ANDROID_LOG_ERROR, "TAG", __VA_ARGS__)
@@ -59,6 +60,8 @@ int startTestSensor(const int sensorTypes[], int numSensorTypes) {
     int numSensors = ASensorManager_getSensorList(sensorManager, &sensorList);
     std::vector<ASensorRef> sensors;
     std::vector<int> sensorsFds;
+
+    std::map<std::string, int> eventFileMap;
 
 
     int looperId = 1;
@@ -169,12 +172,20 @@ int startTestSensor(const int sensorTypes[], int numSensorTypes) {
                 ALOGE("%d [gravity sensor] gravity :%f,%f,%f\n",event.sensor, event.vector.v[0], event.vector.v[1], event.vector.v[2] );
             }
 
+            std::string filepath = std::string(gExternalStoragePath) + "/" + std::to_string(event.sensor);
             // append to file
-            int fd = open((std::string(gExternalStoragePath) + "/" + std::to_string(event.sensor)).c_str(), O_WRONLY | O_APPEND);
+            int fd = open(filepath.c_str(), O_WRONLY | O_APPEND);
             if (fd != -1) {
                 write(fd, &event, sizeof(event));
                 close(fd);
+
+                //get file size, and set to map
+                struct stat statbuf;
+                if (stat(filepath.c_str(), &statbuf) == 0) {
+                    eventFileMap[filepath] = statbuf.st_size;
+                }
             }
+
         }
     }
 
@@ -183,6 +194,10 @@ int startTestSensor(const int sensorTypes[], int numSensorTypes) {
         if( ASensorEventQueue_disableSensor( eventQueue, s) != 0 ){
             ALOGE("error, cannot disable sensor %s\n", ASensor_getName(s));
         }
+    }
+
+    for(auto file: eventFileMap){
+        ALOGD("file: %s, size: %d, %d", file.first.c_str(), file.second, (file.second - 256) % 104);
     }
 
     /* free resources */
