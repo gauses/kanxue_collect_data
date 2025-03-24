@@ -38,6 +38,7 @@ import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.camera.GetCameraInfo
 import com.nest.kanxue.cert.CertificateReader
+import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
@@ -346,6 +347,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
+        val checkSensorText = findViewById<TextView>(R.id.checkSensorText)
 
 
         autoCompleteTextView = findViewById(R.id.pathInput)
@@ -830,6 +832,26 @@ class MainActivity : AppCompatActivity() {
                     }
                     delay(5000)
                     UploadData.printAllFiles(sensorFileDir.absolutePath)
+
+
+                    //开始检查Sensor文件的长度
+                    val sensorFilePath = java.io.File("$externalDir111")
+                    runOnUiThread {
+                        val checkSensorJSON = CheckSensorLength.check(sensorFilePath)
+                        Log.d("sb", "checkSensorJSON = $checkSensorJSON")
+
+                        val checkSensorFailedCount = checkSensorJSON.get("failedCount")
+                        val sumSensorFailedCount = checkSensorJSON.get("totalCheckedFiles")
+
+                        if (checkSensorFailedCount == 0){
+                            checkSensorText.text = "检查$sumSensorFailedCount 个Sensor文件，所有的Sensor文件长度都符合要求"
+                            checkSensorText.setTextColor(android.graphics.Color.GREEN);
+                        }else{
+                            checkSensorText.text = checkSensorJSON.toString()
+                            checkSensorText.setTextColor(android.graphics.Color.RED);
+
+                        }
+                    }
 
 
                     // 继续上传操作

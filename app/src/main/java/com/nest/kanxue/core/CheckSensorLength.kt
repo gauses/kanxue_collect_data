@@ -1,5 +1,6 @@
 package com.nest.kanxue.core
 
+import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -20,6 +21,7 @@ object CheckSensorLength {
         val resultJson = JSONObject()
         val failedFilesArray = JSONArray()
         var totalCheckedFiles = 0
+        var totalDeletedFiles = 0
 
         try {
             if (!targetDir.exists() || !targetDir.isDirectory) {
@@ -45,6 +47,21 @@ object CheckSensorLength {
                             put("fileSize", fileSize)
                         }
                         failedFilesArray.put(fileJson)
+                        
+                        // 删除不符合条件的文件
+                        try {
+                            if (file.delete()) {
+                                totalDeletedFiles++
+                                fileJson.put("deleted", true)
+                                Log.d("CheckSensor", "成功删除文件: ${file.absolutePath}")
+                            } else {
+                                fileJson.put("deleted", false)
+                                Log.e("CheckSensor", "删除文件失败: ${file.absolutePath}")
+                            }
+                        } catch (e: Exception) {
+                            fileJson.put("deleted", false)
+                            Log.e("CheckSensor", "删除文件时发生错误: ${file.absolutePath}, ${e.message}")
+                        }
                     }
                 }
             }
@@ -52,6 +69,7 @@ object CheckSensorLength {
             resultJson.put("totalCheckedFiles", totalCheckedFiles)
             resultJson.put("failedFiles", failedFilesArray)
             resultJson.put("failedCount", failedFilesArray.length())
+            resultJson.put("deletedCount", totalDeletedFiles)
 
         } catch (e: Exception) {
             resultJson.put("error", "检查文件时发生错误: ${e.message}")
