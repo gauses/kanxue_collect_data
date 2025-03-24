@@ -24,7 +24,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         getdrmid.cpp
         readCompatibleNative.cpp
         getdents64.cpp
-        main.cpp
+        sensor.cpp
         jsoncpp/lib_json/json_reader.cpp
         jsoncpp/lib_json/json_value.cpp
         jsoncpp/lib_json/json_writer.cpp
