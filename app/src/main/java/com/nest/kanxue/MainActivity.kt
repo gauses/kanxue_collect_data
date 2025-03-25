@@ -428,7 +428,7 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
-            val cameraInfo = GetCameraInfo.getCameraResolutions(this)
+            val cameraInfo = GetCameraInfo.getCameraInfo(this)
             if (cameraInfo.has("error")) {
                 // 处理错误
                 Log.e("Camera", cameraInfo.getString("error"))
@@ -824,6 +824,7 @@ class MainActivity : AppCompatActivity() {
                         Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         GetCameraInfo.saveSystemPropsToFile(this@MainActivity, File(externalDir111.absolutePath))
+                        ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
                         mCpuFilesCopier.copyCpuFiles()
                         mPower_SupplyFilesCopier.copyPower_SupplyFiles()
 
