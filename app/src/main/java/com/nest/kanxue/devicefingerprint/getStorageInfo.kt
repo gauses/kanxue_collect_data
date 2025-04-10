@@ -7,10 +7,24 @@ import android.util.Base64
 import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.File
-import java.nio.charset.StandardCharsets
+
 
 object getStorageInfo {
+
+    fun getTotalLong(path: String): Long {
+        val stat = StatFs(path)
+
+        var totalBytes: Long = 1L
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            totalBytes = stat.blockSizeLong * stat.blockCountLong
+        } else {
+            totalBytes = (stat.blockSize * stat.blockCount).toLong()
+        }
+
+        return totalBytes
+    }
+
 
     fun getInfo(path: String): Pair<Long, Long> {
         val stat = StatFs(path)
@@ -19,11 +33,12 @@ object getStorageInfo {
         val availableBytes: Long
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            totalBytes = stat.totalBytes
-            availableBytes = stat.availableBytes
-        } else {
+
             totalBytes = stat.blockSizeLong * stat.blockCountLong
             availableBytes = stat.blockSizeLong * stat.availableBlocksLong
+        } else {
+            totalBytes = stat.totalBytes
+            availableBytes = stat.availableBytes
         }
 
         return Pair(totalBytes, availableBytes)

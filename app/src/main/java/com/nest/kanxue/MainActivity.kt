@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
+import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -430,7 +431,10 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
-            val cameraInfo = GetCameraInfo.getCameraInfo(this)
+            Log.d("getStorageInfo.getTotalLong", ""+getStorageInfo.getTotalLong(Environment.getDataDirectory().absolutePath))
+
+
+            val cameraInfo = GetCameraInfo.getCameraResolutions(this)
             if (cameraInfo.has("error")) {
                 // 处理错误
                 Log.e("Camera", cameraInfo.getString("error"))
