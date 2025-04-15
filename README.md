@@ -66,3 +66,10 @@ sysinfo
 uname -a
 
 
+
+需要提供给唐哥的文件
+1. kernel
+2. cpuinfo
+3. camera 怎么刷新 ？
+
+

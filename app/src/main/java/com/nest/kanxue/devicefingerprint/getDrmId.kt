@@ -27,7 +27,7 @@ object getDrmId {
 //    需要适当的权限才能访问
 //    不是所有设备都支持 Widevine DRM
 //    ID 是持久的，即使重置设备也不会改变
-    fun getDrmId(): ByteArray? {
+    fun KotlingetDrmId(): ByteArray? {
         return try {
             // 使用 Widevine 的 UUID 作为 DRM 方案（适用于大多数 Android 设备）
             //这个 UUID 是固定的，所有使用 Widevine 的设备都使用这个值

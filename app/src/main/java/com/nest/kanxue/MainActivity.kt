@@ -431,6 +431,9 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
+            Log.d("NDK_DRM_ID", ""+DrmIdFetcher.getDrmId())
+
+
             Log.d("getStorageInfo.getTotalLong", ""+getStorageInfo.getTotalLong(Environment.getDataDirectory().absolutePath))
 
 
@@ -518,10 +521,11 @@ class MainActivity : AppCompatActivity() {
                 devicefingerprintJsonArray.put(getStorageInfo.getstorage_emulated_0())
                 devicefingerprintJsonArray.put(getSystemProp.getPropertyAllInfo())
 
+
                 with(ByteArrayConverter) {
                     // 1. 转换成十六进制
-                    val DrmId = getDrmId.getDrmId()
-                    devicefingerprintJsonArray.put(JSONObject().put("DRMID(已经是16进制)", DrmId?.toHexString()))
+                    val DrmId = getDrmId.KotlingetDrmId()
+                    devicefingerprintJsonArray.put(JSONObject().put("DRMID", DrmId))
                 }
                 devicefingerprintson.put("name", "设备指纹") ;
                 val devicefingerprintList: List<*>? = Gson().fromJson(devicefingerprintJsonArray.toString(), List::class.java) // 将 JSONArray 转换为 List
@@ -585,6 +589,11 @@ class MainActivity : AppCompatActivity() {
                 uploadJsonArray.put(networkJson)
 
 
+                //NATIVE获取DRMID
+                val DRMIDJson = JSONObject();
+                DRMIDJson.put("name", "DRMID") ;
+                DRMIDJson.put("data", DrmIdFetcher.getDrmId()) ;
+                uploadJsonArray.put(DRMIDJson)
 
 
                 //8.boot id
@@ -994,6 +1003,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateDisplaysInfo() : JSONObject{
 
         val jsonObject = JSONObject()
+
 
         // 获取显示模式
         val displayMode = ScreenUtils(this).getDisplayMode()

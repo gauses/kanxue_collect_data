@@ -25,6 +25,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         readCompatibleNative.cpp
         getdents64.cpp
         sensor.cpp
+        nativegetdrmid.cpp
+        Base64Utils.cpp
         jsoncpp/lib_json/json_reader.cpp
         jsoncpp/lib_json/json_value.cpp
         jsoncpp/lib_json/json_writer.cpp
@@ -33,5 +35,6 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         android
-        log)
+        log
+        mediandk)
 
