@@ -46,6 +46,7 @@ import com.nest.kanxue.core.ShellGetCgroup
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
 import com.nest.kanxue.core.ShellGetKernel
+import com.nest.kanxue.core.ShellGetLinuxVersion
 import com.nest.kanxue.core.ShellGetMeminfo
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
@@ -350,6 +351,8 @@ class MainActivity : AppCompatActivity() {
 
         val uploadStatus = findViewById<TextView>(R.id.uploadStatusText)
         val checkSensorText = findViewById<TextView>(R.id.checkSensorText)
+        val copyCPUResult = findViewById<TextView>(R.id.copyCPUResult)
+
 
 
         autoCompleteTextView = findViewById(R.id.pathInput)
@@ -431,59 +434,89 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
-
-            Log.d("NDK_DRM_ID", ""+DrmIdFetcher.getDrmId())
-
-
-            Log.d("getStorageInfo.getTotalLong", ""+getStorageInfo.getTotalLong(Environment.getDataDirectory().absolutePath))
+            var externalDir111 = this@MainActivity.filesDir ;
+            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
 
 
-            val cameraInfo = GetCameraInfo.getCameraResolutions(this)
-            if (cameraInfo.has("error")) {
-                // 处理错误
-                Log.e("Camera", cameraInfo.getString("error"))
-            } else {
-                // 处理相机信息
-                Log.d("Camera", cameraInfo.toString()
-                )
-                val cameras = cameraInfo.getJSONArray("cameras")
-                // ... 使用相机信息
-
+            val sourceDir = File("/sys/devices/system/cpu")
+            runOnUiThread {
+                Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
             }
-
-
-            val bootTime: LongArray? = DrmIdFetcher.getBootTime()
-            System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
-
-
-            val reader = TunInfoReader()
-
-            try {
-                // 读取所有 TUN 信息
-                val allInfo = reader.readTunInfo()
-                println("所有 TUN 信息:")
-                allInfo.forEach { (name, value) ->
-                    println("$name: $value")
+            if (sourceDir.exists()) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
+                    uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
                 }
-
-                // 读取特定属性，例如 dev_id
-                val devId = reader.readTunProperty("dev_id")
-                println("\n设备 ID: $devId")
-
-            } catch (e: IOException) {
-                println("错误: ${e.message}")
+                val resultJson = mCpuFilesCopier.copyCpuFiles()
+                runOnUiThread {
+                    uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
+                    Thread.sleep(3000)
+                }
+            }else{
+                runOnUiThread {
+                    uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
+                    Thread.sleep(2000)
+                }
             }
 
 
-            Log.d("sb" , "getCgroupUsingCat= "+getBootId.getARPUsingFile())
-            uploadStatus.text = getBootId.getARPUsingFile()
 
-            // 在 Activity 或其他地方使用
-            val collector = CodecInfoCollector()
-            // 收集所有编解码器信息
-            val allCodecInfo = collector.collectCodecInfo()
-            Log.d("sb" , "allCodecInfo= $allCodecInfo")
-            collector.logCodecInfo()
+
+
+
+
+//            Log.d("NDK_DRM_ID", ""+DrmIdFetcher.getDrmId())
+//
+//
+//            Log.d("getStorageInfo.getTotalLong", ""+getStorageInfo.getTotalLong(Environment.getDataDirectory().absolutePath))
+//
+//
+//            val cameraInfo = GetCameraInfo.getCameraResolutions(this)
+//            if (cameraInfo.has("error")) {
+//                // 处理错误
+//                Log.e("Camera", cameraInfo.getString("error"))
+//            } else {
+//                // 处理相机信息
+//                Log.d("Camera", cameraInfo.toString()
+//                )
+//                val cameras = cameraInfo.getJSONArray("cameras")
+//                // ... 使用相机信息
+//
+//            }
+//
+//
+//            val bootTime: LongArray? = DrmIdFetcher.getBootTime()
+//            System.out.println("Boot Time: " + bootTime?.get(0) + " seconds, " + bootTime?.get(1) + " nanoseconds");
+//
+//
+//            val reader = TunInfoReader()
+//
+//            try {
+//                // 读取所有 TUN 信息
+//                val allInfo = reader.readTunInfo()
+//                println("所有 TUN 信息:")
+//                allInfo.forEach { (name, value) ->
+//                    println("$name: $value")
+//                }
+//
+//                // 读取特定属性，例如 dev_id
+//                val devId = reader.readTunProperty("dev_id")
+//                println("\n设备 ID: $devId")
+//
+//            } catch (e: IOException) {
+//                println("错误: ${e.message}")
+//            }
+//
+//
+//            Log.d("sb" , "getCgroupUsingCat= "+getBootId.getARPUsingFile())
+//            uploadStatus.text = getBootId.getARPUsingFile()
+//
+//            // 在 Activity 或其他地方使用
+//            val collector = CodecInfoCollector()
+//            // 收集所有编解码器信息
+//            val allCodecInfo = collector.collectCodecInfo()
+//            Log.d("sb" , "allCodecInfo= $allCodecInfo")
+//            collector.logCodecInfo()
 
 
 
@@ -863,6 +896,12 @@ class MainActivity : AppCompatActivity() {
                         ShellGetMeminfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
 
                         runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/version\")"
+                        }
+                        ShellGetLinuxVersion.saveVersionToFile(File(externalDir111.absolutePath))
+
+
+                        runOnUiThread {
                             uploadStatus.text = "开始执行getCnameInfoHex"
                         }
                         ShellGetKernel.saveSystemPropsToFile(File(externalDir111.absolutePath))
@@ -892,10 +931,30 @@ class MainActivity : AppCompatActivity() {
                         }
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
 
+
+                        val sourceDir = File("/sys/devices/system/cpu")
                         runOnUiThread {
-                            uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+                            Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
                         }
-                        mCpuFilesCopier.copyCpuFiles()
+                        if (sourceDir.exists()) {
+                            runOnUiThread {
+                                Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
+                                uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+                            }
+                            val resultJson = mCpuFilesCopier.copyCpuFiles()
+                            runOnUiThread {
+                                copyCPUResult.text = resultJson
+                                uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
+                                Thread.sleep(3000)
+                            }
+                        }else{
+                            runOnUiThread {
+                                uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
+                                Thread.sleep(2000)
+                            }
+                        }
+
+
 
                         runOnUiThread {
                             uploadStatus.text = "开始执行mPower_SupplyFilesCopier.copyPower_SupplyFiles()"

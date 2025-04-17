@@ -17,7 +17,8 @@ class Power_SupplyFilesCopier(private val context: Context, private val targetDi
             }
 
             // 源目录
-            val sourcePath = "/sys/class/power_supply"
+//            val sourcePath = "/sys/class/power_supply"
+            val sourcePath = "/sys/class/power_supply/battery"
             val sourceDir = File(sourcePath)
 
             // 复制文件

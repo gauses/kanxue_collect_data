@@ -73,12 +73,22 @@
             android:text="checkSensorText"
             />
 
+        <TextView
+            android:id="@+id/copyCPUResult"
+            app:layout_constraintTop_toBottomOf="@id/checkSensorText"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="copyCPUResult"
+            />
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/pathInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/checkSensorText"
+            app:layout_constraintTop_toBottomOf="@id/copyCPUResult"
             android:hint="请输入文件夹路径"
             android:inputType="text" />
 
@@ -118,6 +128,11 @@
                 android:layout_margin="10dp"
                 android:textSize="16sp" />
         </androidx.cardview.widget.CardView>
+
+
+
+
+
 
 
 
