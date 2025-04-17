@@ -28,12 +28,18 @@ Java_com_nest_kanxue_devicefingerprint_DrmIdFetcher_getDrmId(JNIEnv *env, jobjec
     // 获取 deviceUniqueId
     AMediaDrmByteArray aMediaDrmByteArray;
     media_status_t status = AMediaDrm_getPropertyByteArray(mediaDrm, PROPERTY_DEVICE_UNIQUE_ID, &aMediaDrmByteArray);
-    
+    LOGI("DRM_status: %d", status);
+
     std::string result;
+
     if (status == AMEDIA_OK) {
         result = Base64Utils::Encode((uint8_t *)aMediaDrmByteArray.ptr, aMediaDrmByteArray.length);
     }
 
+    
+
     AMediaDrm_release(mediaDrm);
+
+
     return env->NewStringUTF(result.c_str());
 }

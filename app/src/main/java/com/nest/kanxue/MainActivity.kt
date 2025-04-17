@@ -46,6 +46,7 @@ import com.nest.kanxue.core.ShellGetCgroup
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
 import com.nest.kanxue.core.ShellGetKernel
+import com.nest.kanxue.core.ShellGetMeminfo
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
 import com.nest.kanxue.core.Shell_lshal
@@ -829,18 +830,76 @@ class MainActivity : AppCompatActivity() {
                         runOnUiThread {
                             uploadStatus.text = "开始复制cpu，电池等文件到本地...."
                         }
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行Runtime.getRuntime().exec(arrayOf(\"sh\", \"-c\", \"/system/bin/getprop\"))"
+                        }
                         ShellGetProp.saveSystemPropsToFile(File(externalDir111.absolutePath ))
+
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/self/cgroup\")"
+                        }
                         ShellGetCgroup.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/mounts\")"
+                        }
                         ShellGetMounts.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/diskstats\")"
+                        }
                         ShellGetDiskstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/cpuinfo\")"
+                        }
                         ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/meminfo\")"
+                        }
+                        ShellGetMeminfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行getCnameInfoHex"
+                        }
                         ShellGetKernel.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行Runtime.getRuntime().exec(\"lspci\")"
+                        }
                         Shell_lspci.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行Runtime.getRuntime().exec(\"lsusb\")"
+                        }
                         Shell_lsusb.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行Runtime.getRuntime().exec(\"lshal\")"
+                        }
                         Shell_lshal.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行GetCameraInfo"
+                        }
                         GetCameraInfo.saveSystemPropsToFile(this@MainActivity, File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行cp /data/local/tmp/camera.txt"
+                        }
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+                        }
                         mCpuFilesCopier.copyCpuFiles()
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行mPower_SupplyFilesCopier.copyPower_SupplyFiles()"
+                        }
                         mPower_SupplyFilesCopier.copyPower_SupplyFiles()
 
                     }
