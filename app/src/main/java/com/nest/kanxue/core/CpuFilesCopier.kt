@@ -5,6 +5,8 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 
 class CpuFilesCopier(private val context: Context, private val targetDir: File) {
@@ -22,31 +24,22 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
             return true
         }
         
-        dir.listFiles()?.forEach { file ->
-            try {
-                if (file.isDirectory) {
-                    // 递归删除子目录
-                    if (!deleteDirectory(file)) {
-                        return false
-                    }
-                } else {
-                    // 删除文件
-                    if (!file.delete()) {
-                        Log.e("CpuFilesCopier", "无法删除文件: ${file.absolutePath}")
-                        return false
-                    }
-                }
-            } catch (e: SecurityException) {
-                Log.e("CpuFilesCopier", "删除文件时发生权限错误: ${file.absolutePath}, ${e.message}")
-                return false
-            } catch (e: Exception) {
-                Log.e("CpuFilesCopier", "删除文件时发生错误: ${file.absolutePath}, ${e.message}")
+        try {
+            // 直接删除整个目录
+            if (dir.deleteRecursively()) {
+                Log.d("CpuFilesCopier", "成功删除目录: ${dir.absolutePath}")
+                return true
+            } else {
+                Log.e("CpuFilesCopier", "无法删除目录: ${dir.absolutePath}")
                 return false
             }
+        } catch (e: SecurityException) {
+            Log.e("CpuFilesCopier", "删除目录时发生权限错误: ${dir.absolutePath}, ${e.message}")
+            return false
+        } catch (e: Exception) {
+            Log.e("CpuFilesCopier", "删除目录时发生错误: ${dir.absolutePath}, ${e.message}")
+            return false
         }
-        
-        // 删除空目录
-        return dir.delete()
     }
 
     // 递归复制目录
@@ -93,7 +86,9 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
                         return@forEach
                     }
 
-                    sourceFile.copyTo(targetFile, overwrite = false)
+//                    sourceFile.copyTo(targetFile, overwrite = false)
+                    copyFile(sourceFile, targetFile)
+
                     copiedCount++
                     Log.d("CpuFilesCopier", "成功复制文件: ${sourceFile.absolutePath} -> ${targetFile.absolutePath}")
                 }
@@ -131,6 +126,25 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
         }
         val files = dir.listFiles()
         return files?.size ?: 0
+    }
+
+
+    fun copyFile(sourceFile: File, targetFile: File) {
+        try {
+            FileInputStream(sourceFile).use { input ->
+                FileOutputStream(targetFile).use { output ->
+                    val buffer = ByteArray(8192)
+                    var bytes = input.read(buffer)
+                    while (bytes >= 0) {
+                        output.write(buffer, 0, bytes)
+                        bytes = input.read(buffer)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("FileCopy", "复制文件失败: ${e.message}")
+            throw e
+        }
     }
 
     fun copyCpuFiles(): String {
@@ -172,6 +186,7 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
                 }
             }
 
+
             // 检查目标目录是否有写入权限
             if (!targetDir.canWrite()) {
                 resultJson.put("error", "没有写入目标目录的权限: ${targetDir.absolutePath}")
@@ -184,16 +199,30 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
                 return resultJson.toString()
             }
 
-            // 检查目标目录是否为空，不为空则清空
-            val targetFiles = targetDir.listFiles()
-            if (targetFiles != null && targetFiles.isNotEmpty()) {
-                if (!deleteDirectory(targetDir)) {
-                    resultJson.put("error", "无法清空目标目录: ${targetDir.absolutePath}")
-                    return resultJson.toString()
-                }
-                // 重新创建目录
-                if (!targetDir.mkdirs()) {
-                    resultJson.put("error", "无法重新创建目标目录: ${targetDir.absolutePath}")
+            File(targetDir.absolutePath).deleteRecursively()
+
+//            // 检查目标目录是否为空，不为空则清空
+//            if (targetDir.exists() && targetDir.listFiles().isNotEmpty()) {
+//                if (!deleteDirectory(targetDir)) {
+//                    resultJson.put("error", "无法清空目标目录: ${targetDir.absolutePath}")
+//                    return resultJson.toString()
+//                }
+//                // 重新创建目录
+//                if (!targetDir.mkdirs()) {
+//                    resultJson.put("error", "无法重新创建目标目录: ${targetDir.absolutePath}")
+//                    return resultJson.toString()
+//                }
+//            }
+
+            // 检查目标目录是否存在，不存在则创建
+            if (!targetDir.exists()) {
+                try {
+                    if (!targetDir.mkdirs()) {
+                        resultJson.put("error", "无法创建目标目录: ${targetDir.absolutePath}")
+                        return resultJson.toString()
+                    }
+                } catch (e: SecurityException) {
+                    resultJson.put("error", "没有权限创建目标目录: ${targetDir.absolutePath}, ${e.message}")
                     return resultJson.toString()
                 }
             }

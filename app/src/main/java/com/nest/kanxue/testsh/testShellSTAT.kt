@@ -37,11 +37,11 @@ object testShellSTAT {
             "/data/system/uiderrors.txt"
         )
 
-        val fsPathsToCheck = listOf(
+       val fsPathsToCheck = listOf(
             "/cache",
             "/system/etc",
             "/storage/emulated"
-        )
+        ) 
 
         val resultJson = JSONObject()
 

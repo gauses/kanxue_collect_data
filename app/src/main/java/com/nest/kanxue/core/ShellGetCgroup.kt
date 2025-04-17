@@ -10,7 +10,7 @@ object ShellGetCgroup {
     // sh -c /proc/self/cgroup
     fun getCgroupUsingFile(): String {
         return try {
-            File("/proc/self/cgroup").bufferedReader().use { it.readText() }
+            File("cat").bufferedReader().use { it.readText() }
         } catch (e: Exception) {
             ""
         }

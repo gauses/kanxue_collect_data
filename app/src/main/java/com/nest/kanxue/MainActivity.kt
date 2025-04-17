@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.nest.kanxue.apkinstallpath.getAPKInstallPath
-import com.nest.kanxue.bootid.TunInfoReader
 import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.camera.GetCameraInfo
@@ -53,6 +52,12 @@ import com.nest.kanxue.core.ShellGetProp
 import com.nest.kanxue.core.Shell_lshal
 import com.nest.kanxue.core.Shell_lspci
 import com.nest.kanxue.core.Shell_lsusb
+import com.nest.kanxue.core.stat.ShellGetStat_F_Data
+import com.nest.kanxue.core.stat.ShellGetStat_F_Odm
+import com.nest.kanxue.core.stat.ShellGetStat_F_Odm_dlkm
+import com.nest.kanxue.core.stat.ShellGetStat_F_Product
+import com.nest.kanxue.core.stat.ShellGetStat_F_System_ext
+import com.nest.kanxue.core.stat.ShellGetStat_F_Vendor
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -88,11 +93,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedReader
 import java.io.File
-import java.io.FileReader
-import java.io.IOException
 import kotlin.concurrent.thread
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -289,6 +293,11 @@ class MainActivity : AppCompatActivity() {
         val frame = findViewById<FrameLayout>(R.id.SurfaceViewFrame)
         frame.addView(mySurfaceView)
 
+        val lastTargetDir_suffix = "nest_" + System.currentTimeMillis()/1000
+        val lastTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix)
+        val lastCPUTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/cpu")
+
+
 
 
         thread {
@@ -434,8 +443,16 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
-            var externalDir111 = this@MainActivity.filesDir ;
-            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+//            var externalDir111 = this@MainActivity.filesDir ;
+            //            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+//            val targetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
+            if (!lastTargetDir.exists()) {
+                if (!lastTargetDir.mkdirs()) {
+                    Toast.makeText(this@MainActivity, "无法创建目标目录: ${lastTargetDir.absolutePath}", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
 
 
             val sourceDir = File("/sys/devices/system/cpu")
@@ -842,6 +859,21 @@ class MainActivity : AppCompatActivity() {
                     uploadStatus.text = uploadTxTtoServerState
                 }
                 var externalDir111 = this@MainActivity.filesDir ;
+
+//                val externalDir111 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
+//                if (externalDir111.exists()) {
+//                    if (externalDir111.deleteRecursively()) {
+//                        Toast.makeText(this@MainActivity, "目录已经存在，先删除这个文件原有文件", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//                if (!externalDir111.exists()) {
+//                    if (!externalDir111.mkdirs()) {
+//                        Toast.makeText(this@MainActivity, "无法创建本地目标目录: ${externalDir111.absolutePath}", Toast.LENGTH_LONG).show()
+//                        return@launch
+//                    }
+//                }
+
                 //写入
                 java.io.File("$externalDir111/$allDataFileName").writeText(uploadJsonArray.toString())
 
@@ -852,12 +884,27 @@ class MainActivity : AppCompatActivity() {
                     uploadStatus.text = "开始收集传感器文件..."
                 }
                 val sensorFileDir = File(externalDir111.absolutePath)
+
                 delay(3000)
 
                 //21.唐哥要求的本地文件
                 // 使用协程处理延迟和文件操作
                 CoroutineScope(Dispatchers.IO).launch {
-                    mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+//                    mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
+
+
+                    runOnUiThread {
+                        uploadStatus.text = "开始创建download/nest/cpu..."
+                    }
+//                    val externalCPUDir111 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
+//                    if (!externalCPUDir111.exists()) {
+//                        if (!externalCPUDir111.mkdirs()) {
+//                            Toast.makeText(this@MainActivity, "无法创建目标目录: ${externalCPUDir111.absolutePath}", Toast.LENGTH_SHORT).show()
+//                            return@launch
+//                        }
+//                    }
+                    mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
+
                     mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
                     withContext(Dispatchers.IO) {
                         runOnUiThread {
@@ -868,6 +915,16 @@ class MainActivity : AppCompatActivity() {
                             uploadStatus.text = "开始执行Runtime.getRuntime().exec(arrayOf(\"sh\", \"-c\", \"/system/bin/getprop\"))"
                         }
                         ShellGetProp.saveSystemPropsToFile(File(externalDir111.absolutePath ))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/stat -f"
+                        }
+                        ShellGetStat_F_Data.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetStat_F_Odm.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetStat_F_Odm_dlkm.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetStat_F_Product.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetStat_F_System_ext.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        ShellGetStat_F_Vendor.saveSystemPropsToFile(File(externalDir111.absolutePath))
 
 
                         runOnUiThread {
@@ -994,7 +1051,45 @@ class MainActivity : AppCompatActivity() {
                     runOnUiThread {
                         uploadStatus.text = "开始准备上传文件到服务器..."
                     }
-                    UploadData.upload(this@MainActivity, externalDir111.path, allDataFileNameSuffix,
+
+
+                    //把externalDir111下面的整个目录拷贝到download/nest下面去,然后上传
+                    val sourceDir = File(externalDir111.absolutePath)
+
+                    try {
+                        // 确保目标目录存在
+                        if (!lastTargetDir.exists()) {
+                            if (!lastTargetDir.mkdirs()) {
+                                runOnUiThread {
+                                    Toast.makeText(this@MainActivity, "无法创建目标目录: ${lastTargetDir.absolutePath}", Toast.LENGTH_SHORT).show()
+                                }
+                                return@launch
+                            }
+                        }
+                        
+                        // 复制所有文件
+                        sourceDir.listFiles()?.forEach { sourceFile ->
+                            val targetFile = File(lastTargetDir, sourceFile.name)
+                            if (sourceFile.isDirectory) {
+                                // 如果是目录，递归复制
+                                copyDirectory(sourceFile, targetFile)
+                            } else {
+                                // 如果是文件，直接复制
+                                copyFile(sourceFile, targetFile)
+//                                sourceFile.copyTo(targetFile, overwrite = false)
+                            }
+                        }
+                        
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, "文件已复制到: ${lastTargetDir.absolutePath}", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(this@MainActivity, "复制文件时出错: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    UploadData.upload(this@MainActivity, lastTargetDir.absolutePath, allDataFileNameSuffix,
                         onSuccess = {
                             // 在主线程更新UI
                             runOnUiThread {
@@ -1160,5 +1255,41 @@ class MainActivity : AppCompatActivity() {
         Log.d("DisplayInfo", info)
 
         return jsonObject
+    }
+
+    // 添加复制目录的辅助函数
+    private fun copyDirectory(sourceDir: File, targetDir: File) {
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+        
+        sourceDir.listFiles()?.forEach { sourceFile ->
+            val targetFile = File(targetDir, sourceFile.name)
+            if (sourceFile.isDirectory) {
+                copyDirectory(sourceFile, targetFile)
+            } else {
+//                copyFile(sourceFile, targetFile)
+                sourceFile.copyTo(targetFile, overwrite = true)
+            }
+        }
+    }
+
+    // 添加复制单个文件的辅助函数
+    fun copyFile(sourceFile: File, targetFile: File) {
+        try {
+            FileInputStream(sourceFile).use { input ->
+                FileOutputStream(targetFile).use { output ->
+                    val buffer = ByteArray(8192)
+                    var bytes = input.read(buffer)
+                    while (bytes >= 0) {
+                        output.write(buffer, 0, bytes)
+                        bytes = input.read(buffer)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("FileCopy", "复制文件失败: ${e.message}")
+            throw e
+        }
     }
 }
