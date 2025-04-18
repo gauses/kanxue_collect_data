@@ -67,9 +67,16 @@ uname -a
 
 
 
-需要提供给唐哥的文件
-1. kernel
-2. cpuinfo
-3. camera 怎么刷新 ？
+
+0417：
+1./proc/meminfo
+2.stats - f /data
+3.修改duoplus抓取cpu文件时候，修改成了真机抓取cpu不上传的bug
+
+
+
+0418：
+1.am get-config
+2.pm list features
 
 

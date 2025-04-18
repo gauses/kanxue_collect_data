@@ -42,6 +42,7 @@ import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
+import com.nest.kanxue.core.Shell_AM_GetConfig
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
 import com.nest.kanxue.core.ShellGetKernel
@@ -49,6 +50,7 @@ import com.nest.kanxue.core.ShellGetLinuxVersion
 import com.nest.kanxue.core.ShellGetMeminfo
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
+import com.nest.kanxue.core.Shell_PM_List_Features
 import com.nest.kanxue.core.Shell_lshal
 import com.nest.kanxue.core.Shell_lspci
 import com.nest.kanxue.core.Shell_lsusb
@@ -931,6 +933,17 @@ class MainActivity : AppCompatActivity() {
                             uploadStatus.text = "开始执行File(\"/proc/self/cgroup\")"
                         }
                         ShellGetCgroup.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "Runtime.getRuntime().exec(arrayOf(\"sh\", \"-c\", \"am get-config\"))"
+                        }
+                        Shell_AM_GetConfig.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "Runtime.getRuntime().exec(arrayOf(\"sh\", \"-c\", \"pm list features\"))"
+                        }
+                        Shell_PM_List_Features.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
 
                         runOnUiThread {
                             uploadStatus.text = "开始执行File(\"/proc/mounts\")"
