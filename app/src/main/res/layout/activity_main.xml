@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true"
     android:scrollbars="vertical"
     android:fitsSystemWindows="true"
@@ -22,14 +23,25 @@
         </FrameLayout>
 
 
-
+        <Switch
+            android:id="@+id/cpu_capture_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="是否抓取CPU文件(默认抓取上传)"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:checked="true"
+            app:layout_constraintTop_toBottomOf="@id/SurfaceViewFrame"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/stat_file_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="上传文件"
-            app:layout_constraintTop_toBottomOf="@id/SurfaceViewFrame"
+            app:layout_constraintTop_toBottomOf="@id/cpu_capture_switch"
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <Button

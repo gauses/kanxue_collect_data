@@ -160,6 +160,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var statsAdapter: FileStatsAdapter
     private lateinit var fileContent : TextView
+    private lateinit var cpuCaptureSwitch: android.widget.Switch
+    private var isCpuCapturing = true  // 设置为true以匹配Switch的默认状态
+
 
     //地理位置属性
     var locationJSONObject = JSONObject();
@@ -296,10 +299,21 @@ class MainActivity : AppCompatActivity() {
         frame.addView(mySurfaceView)
 
         val lastTargetDir_suffix = "nest_" + System.currentTimeMillis()/1000
+        //整个要上传的目录
         val lastTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix)
+        //整个要上传的cpu目录
         val lastCPUTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/cpu")
 
-
+        //确定是否要上传cpu文件
+        cpuCaptureSwitch = findViewById(R.id.cpu_capture_switch)
+        cpuCaptureSwitch.setOnCheckedChangeListener { _, isChecked ->
+            isCpuCapturing = isChecked
+            if (isChecked) {
+                Toast.makeText(this, "需要上传CPU文件", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "不需要上传cpu文件", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
         thread {
@@ -1002,27 +1016,35 @@ class MainActivity : AppCompatActivity() {
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
 
 
-                        val sourceDir = File("/sys/devices/system/cpu")
-                        runOnUiThread {
-                            Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
-                        }
-                        if (sourceDir.exists()) {
+                        if (isCpuCapturing) {
+                            val sourceDir = File("/sys/devices/system/cpu")
                             runOnUiThread {
-                                Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
-                                uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+                                Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
                             }
-                            val resultJson = mCpuFilesCopier.copyCpuFiles()
-                            runOnUiThread {
-                                copyCPUResult.text = resultJson
-                                uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
-                                Thread.sleep(3000)
+                            if (sourceDir.exists()) {
+                                runOnUiThread {
+                                    Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
+                                    uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+                                }
+                                val resultJson = mCpuFilesCopier.copyCpuFiles()
+                                runOnUiThread {
+                                    copyCPUResult.text = resultJson
+                                    uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
+                                    Thread.sleep(3000)
+                                }
+                            }else{
+                                runOnUiThread {
+                                    uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
+                                    Thread.sleep(2000)
+                                }
                             }
                         }else{
                             runOnUiThread {
-                                uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
-                                Thread.sleep(2000)
+                                uploadStatus.text = "不需要上传cpu文件，跳过."
+                                Thread.sleep(3000)
                             }
                         }
+
 
 
 
@@ -1089,7 +1111,6 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 // 如果是文件，直接复制
                                 copyFile(sourceFile, targetFile)
-//                                sourceFile.copyTo(targetFile, overwrite = false)
                             }
                         }
                         
