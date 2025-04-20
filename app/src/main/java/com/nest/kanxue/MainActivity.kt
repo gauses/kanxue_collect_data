@@ -38,6 +38,7 @@ import com.nest.kanxue.bootid.getBootId
 import com.nest.kanxue.bootid.getBootId.getFileContentUsingFile
 import com.nest.kanxue.camera.GetCameraInfo
 import com.nest.kanxue.cert.CertificateReader
+import com.nest.kanxue.core.Batteryutils
 import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.Power_SupplyFilesCopier
@@ -459,38 +460,53 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
-//            var externalDir111 = this@MainActivity.filesDir ;
-            //            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/cpu"))
-//            val targetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
-            if (!lastTargetDir.exists()) {
-                if (!lastTargetDir.mkdirs()) {
-                    Toast.makeText(this@MainActivity, "无法创建目标目录: ${lastTargetDir.absolutePath}", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
+
+            // 打印电池信息
+            val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity)
+            val batteryStatus = Batteryutils.getBatteryStatusInfo(this@MainActivity)
+
+            Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")
+            batteryInfo.forEach { (key, value) ->
+                Log.d("BatteryInfo", "$key = $value")
             }
-            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
+
+            Log.d("BatteryInfo", "═══════════════ 电池状态信息 ═══════════════")
+            batteryStatus.forEach { (key, value) ->
+                Log.d("BatteryInfo", "$key = $value")
+            }
 
 
-            val sourceDir = File("/sys/devices/system/cpu")
-            runOnUiThread {
-                Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
-            }
-            if (sourceDir.exists()) {
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
-                    uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
-                }
-                val resultJson = mCpuFilesCopier.copyCpuFiles()
-                runOnUiThread {
-                    uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
-                    Thread.sleep(3000)
-                }
-            }else{
-                runOnUiThread {
-                    uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
-                    Thread.sleep(2000)
-                }
-            }
+
+
+//            if (!lastTargetDir.exists()) {
+//                if (!lastTargetDir.mkdirs()) {
+//                    Toast.makeText(this@MainActivity, "无法创建目标目录: ${lastTargetDir.absolutePath}", Toast.LENGTH_SHORT).show()
+//                    return@setOnClickListener
+//                }
+//            }
+//            mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
+//
+//
+//            val sourceDir = File("/sys/devices/system/cpu")
+//            runOnUiThread {
+//                Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
+//            }
+//            if (sourceDir.exists()) {
+//                runOnUiThread {
+//                    Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
+//                    uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+//                }
+//                val resultJson = mCpuFilesCopier.copyCpuFiles()
+//                runOnUiThread {
+//                    uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
+//                    Thread.sleep(3000)
+//                }
+//            }else{
+//                runOnUiThread {
+//                    uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
+//                    Thread.sleep(2000)
+//                }
+//            }
 
 
 
