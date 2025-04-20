@@ -462,7 +462,7 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
 
             // 打印电池信息
-            val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity)
+            val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity, lastTargetDir)
             val batteryStatus = Batteryutils.getBatteryStatusInfo(this@MainActivity)
 
             Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")
@@ -1030,6 +1030,14 @@ class MainActivity : AppCompatActivity() {
                             uploadStatus.text = "开始执行cp /data/local/tmp/camera.txt"
                         }
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
+
+
+                        //电池信息
+                        val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity, File(externalDir111.absolutePath))
+                        Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")
+                        batteryInfo.forEach { (key, value) ->
+                            Log.d("BatteryInfo", "$key = $value")
+                        }
 
 
                         if (isCpuCapturing) {
