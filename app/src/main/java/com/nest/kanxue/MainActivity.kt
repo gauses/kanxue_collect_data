@@ -947,6 +947,11 @@ class MainActivity : AppCompatActivity() {
                     mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
                     mTempFilesCopier = TempFilesCopier(this@MainActivity, lastTempTargetDir)
 
+                    loadRemperatureUtils.saveTemperatureInfo(File(externalDir111.absolutePath ))
+
+
+
+
 
                     mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
                     withContext(Dispatchers.IO) {

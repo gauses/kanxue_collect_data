@@ -71,12 +71,15 @@ class TempFilesCopier(private val context: Context, private val targetDir: File)
                     sourceFile.absolutePath
                 }
 
-                // 保存符号链接信息
-                File(targetFile, "symlink_info.txt").writeText("""
-                    Original Path: ${sourceFile.absolutePath}
-                    Link Target: $linkTarget
-                    Time: ${System.currentTimeMillis()}
-                """.trimIndent())
+//                // 保存符号链接信息
+//                File(targetFile, "symlink_info.txt").writeText("""
+//                    Original Path: ${sourceFile.absolutePath}
+//                    Link Target: $linkTarget
+//                    Time: ${System.currentTimeMillis()}
+//                """.trimIndent())
+
+
+
                 copiedCount++
 
                 // 复制实际目录中的文件

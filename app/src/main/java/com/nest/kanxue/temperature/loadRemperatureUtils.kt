@@ -159,6 +159,10 @@ object loadRemperatureUtils {
 
     // 保存温度信息到文件
     fun saveTemperatureInfo(targetDir: File): JSONObject {
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+
         val tempInfo = getTemperatureInfo()
         try {
             val outputFile = File(targetDir, "temperature_info.txt")
