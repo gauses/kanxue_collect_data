@@ -55,6 +55,7 @@ import com.nest.kanxue.core.Shell_PM_List_Features
 import com.nest.kanxue.core.Shell_lshal
 import com.nest.kanxue.core.Shell_lspci
 import com.nest.kanxue.core.Shell_lsusb
+import com.nest.kanxue.core.TempFilesCopier
 import com.nest.kanxue.core.stat.ShellGetStat_F_Data
 import com.nest.kanxue.core.stat.ShellGetStat_F_Odm
 import com.nest.kanxue.core.stat.ShellGetStat_F_Odm_dlkm
@@ -81,6 +82,7 @@ import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
 import com.nest.kanxue.statprocpath.FileStatsAdapter
+import com.nest.kanxue.temperature.loadRemperatureUtils
 import com.nest.kanxue.testsh.testShellBuildId
 import com.nest.kanxue.testsh.testShellGetProp
 import com.nest.kanxue.testsh.testShellSTAT
@@ -107,6 +109,8 @@ class MainActivity : AppCompatActivity() {
     val testor = Testor()
 
     private lateinit var mCpuFilesCopier: com.nest.kanxue.core.CpuFilesCopier
+    private lateinit var mTempFilesCopier: com.nest.kanxue.core.TempFilesCopier
+
     private lateinit var mPower_SupplyFilesCopier: Power_SupplyFilesCopier
 
 
@@ -304,6 +308,7 @@ class MainActivity : AppCompatActivity() {
         val lastTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix)
         //整个要上传的cpu目录
         val lastCPUTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/cpu")
+        val lastTempTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/temp")
 
         //确定是否要上传cpu文件
         cpuCaptureSwitch = findViewById(R.id.cpu_capture_switch)
@@ -461,19 +466,23 @@ class MainActivity : AppCompatActivity() {
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
 
-            // 打印电池信息
-            val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity, lastTargetDir)
-            val batteryStatus = Batteryutils.getBatteryStatusInfo(this@MainActivity)
 
-            Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")
-            batteryInfo.forEach { (key, value) ->
-                Log.d("BatteryInfo", "$key = $value")
-            }
+            loadRemperatureUtils.getTemperatureInfo()
+            Log.d("loadRemperatureUtils", "温度传感器 = " + loadRemperatureUtils.getTemperatureInfo())
 
-            Log.d("BatteryInfo", "═══════════════ 电池状态信息 ═══════════════")
-            batteryStatus.forEach { (key, value) ->
-                Log.d("BatteryInfo", "$key = $value")
-            }
+//            // 打印电池信息
+//            val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity, lastTargetDir)
+//            val batteryStatus = Batteryutils.getBatteryStatusInfo(this@MainActivity)
+//
+//            Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")
+//            batteryInfo.forEach { (key, value) ->
+//                Log.d("BatteryInfo", "$key = $value")
+//            }
+//
+//            Log.d("BatteryInfo", "═══════════════ 电池状态信息 ═══════════════")
+//            batteryStatus.forEach { (key, value) ->
+//                Log.d("BatteryInfo", "$key = $value")
+//            }
 
 
 
@@ -936,6 +945,8 @@ class MainActivity : AppCompatActivity() {
 //                        }
 //                    }
                     mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
+                    mTempFilesCopier = TempFilesCopier(this@MainActivity, lastTempTargetDir)
+
 
                     mPower_SupplyFilesCopier = Power_SupplyFilesCopier(this@MainActivity, File(externalDir111.absolutePath + "/power_supply"))
                     withContext(Dispatchers.IO) {
@@ -1069,6 +1080,11 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行mTempFilesCopier.copyFiles()"
+                        }
+                        mTempFilesCopier.copyFiles()
 
 
 
