@@ -57,11 +57,61 @@ object DisplayCard {
     fun saveDisplayCardInfo(targetDir: File) {
         try {
             val info = getDisplayCardInfo()
-            val file = File(targetDir, "display_card_info.json")
+            val file = File(targetDir, "显卡_info.json")
             file.writeText(info.toString(4))
             Log.i(TAG, "Display card info saved to ${file.absolutePath}")
         } catch (e: Exception) {
             Log.e(TAG, "Error saving display card info: ${e.message}")
+        }
+    }
+
+    fun printDeviceInfo() {
+        try {
+            val instance = createVulkanInstance()
+            if (instance == 0L) {
+                Log.e(TAG, "Failed to create Vulkan instance")
+                return
+            }
+
+            val deviceCount = getPhysicalDeviceCount(instance)
+            Log.d(TAG, "Found $deviceCount physical devices")
+
+            val devices = getPhysicalDevices(instance)
+            for (i in devices.indices) {
+                val deviceInfo = getDeviceInfo(instance, devices[i])
+                val json = JSONObject(deviceInfo)
+                
+                // 打印基本信息
+                Log.d(TAG, "Device $i:")
+                Log.d(TAG, "  Name: ${json.getString("deviceName")}")
+                Log.d(TAG, "  Type: ${getDeviceTypeString(json.getInt("deviceType"))}")
+                Log.d(TAG, "  Driver Version: ${json.getLong("driverVersion")}")
+                Log.d(TAG, "  API Version: ${json.getLong("apiVersion")}")
+
+                // 打印特性信息
+                val features = json.getJSONObject("features")
+                Log.d(TAG, "  Features:")
+                val featureNames = features.keys()
+                while (featureNames.hasNext()) {
+                    val name = featureNames.next()
+                    val value = features.getInt(name)
+                    Log.d(TAG, "    - $name: $value")  // 打印名称和值
+                }
+            }
+
+            destroyVulkanInstance(instance)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting device info: ${e.message}")
+        }
+    }
+
+    private fun getDeviceTypeString(type: Int): String {
+        return when (type) {
+            1 -> "Integrated GPU"
+            2 -> "Discrete GPU"
+            3 -> "Virtual GPU"
+            4 -> "CPU"
+            else -> "Unknown"
         }
     }
 }

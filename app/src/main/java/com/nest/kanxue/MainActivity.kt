@@ -470,6 +470,8 @@ class MainActivity : AppCompatActivity() {
 
             val displayCardInfo = DisplayCard.getDisplayCardInfo()
             Log.d("displayCardInfo", "显卡数据 = " + DisplayCard.getDisplayCardInfo())
+            Log.d("displayCardInfo", "显卡打印数据 = " + DisplayCard.printDeviceInfo())
+
 
 
             Log.d("loadRemperatureUtils", "温度传感器 = " + loadRemperatureUtils.getTemperatureInfo())
@@ -1082,6 +1084,15 @@ class MainActivity : AppCompatActivity() {
                                     Thread.sleep(2000)
                                 }
                             }
+
+
+                            //温度文件拷贝
+                            runOnUiThread {
+                                uploadStatus.text = "开始执行mTempFilesCopier.copyFiles()"
+                            }
+                            mTempFilesCopier.copyFiles()
+
+
                         }else{
                             runOnUiThread {
                                 uploadStatus.text = "不需要上传cpu文件，跳过."
@@ -1089,12 +1100,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
 
-
-                        runOnUiThread {
-                            uploadStatus.text = "开始执行mTempFilesCopier.copyFiles()"
-                        }
-                        mTempFilesCopier.copyFiles()
-
+                        //显卡JSON文件
+                        DisplayCard.saveDisplayCardInfo(File(externalDir111.absolutePath))
 
 
                         runOnUiThread {
