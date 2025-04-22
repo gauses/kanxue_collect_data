@@ -4,6 +4,7 @@
 
 
     <uses-feature android:name="android.hardware.vulkan.version" android:required="true"  />
+    <uses-feature android:name="android.hardware.vulkan.level" android:required="true" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
