@@ -42,6 +42,7 @@ import com.nest.kanxue.core.Batteryutils
 import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.DisplayCard
+import com.nest.kanxue.core.OpenFrameWorkJar
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
 import com.nest.kanxue.core.Shell_AM_GetConfig
@@ -466,6 +467,18 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+
+            //Framework.jar
+            val success = OpenFrameWorkJar.copyFrameworkJar(lastTargetDir)
+            if (success) {
+                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
+            } else {
+                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+            }
+
+            // 获取 framework.jar 信息
+            val info = OpenFrameWorkJar.getFrameworkJarInfo()
+            Log.d("OpenFrameWorkJar", info)
 
 
             val displayCardInfo = DisplayCard.getDisplayCardInfo()
