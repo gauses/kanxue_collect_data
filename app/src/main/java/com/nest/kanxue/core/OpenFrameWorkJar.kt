@@ -6,6 +6,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 //获取framework.jar，读取到本地
 ///system/framework/framework.jar
@@ -91,6 +93,36 @@ object OpenFrameWorkJar {
         "/system/framework/android.test.mock.jar",
         "/system/framework/hid.jar"
     )
+
+    private fun zipDirectory(sourceDir: File, zipFile: File): Boolean {
+        try {
+            FileOutputStream(zipFile).use { fos ->
+                ZipOutputStream(fos).use { zos ->
+                    val files = sourceDir.walk().filter { it.isFile }.toList()
+                    for (file in files) {
+                        val relativePath = file.relativeTo(sourceDir).path
+                        val zipEntry = ZipEntry(relativePath)
+                        zos.putNextEntry(zipEntry)
+                        
+                        FileInputStream(file).use { fis ->
+                            val buffer = ByteArray(8192)
+                            var bytes = fis.read(buffer)
+                            while (bytes >= 0) {
+                                zos.write(buffer, 0, bytes)
+                                bytes = fis.read(buffer)
+                            }
+                        }
+                        zos.closeEntry()
+                    }
+                }
+            }
+            Log.i(TAG, "Successfully created zip file: ${zipFile.absolutePath}")
+            return true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creating zip file: ${e.message}")
+            return false
+        }
+    }
 
     fun copyFrameworkJars(targetDir: File): Boolean {
         val targetJarDir = File(targetDir, "framework_copy")
@@ -184,6 +216,24 @@ object OpenFrameWorkJar {
             // 写入报告文件
             reportFile.writeText(report)
             Log.i(TAG, "Copy report saved to ${reportFile.absolutePath}")
+
+            // 创建zip文件
+            val zipFile = File(targetDir, "framework_jars_${SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())}.zip")
+            if (!zipDirectory(targetJarDir, zipFile)) {
+                Log.e(TAG, "Failed to create zip file")
+                return false
+            }
+
+            // 删除原始目录
+            if (targetJarDir.exists()) {
+                try {
+                    targetJarDir.deleteRecursively()
+                    Log.i(TAG, "Successfully deleted original directory: ${targetJarDir.absolutePath}")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error deleting original directory: ${e.message}")
+                    return false
+                }
+            }
 
             return true
         } catch (e: Exception) {
