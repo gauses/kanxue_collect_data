@@ -469,7 +469,7 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
 
             //Framework.jar
-            val success = OpenFrameWorkJar.copyFrameworkJar(lastTargetDir)
+            val success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
             if (success) {
                 Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
             } else {
@@ -1115,6 +1115,19 @@ class MainActivity : AppCompatActivity() {
 
                         //显卡JSON文件
                         DisplayCard.saveDisplayCardInfo(File(externalDir111.absolutePath))
+
+
+                        //Framework.jar,正常不需要上传，因为内部的文件大约50M左右
+                        if (false){
+                            val success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
+                            if (success) {
+                                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
+                            } else {
+                                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+                            }
+                        }
+
+
 
 
                         runOnUiThread {
