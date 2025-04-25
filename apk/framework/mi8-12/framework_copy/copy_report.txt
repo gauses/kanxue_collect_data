@@ -1,0 +1,764 @@
+Framework Jars Copy Report
+Generated on: 2025-04-24 12:23:46
+
+=== Successfully Copied Files ===
+/system/framework/framework.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/framework.jar
+/system/framework/services.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/services.jar
+/system/framework/am.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/am.jar
+/system/framework/svc.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/svc.jar
+/system/framework/uinput.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/uinput.jar
+/system/framework/android.hidl.manager-V1.0-java.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/android.hidl.manager-V1.0-java.jar
+/system/framework/abx.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/abx.jar
+/system/framework/android.hidl.base-V1.0-java.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/android.hidl.base-V1.0-java.jar
+/system/framework/telephony-common.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/telephony-common.jar
+/system/framework/android.test.runner.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/android.test.runner.jar
+/system/framework/requestsync.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/requestsync.jar
+/system/framework/ims-common.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/ims-common.jar
+/system/framework/com.android.future.usb.accessory.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/com.android.future.usb.accessory.jar
+/system/framework/appwidget.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/appwidget.jar
+/system/framework/bmgr.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/bmgr.jar
+/system/framework/locksettings.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/locksettings.jar
+/system/framework/incident-helper-cmd.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/incident-helper-cmd.jar
+/system/framework/telecom.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/telecom.jar
+/system/framework/monkey.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/monkey.jar
+/system/framework/voip-common.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/voip-common.jar
+/system/framework/com.android.mediadrm.signer.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/com.android.mediadrm.signer.jar
+/system/framework/content.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/content.jar
+/system/framework/sm.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/sm.jar
+/system/framework/vr.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/vr.jar
+/system/framework/android.test.base.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/android.test.base.jar
+/system/framework/javax.obex.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/javax.obex.jar
+/system/framework/uiautomator.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/uiautomator.jar
+/system/framework/ethernet-service.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/ethernet-service.jar
+/system/framework/ext.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/ext.jar
+/system/framework/com.android.location.provider.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/com.android.location.provider.jar
+/system/framework/com.android.media.remotedisplay.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/com.android.media.remotedisplay.jar
+/system/framework/bu.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/bu.jar
+/system/framework/framework-graphics.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/framework-graphics.jar
+/system/framework/org.apache.http.legacy.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/org.apache.http.legacy.jar
+/system/framework/android.test.mock.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/android.test.mock.jar
+/system/framework/hid.jar - Successfully copied to /storage/emulated/0/Download/nest_1745468615/framework_copy/hid.jar
+
+=== Failed Files ===
+
+=== File Information ===
+
+File: /system/framework/framework.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/framework.jar
+Canonical Path: /system/framework/framework.jar
+Parent: /system/framework
+Name: framework.jar
+Path: /system/framework/framework.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 32383848 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/services.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/services.jar
+Canonical Path: /system/framework/services.jar
+Parent: /system/framework
+Name: services.jar
+Path: /system/framework/services.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 16693771 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/am.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/am.jar
+Canonical Path: /system/framework/am.jar
+Parent: /system/framework
+Name: am.jar
+Path: /system/framework/am.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 482526 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/svc.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/svc.jar
+Canonical Path: /system/framework/svc.jar
+Parent: /system/framework
+Name: svc.jar
+Path: /system/framework/svc.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 12974 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/uinput.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/uinput.jar
+Canonical Path: /system/framework/uinput.jar
+Parent: /system/framework
+Name: uinput.jar
+Path: /system/framework/uinput.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 23254 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/android.hidl.manager-V1.0-java.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/android.hidl.manager-V1.0-java.jar
+Canonical Path: /system/framework/android.hidl.manager-V1.0-java.jar
+Parent: /system/framework
+Name: android.hidl.manager-V1.0-java.jar
+Path: /system/framework/android.hidl.manager-V1.0-java.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 27278 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/abx.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/abx.jar
+Canonical Path: /system/framework/abx.jar
+Parent: /system/framework
+Name: abx.jar
+Path: /system/framework/abx.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 4234 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/android.hidl.base-V1.0-java.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/android.hidl.base-V1.0-java.jar
+Canonical Path: /system/framework/android.hidl.base-V1.0-java.jar
+Parent: /system/framework
+Name: android.hidl.base-V1.0-java.jar
+Path: /system/framework/android.hidl.base-V1.0-java.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 11698 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/telephony-common.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/telephony-common.jar
+Canonical Path: /system/framework/telephony-common.jar
+Parent: /system/framework
+Name: telephony-common.jar
+Path: /system/framework/telephony-common.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 3747573 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/android.test.runner.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/android.test.runner.jar
+Canonical Path: /system/framework/android.test.runner.jar
+Parent: /system/framework
+Name: android.test.runner.jar
+Path: /system/framework/android.test.runner.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 95298 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/requestsync.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/requestsync.jar
+Canonical Path: /system/framework/requestsync.jar
+Parent: /system/framework
+Name: requestsync.jar
+Path: /system/framework/requestsync.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 12306 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/ims-common.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/ims-common.jar
+Canonical Path: /system/framework/ims-common.jar
+Parent: /system/framework
+Name: ims-common.jar
+Path: /system/framework/ims-common.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 535505 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/com.android.future.usb.accessory.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/com.android.future.usb.accessory.jar
+Canonical Path: /system/framework/com.android.future.usb.accessory.jar
+Parent: /system/framework
+Name: com.android.future.usb.accessory.jar
+Path: /system/framework/com.android.future.usb.accessory.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 5230 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/appwidget.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/appwidget.jar
+Canonical Path: /system/framework/appwidget.jar
+Parent: /system/framework
+Name: appwidget.jar
+Path: /system/framework/appwidget.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 5462 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/bmgr.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/bmgr.jar
+Canonical Path: /system/framework/bmgr.jar
+Parent: /system/framework
+Name: bmgr.jar
+Path: /system/framework/bmgr.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 29514 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/locksettings.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/locksettings.jar
+Canonical Path: /system/framework/locksettings.jar
+Parent: /system/framework
+Name: locksettings.jar
+Path: /system/framework/locksettings.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 3690 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/incident-helper-cmd.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/incident-helper-cmd.jar
+Canonical Path: /system/framework/incident-helper-cmd.jar
+Parent: /system/framework
+Name: incident-helper-cmd.jar
+Path: /system/framework/incident-helper-cmd.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 14566 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/telecom.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/telecom.jar
+Canonical Path: /system/framework/telecom.jar
+Parent: /system/framework
+Name: telecom.jar
+Path: /system/framework/telecom.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 15854 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/monkey.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/monkey.jar
+Canonical Path: /system/framework/monkey.jar
+Parent: /system/framework
+Name: monkey.jar
+Path: /system/framework/monkey.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 105430 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/voip-common.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/voip-common.jar
+Canonical Path: /system/framework/voip-common.jar
+Parent: /system/framework
+Name: voip-common.jar
+Path: /system/framework/voip-common.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 762785 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/com.android.mediadrm.signer.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/com.android.mediadrm.signer.jar
+Canonical Path: /system/framework/com.android.mediadrm.signer.jar
+Parent: /system/framework
+Name: com.android.mediadrm.signer.jar
+Path: /system/framework/com.android.mediadrm.signer.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 2798 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/content.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/content.jar
+Canonical Path: /system/framework/content.jar
+Parent: /system/framework
+Name: content.jar
+Path: /system/framework/content.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 18882 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/sm.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/sm.jar
+Canonical Path: /system/framework/sm.jar
+Parent: /system/framework
+Name: sm.jar
+Path: /system/framework/sm.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 10598 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/vr.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/vr.jar
+Canonical Path: /system/framework/vr.jar
+Parent: /system/framework
+Name: vr.jar
+Path: /system/framework/vr.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 4206 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/android.test.base.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/android.test.base.jar
+Canonical Path: /system/framework/android.test.base.jar
+Parent: /system/framework
+Name: android.test.base.jar
+Path: /system/framework/android.test.base.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 30954 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/javax.obex.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/javax.obex.jar
+Canonical Path: /system/framework/javax.obex.jar
+Parent: /system/framework
+Name: javax.obex.jar
+Path: /system/framework/javax.obex.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 55386 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/uiautomator.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/uiautomator.jar
+Canonical Path: /system/framework/uiautomator.jar
+Parent: /system/framework
+Name: uiautomator.jar
+Path: /system/framework/uiautomator.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 373626 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/ethernet-service.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/ethernet-service.jar
+Canonical Path: /system/framework/ethernet-service.jar
+Parent: /system/framework
+Name: ethernet-service.jar
+Path: /system/framework/ethernet-service.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 42734 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/ext.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/ext.jar
+Canonical Path: /system/framework/ext.jar
+Parent: /system/framework
+Name: ext.jar
+Path: /system/framework/ext.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 2201014 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/com.android.location.provider.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/com.android.location.provider.jar
+Canonical Path: /system/framework/com.android.location.provider.jar
+Parent: /system/framework
+Name: com.android.location.provider.jar
+Path: /system/framework/com.android.location.provider.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 24934 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/com.android.media.remotedisplay.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/com.android.media.remotedisplay.jar
+Canonical Path: /system/framework/com.android.media.remotedisplay.jar
+Parent: /system/framework
+Name: com.android.media.remotedisplay.jar
+Path: /system/framework/com.android.media.remotedisplay.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 9078 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/bu.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/bu.jar
+Canonical Path: /system/framework/bu.jar
+Parent: /system/framework
+Name: bu.jar
+Path: /system/framework/bu.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 6582 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/framework-graphics.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/framework-graphics.jar
+Canonical Path: /system/framework/framework-graphics.jar
+Parent: /system/framework
+Name: framework-graphics.jar
+Path: /system/framework/framework-graphics.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 3401 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/org.apache.http.legacy.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/org.apache.http.legacy.jar
+Canonical Path: /system/framework/org.apache.http.legacy.jar
+Parent: /system/framework
+Name: org.apache.http.legacy.jar
+Path: /system/framework/org.apache.http.legacy.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 450086 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/android.test.mock.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/android.test.mock.jar
+Canonical Path: /system/framework/android.test.mock.jar
+Parent: /system/framework
+Name: android.test.mock.jar
+Path: /system/framework/android.test.mock.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 573053 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000
+
+File: /system/framework/hid.jar
+Exists: true
+Can Read: true
+Can Write: false
+Can Execute: false
+Is File: true
+Is Directory: false
+Is Hidden: false
+Absolute Path: /system/framework/hid.jar
+Canonical Path: /system/framework/hid.jar
+Parent: /system/framework
+Name: hid.jar
+Path: /system/framework/hid.jar
+Total Space: 3120525312 bytes
+Free Space: 33349632 bytes
+Usable Space: 16572416 bytes
+Size: 20946 bytes
+Last Modified: 2009-01-01 08:00:00
+Last Modified (timestamp): 1230768000000

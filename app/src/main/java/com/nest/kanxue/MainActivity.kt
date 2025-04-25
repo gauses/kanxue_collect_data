@@ -42,6 +42,7 @@ import com.nest.kanxue.core.Batteryutils
 import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.DisplayCard
+import com.nest.kanxue.core.GetInutService
 import com.nest.kanxue.core.OpenFrameWorkJar
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
@@ -467,6 +468,11 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+
+
+            //InputSerrvice
+            GetInutService.saveInutServiceToFile(this, lastTargetDir)
+
 
             //Framework.jar
             val success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
@@ -1128,6 +1134,8 @@ class MainActivity : AppCompatActivity() {
                         }
 
 
+
+                        GetInutService.saveInutServiceToFile(this@MainActivity, lastTargetDir)
 
 
                         runOnUiThread {
