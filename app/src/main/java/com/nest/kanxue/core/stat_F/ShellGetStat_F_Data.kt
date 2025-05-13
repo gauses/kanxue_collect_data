@@ -1,17 +1,18 @@
-package com.nest.kanxue.core.stat
+package com.nest.kanxue.core.stat_F
 
 import android.util.Log
 import java.io.File
 import java.io.FileWriter
 
-object ShellGetStat_F_Odm_dlkm {
+object ShellGetStat_F_Data {
     private const val TAG = "ShellGetMeminfo"
 
     ///proc/mounts
     fun GetStat_F_DataUsingFile(): String {
         // 处理stat -f命令
         val fsPathsToCheck = listOf(
-            "/odm_dlkm"
+            "/data"
+
         )
 
         var result = ""
@@ -35,7 +36,7 @@ object ShellGetStat_F_Odm_dlkm {
                 targetDir.mkdirs()
             }
 
-            val propsFile = File(targetDir, "Stat_F_odm_dlkm.txt")
+            val propsFile = File(targetDir, "Stat_F_data.txt")
 
             FileWriter(propsFile).use { writer ->
                 writer.write(props)

@@ -4,7 +4,7 @@ import android.util.Log
 import java.io.File
 import java.io.FileWriter
 
-object ShellGetStat_F_Product {
+object ShellGetStat_Product {
     private const val TAG = "ShellGetMeminfo"
 
     ///proc/mounts
@@ -18,7 +18,7 @@ object ShellGetStat_F_Product {
         fsPathsToCheck.forEach { path ->
             val key = "fs_$path"  // 添加前缀以区分文件系统信息
             result = try {
-                val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", "stat -f $path"))
+                val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", "stat $path"))
                 process.inputStream.bufferedReader().use { it.readText() }
             } catch (e: Exception) {
                 ""
@@ -35,7 +35,7 @@ object ShellGetStat_F_Product {
                 targetDir.mkdirs()
             }
 
-            val propsFile = File(targetDir, "Stat_F_product.txt")
+            val propsFile = File(targetDir, "Stat_product.txt")
 
             FileWriter(propsFile).use { writer ->
                 writer.write(props)

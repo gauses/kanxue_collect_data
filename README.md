@@ -80,3 +80,12 @@ uname -a
 2.pm list features
 
 
+
+
+0508：
+1.service list
+2.rsync -a  源目录  目的目录  ------cpu 和 度传感器
+3.cp -rlp source_dir/ target_dir/ ------cpu 和 度传感器
+
+
+

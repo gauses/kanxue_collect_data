@@ -59,12 +59,17 @@ import com.nest.kanxue.core.Shell_lshal
 import com.nest.kanxue.core.Shell_lspci
 import com.nest.kanxue.core.Shell_lsusb
 import com.nest.kanxue.core.TempFilesCopier
-import com.nest.kanxue.core.stat.ShellGetStat_F_Data
-import com.nest.kanxue.core.stat.ShellGetStat_F_Odm
-import com.nest.kanxue.core.stat.ShellGetStat_F_Odm_dlkm
-import com.nest.kanxue.core.stat.ShellGetStat_F_Product
-import com.nest.kanxue.core.stat.ShellGetStat_F_System_ext
-import com.nest.kanxue.core.stat.ShellGetStat_F_Vendor
+import com.nest.kanxue.core.stat.ShellGetStat_All
+import com.nest.kanxue.core.stat.ShellGetStat_Odm
+import com.nest.kanxue.core.stat.ShellGetStat_Product
+import com.nest.kanxue.core.stat.ShellGetStat_System_ext
+import com.nest.kanxue.core.stat.ShellGetStat_Vendor
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_Data
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_Odm
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_Odm_dlkm
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_Product
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_System_ext
+import com.nest.kanxue.core.stat_F.ShellGetStat_F_Vendor
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -998,6 +1003,17 @@ class MainActivity : AppCompatActivity() {
                         ShellGetStat_F_Product.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         ShellGetStat_F_System_ext.saveSystemPropsToFile(File(externalDir111.absolutePath))
                         ShellGetStat_F_Vendor.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/stat"
+                        }
+                        var statFile = File(externalDir111.absolutePath + "/stat")
+                        ShellGetStat_All.saveSystemPropsToFile(statFile)
+                        ShellGetStat_Odm.saveSystemPropsToFile(statFile)
+                        ShellGetStat_Product.saveSystemPropsToFile(statFile)
+                        ShellGetStat_System_ext.saveSystemPropsToFile(statFile)
+                        ShellGetStat_Vendor.saveSystemPropsToFile(statFile)
 
 
                         runOnUiThread {

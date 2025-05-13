@@ -1,17 +1,17 @@
-package com.nest.kanxue.core.stat
+package com.nest.kanxue.core.stat_F
 
 import android.util.Log
 import java.io.File
 import java.io.FileWriter
 
-object ShellGetStat_F_Vendor {
+object ShellGetStat_F_Product {
     private const val TAG = "ShellGetMeminfo"
 
     ///proc/mounts
     fun GetStat_F_DataUsingFile(): String {
         // 处理stat -f命令
         val fsPathsToCheck = listOf(
-            "/vendor"
+            "/product"
         )
 
         var result = ""
@@ -35,7 +35,7 @@ object ShellGetStat_F_Vendor {
                 targetDir.mkdirs()
             }
 
-            val propsFile = File(targetDir, "Stat_F_vendor.txt")
+            val propsFile = File(targetDir, "Stat_F_product.txt")
 
             FileWriter(propsFile).use { writer ->
                 writer.write(props)

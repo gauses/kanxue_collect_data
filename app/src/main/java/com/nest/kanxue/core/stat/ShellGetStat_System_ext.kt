@@ -4,22 +4,21 @@ import android.util.Log
 import java.io.File
 import java.io.FileWriter
 
-object ShellGetStat_F_Data {
+object ShellGetStat_System_ext {
     private const val TAG = "ShellGetMeminfo"
 
     ///proc/mounts
     fun GetStat_F_DataUsingFile(): String {
         // 处理stat -f命令
         val fsPathsToCheck = listOf(
-            "/data"
-
+            "/system_ext"
         )
 
         var result = ""
         fsPathsToCheck.forEach { path ->
             val key = "fs_$path"  // 添加前缀以区分文件系统信息
             result = try {
-                val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", "stat -f $path"))
+                val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", "stat $path"))
                 process.inputStream.bufferedReader().use { it.readText() }
             } catch (e: Exception) {
                 ""
@@ -36,7 +35,7 @@ object ShellGetStat_F_Data {
                 targetDir.mkdirs()
             }
 
-            val propsFile = File(targetDir, "Stat_F_data.txt")
+            val propsFile = File(targetDir, "Stat_system_ext.txt")
 
             FileWriter(propsFile).use { writer ->
                 writer.write(props)
