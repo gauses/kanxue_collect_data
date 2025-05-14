@@ -43,6 +43,7 @@ import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.DisplayCard
 import com.nest.kanxue.core.GetInutService
+import com.nest.kanxue.core.GetServiceList
 import com.nest.kanxue.core.OpenFrameWorkJar
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
@@ -997,12 +998,13 @@ class MainActivity : AppCompatActivity() {
                         runOnUiThread {
                             uploadStatus.text = "开始执行File(\"/stat -f"
                         }
-                        ShellGetStat_F_Data.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                        ShellGetStat_F_Odm.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                        ShellGetStat_F_Odm_dlkm.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                        ShellGetStat_F_Product.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                        ShellGetStat_F_System_ext.saveSystemPropsToFile(File(externalDir111.absolutePath))
-                        ShellGetStat_F_Vendor.saveSystemPropsToFile(File(externalDir111.absolutePath))
+                        var stat_F_File = File(externalDir111.absolutePath + "/stat-f")
+                        ShellGetStat_F_Data.saveSystemPropsToFile(stat_F_File)
+                        ShellGetStat_F_Odm.saveSystemPropsToFile(stat_F_File)
+                        ShellGetStat_F_Odm_dlkm.saveSystemPropsToFile(stat_F_File)
+                        ShellGetStat_F_Product.saveSystemPropsToFile(stat_F_File)
+                        ShellGetStat_F_System_ext.saveSystemPropsToFile(stat_F_File)
+                        ShellGetStat_F_Vendor.saveSystemPropsToFile(stat_F_File)
 
 
                         runOnUiThread {
@@ -1152,6 +1154,8 @@ class MainActivity : AppCompatActivity() {
 
 
                         GetInutService.saveInutServiceToFile(this@MainActivity, lastTargetDir)
+
+                        GetServiceList.saveServiceListToFile(this@MainActivity, lastTargetDir)
 
 
                         runOnUiThread {
