@@ -212,8 +212,8 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
             File(targetDir.absolutePath).deleteRecursively()
             targetDir.mkdirs()
 
-            // 使用cp -rv命令复制文件，显示详细过程
-            val command = arrayOf("sh", "-c", "cp -rv ${sourceDir.absolutePath}/ ${targetDir.absolutePath}/ 2>/dev/null")
+            // 使用cp -rp命令复制文件，保留权限和时间戳
+            val command = arrayOf("sh", "-c", "cp -rdp ${sourceDir.absolutePath}/ ${targetDir.absolutePath}/ 2>/dev/null")
             Log.d("CpuFilesCopier", "执行命令: ${command.joinToString(" ")}")
             Log.d("CpuFilesCopier", "目录文件")
             val process = Runtime.getRuntime().exec(command)

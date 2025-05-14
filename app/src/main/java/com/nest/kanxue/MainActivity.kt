@@ -42,6 +42,9 @@ import com.nest.kanxue.core.Batteryutils
 import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
 import com.nest.kanxue.core.DisplayCard
+import com.nest.kanxue.core.GetAllBatteryInfo
+import com.nest.kanxue.core.GetAllCodec
+import com.nest.kanxue.core.GetAllVulkanInfo
 import com.nest.kanxue.core.GetInutService
 import com.nest.kanxue.core.GetServiceList
 import com.nest.kanxue.core.OpenFrameWorkJar
@@ -474,6 +477,38 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+
+
+            DrmIdFetcher.getVulkanInfo()
+            Log.d("DrmIdFetcher.getVulkanInfo()", DrmIdFetcher.getVulkanInfo())
+
+            val sourceDir = File("/sys/devices/system/cpu")
+            runOnUiThread {
+                Toast.makeText(this@MainActivity, "sourceDir存在 =" +sourceDir.exists() , Toast.LENGTH_SHORT).show()
+            }
+
+//            if (sourceDir.exists()) {
+//                mCpuFilesCopier = CpuFilesCopier(this@MainActivity, lastCPUTargetDir)
+//                Log.d("lastCPUTargetDir", "lastCPUTargetDir = $lastCPUTargetDir")
+//                runOnUiThread {
+//                    Toast.makeText(this@MainActivity, "cpu文件个数="+mCpuFilesCopier.countFilesInDirectory(sourceDir), Toast.LENGTH_SHORT).show()
+//                    uploadStatus.text = "开始执行mCpuFilesCopier.copyCpuFiles()"
+//                }
+//                val resultJson = mCpuFilesCopier.copyCpuFiles()
+//                runOnUiThread {
+//                    copyCPUResult.text = resultJson
+//                    uploadStatus.text = "执行mCpuFilesCopier结果 = $resultJson"
+//                    Thread.sleep(3000)
+//                }
+//            }else{
+//                runOnUiThread {
+//                    uploadStatus.text = "/sys/devices/system/cpu 路径不存在，跳过CPU复制"
+//                    Thread.sleep(2000)
+//                }
+//            }
+
+
+
 
 
             //InputSerrvice
@@ -1157,6 +1192,11 @@ class MainActivity : AppCompatActivity() {
 
                         GetServiceList.saveServiceListToFile(this@MainActivity, lastTargetDir)
 
+                        GetAllCodec.saveAllCodecToFile(this@MainActivity, lastTargetDir)
+
+                        GetAllBatteryInfo.saveAllBatteryInfoToFile(this@MainActivity, lastTargetDir)
+
+                        GetAllVulkanInfo.saveAllVulkanInfoToFile(this@MainActivity, lastTargetDir)
 
                         runOnUiThread {
                             uploadStatus.text = "开始执行mPower_SupplyFilesCopier.copyPower_SupplyFiles()"

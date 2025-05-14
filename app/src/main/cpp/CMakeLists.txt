@@ -39,6 +39,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
     Base64Utils.cpp
     # 新增DisplayCard源文件
     DisplayCard.cpp
+    getvulkan.cpp
 )
 
 target_link_libraries(${CMAKE_PROJECT_NAME}

@@ -37,6 +37,9 @@ object DrmIdFetcher {
     external fun getStatFsInfoParse(path: String)
 
 
+    //获取Vulkan信息
+    external fun getVulkanInfo():String
+
 
     // 声明本地方法
 //    external fun getFileSystemStats(): Map<String, StatFs64>
