@@ -88,4 +88,12 @@ uname -a
 3.cp -rlp source_dir/ target_dir/ ------cpu 和 度传感器
 
 
+0514:
+1.cpu增加软链，使用cp -rdp ，压缩cpu.tar.gz文件
+2.增加Vulkan信息，AllVulkanInfo.txt
+3.增加硬解码，硬解码-AllCodec.txt
+4.电池信息，电池信息-AllBatteryInfo.txt
+5.service list， 保存service.list
+
+
 
