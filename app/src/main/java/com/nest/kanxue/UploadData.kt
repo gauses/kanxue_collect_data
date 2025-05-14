@@ -15,6 +15,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 
 object UploadData {
 
@@ -38,17 +40,20 @@ object UploadData {
     }
 
     private fun zipDirectory(sourceDir: String, outputFile: String) {
+        val sourceFile = File(sourceDir)
+        // 生成到 cpu 目录下
+        generateSymlinkList(File(sourceFile, "cpu"), File(sourceFile, "cpu/symlinks.txt"))
+
         ZipOutputStream(FileOutputStream(outputFile)).use { zipOut ->
-            val sourceFile = File(sourceDir)
             if (sourceFile.exists()) {
                 sourceFile.walkTopDown().forEach { file ->
+                    // 跳过软链
+                    if (Files.isSymbolicLink(Paths.get(file.absolutePath))) return@forEach
                     // 排除zip文件
-                    // 排除profileInstalled文件
-                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.toUpperCase().contains("profileinstall")) {
+                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.toUpperCase().contains("PROFILEINSTALL")) {
                         val entryPath = file.absolutePath.substring(sourceFile.absolutePath.length + 1)
                         val entry = ZipEntry(entryPath)
                         zipOut.putNextEntry(entry)
-                        
                         FileInputStream(file).use { input ->
                             input.copyTo(zipOut)
                         }
@@ -126,9 +131,20 @@ object UploadData {
             })
         } catch (e: Exception) {
             Log.e("sb", "Error during zip and upload: ${e.message}")
-            Toast.makeText(context, "压缩或上传过程中发生错误", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "压缩或上传过程中发生错误", Toast.LENGTH_SHORT).show()
             // 发生异常时调用失败回调，传入错误信息
             onFailure("压缩或上传过程中发生错误: ${e.message}")
         }
+    }
+
+    private fun generateSymlinkList(dir: File, output: File) {
+        val sb = StringBuilder()
+        dir.walkTopDown().forEach { file ->
+            if (Files.isSymbolicLink(Paths.get(file.absolutePath))) {
+                val target = Files.readSymbolicLink(Paths.get(file.absolutePath))
+                sb.append("${file.relativeTo(dir).path} -> $target\n")
+            }
+        }
+        output.writeText(sb.toString())
     }
 }

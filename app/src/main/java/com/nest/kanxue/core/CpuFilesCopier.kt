@@ -8,6 +8,8 @@ import org.json.JSONObject
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class CpuFilesCopier(private val context: Context, private val targetDir: File) {
     // 源目录路径
@@ -263,5 +265,16 @@ class CpuFilesCopier(private val context: Context, private val targetDir: File) 
         }
 
         return resultJson.toString()
+    }
+
+    fun generateSymlinkList(dir: File, output: File) {
+        val sb = StringBuilder()
+        dir.walkTopDown().forEach { file ->
+            if (Files.isSymbolicLink(Paths.get(file.absolutePath))) {
+                val target = Files.readSymbolicLink(Paths.get(file.absolutePath))
+                sb.append("${file.relativeTo(dir).path} -> $target\n")
+            }
+        }
+        output.writeText(sb.toString())
     }
 }

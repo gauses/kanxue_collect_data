@@ -316,11 +316,21 @@ class MainActivity : AppCompatActivity() {
         frame.addView(mySurfaceView)
 
         val lastTargetDir_suffix = "nest_" + System.currentTimeMillis()/1000
+//        //整个要上传的目录
+//        val lastTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix)
+//        //整个要上传的cpu目录
+//        val lastCPUTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/cpu")
+//        val lastTempTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/temp")
+//
         //整个要上传的目录
-        val lastTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix)
+        val dataDir = this.filesDir.parentFile
+        val lastTargetDir = File(dataDir, lastTargetDir_suffix)
         //整个要上传的cpu目录
-        val lastCPUTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/cpu")
-        val lastTempTargetDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), lastTargetDir_suffix + "/temp")
+        val lastCPUTargetDir = File(dataDir, lastTargetDir_suffix + "/cpu")
+        val lastTempTargetDir = File(dataDir, lastTargetDir_suffix + "/temp")
+
+
+
 
         //确定是否要上传cpu文件
         cpuCaptureSwitch = findViewById(R.id.cpu_capture_switch)
@@ -477,6 +487,9 @@ class MainActivity : AppCompatActivity() {
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
+            val dataDir = this.filesDir.parentFile
+            Log.d("dataDir", dataDir.absolutePath.toString())
+
 
 
             DrmIdFetcher.getVulkanInfo()
