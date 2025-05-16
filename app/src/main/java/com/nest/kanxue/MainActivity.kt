@@ -1139,6 +1139,12 @@ class MainActivity : AppCompatActivity() {
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/camera.txt ${externalDir111.absolutePath}/camera.txt")
 
 
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行cp /data/local/tmp/dumpsys_input.txt"
+                        }
+                        ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/dumpsys_input.txt ${externalDir111.absolutePath}/dumpsys_input.txt")
+
+
                         //电池信息
                         val batteryInfo = Batteryutils.getAllBatteryInfo(this@MainActivity, File(externalDir111.absolutePath))
                         Log.d("BatteryInfo", "═══════════════ 电池基本信息 ═══════════════")

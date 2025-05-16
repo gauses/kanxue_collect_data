@@ -97,3 +97,7 @@ uname -a
 
 
 
+0516：
+1.增加读取/data/local/tmp/dumpsys_input.txt
+
+
