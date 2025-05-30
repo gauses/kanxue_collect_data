@@ -41,6 +41,7 @@ import com.nest.kanxue.cert.CertificateReader
 import com.nest.kanxue.core.Batteryutils
 import com.nest.kanxue.core.CheckSensorLength
 import com.nest.kanxue.core.CpuFilesCopier
+import com.nest.kanxue.core.DeviceFingerprinter
 import com.nest.kanxue.core.DisplayCard
 import com.nest.kanxue.core.GetAllBatteryInfo
 import com.nest.kanxue.core.GetAllCodec
@@ -143,7 +144,8 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_SMS,
             Manifest.permission.READ_PHONE_NUMBERS,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
         )
 
         val missingPermissions = permissions.filter {
@@ -489,6 +491,15 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
             val dataDir = this.filesDir.parentFile
             Log.d("dataDir", dataDir.absolutePath.toString())
+
+
+
+            // Get the combined fingerprint
+            val fingerprint = DeviceFingerprinter.getCombinedFingerprint(this, testbutton)
+
+            // Display or send the fingerprint
+            Log.d("fingerprint", fingerprint.toString(2)) // Pretty-print with 2 space indent)
+
 
 
 
@@ -1140,7 +1151,7 @@ class MainActivity : AppCompatActivity() {
 
 
                         runOnUiThread {
-                            uploadStatus.text = "开始执行cp /data/local/tmp/dumpsys_input.txt"
+                            uploadStatus.text = "开始执cp /data/local/tmp/dumpsys_input.txt"
                         }
                         ShellCommandExecutor().executeShellCommand("cp /data/local/tmp/dumpsys_input.txt ${externalDir111.absolutePath}/dumpsys_input.txt")
 

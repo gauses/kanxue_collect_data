@@ -20,8 +20,12 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 object UploadData {
+    private const val MAX_FILE_SIZE = 100 * 1024 * 1024 // 100MB
+    private val isUploading = AtomicBoolean(false)
 
     fun printAllFiles(directory: String) {
         Log.d("FileList", "目录文件遍历开始")
@@ -41,6 +45,10 @@ object UploadData {
 
     // 只用tar.gz压缩，保留软链
     fun createTarGzWithSymlinks(sourceDir: File, tarGzFile: File) {
+        if (!sourceDir.exists() || !sourceDir.isDirectory) {
+            throw IOException("Source directory does not exist or is not a directory")
+        }
+
         TarArchiveOutputStream(GzipCompressorOutputStream(FileOutputStream(tarGzFile))).use { tarOut ->
             addFileToTar(tarOut, sourceDir, sourceDir.parentFile!!.absolutePath)
         }
@@ -49,6 +57,12 @@ object UploadData {
     // 递归添加文件和目录，保留软链
     private fun addFileToTar(tarOut: TarArchiveOutputStream, file: File, basePath: String) {
         val entryName = file.absolutePath.substring(basePath.length + 1)
+        
+        if (file.length() > MAX_FILE_SIZE) {
+            Log.w("FileList", "文件过大，跳过: ${file.absolutePath}")
+            return
+        }
+
         if (Files.isSymbolicLink(file.toPath())) {
             val linkTarget = Files.readSymbolicLink(file.toPath()).toString()
             val entry = TarArchiveEntry(entryName, TarArchiveEntry.LF_SYMLINK)
@@ -72,35 +86,55 @@ object UploadData {
 
     fun zipDirectoryWithExtraFiles(sourceDir: String, outputFile: String, extraFiles: List<File>) {
         val sourceFile = File(sourceDir)
+        if (!sourceFile.exists() || !sourceFile.isDirectory) {
+            throw IOException("Source directory does not exist or is not a directory")
+        }
+
         ZipOutputStream(FileOutputStream(outputFile)).use { zipOut ->
             if (sourceFile.exists()) {
                 sourceFile.walkTopDown().forEach { file ->
-                    // 跳过cpu目录本身和zip文件本身
-                    if (file == File(sourceFile, "cpu") || file.absolutePath == outputFile) return@forEach
-                    // 跳过cpu目录下的所有内容（只保留cpu.tar.gz）
-                    if (file.toPath().startsWith(File(sourceFile, "cpu").toPath())) return@forEach
-                    // 跳过cpu.tar.gz本身，避免重复
-                    if (file.name == "cpu.tar.gz") return@forEach
-                    // 排除zip文件
-                    if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.toUpperCase().contains("PROFILEINSTALL")) {
-                        val entryPath = file.absolutePath.substring(sourceFile.absolutePath.length + 1)
-                        val entry = ZipEntry(entryPath)
-                        zipOut.putNextEntry(entry)
-                        FileInputStream(file).use { input ->
-                            input.copyTo(zipOut)
+                    try {
+                        // 跳过cpu目录本身和zip文件本身
+                        if (file == File(sourceFile, "cpu") || file.absolutePath == outputFile) return@forEach
+                        // 跳过cpu目录下的所有内容（只保留cpu.tar.gz）
+                        if (file.toPath().startsWith(File(sourceFile, "cpu").toPath())) return@forEach
+                        // 跳过cpu.tar.gz本身，避免重复
+                        if (file.name == "cpu.tar.gz") return@forEach
+                        // 排除zip文件
+                        if (!file.isDirectory && !file.name.endsWith(".zip") && !file.name.toUpperCase().contains("PROFILEINSTALL")) {
+                            if (file.length() > MAX_FILE_SIZE) {
+                                Log.w("FileList", "文件过大，跳过: ${file.absolutePath}")
+                                return@forEach
+                            }
+                            val entryPath = file.absolutePath.substring(sourceFile.absolutePath.length + 1)
+                            val entry = ZipEntry(entryPath)
+                            zipOut.putNextEntry(entry)
+                            FileInputStream(file).use { input ->
+                                input.copyTo(zipOut)
+                            }
+                            zipOut.closeEntry()
                         }
-                        zipOut.closeEntry()
+                    } catch (e: Exception) {
+                        Log.e("FileList", "处理文件时出错: ${file.absolutePath}, 错误: ${e.message}")
                     }
                 }
                 // 额外加入cpu.tar.gz
                 extraFiles.forEach { file ->
-                    if (file.exists()) {
-                        val entry = ZipEntry(file.name)
-                        zipOut.putNextEntry(entry)
-                        FileInputStream(file).use { input ->
-                            input.copyTo(zipOut)
+                    try {
+                        if (file.exists()) {
+                            if (file.length() > MAX_FILE_SIZE) {
+                                Log.w("FileList", "文件过大，跳过: ${file.absolutePath}")
+                                return@forEach
+                            }
+                            val entry = ZipEntry(file.name)
+                            zipOut.putNextEntry(entry)
+                            FileInputStream(file).use { input ->
+                                input.copyTo(zipOut)
+                            }
+                            zipOut.closeEntry()
                         }
-                        zipOut.closeEntry()
+                    } catch (e: Exception) {
+                        Log.e("FileList", "处理额外文件时出错: ${file.absolutePath}, 错误: ${e.message}")
                     }
                 }
             }
@@ -114,6 +148,14 @@ object UploadData {
             return
         }
 
+        if (!isUploading.compareAndSet(false, true)) {
+            onFailure("已有上传任务正在进行中")
+            return
+        }
+
+        var zipFile: File? = null
+        var cpuTarGzFile: File? = null
+
         try {
             Log.d("FileList", "开始遍历文件....")
             printAllFiles(externalDir)
@@ -121,16 +163,16 @@ object UploadData {
 
             // 1. 先压缩cpu目录为tar.gz
             val cpuDir = File(externalDir, "cpu")
-            val cpuTarGzFile = File(externalDir, "cpu.tar.gz")
+            cpuTarGzFile = File(externalDir, "cpu.tar.gz")
             createTarGzWithSymlinks(cpuDir, cpuTarGzFile)
 
             Log.d("FileList", "开始整体打包zip....")
             // 2. 再整体打包zip（包含cpu.tar.gz）
             val zipFilePath = "$externalDir/$allDataFileNameSuffix.zip"
+            zipFile = File(zipFilePath)
             zipDirectoryWithExtraFiles(externalDir, zipFilePath, listOf(cpuTarGzFile))
 
             val apiService = RetrofitClient.create()
-            val zipFile = File(zipFilePath)
             val requestFile = zipFile.asRequestBody("application/zip".toMediaType())
             val filePart = MultipartBody.Part.createFormData("file", zipFile.name, requestFile)
 
@@ -143,35 +185,44 @@ object UploadData {
 
                         if (response.isSuccessful) {
                             Log.d("sb", "File uploaded successfully")
-                            // 上传完成后删除临时文件
-                            zipFile.delete()
-                            cpuTarGzFile.delete()
+                            cleanupFiles(zipFile, cpuTarGzFile)
                             onSuccess()
                         } else {
                             val errorBody = response.errorBody()?.string()
                             Log.e("sb", "Upload failed with response: $errorBody")
-                            zipFile.delete()
-                            cpuTarGzFile.delete()
+                            cleanupFiles(zipFile, cpuTarGzFile)
                             onFailure("上传失败: 服务器返回错误 ${response.code()}")
                         }
                     } catch (e: Exception) {
                         Log.e("sb", "Error processing response: ${e.message}")
-                        zipFile.delete()
-                        cpuTarGzFile.delete()
+                        cleanupFiles(zipFile, cpuTarGzFile)
                         onFailure("处理响应时发生错误: ${e.message}")
+                    } finally {
+                        isUploading.set(false)
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.e("sb", "File upload error = ${t.message}")
-                    zipFile.delete()
-                    cpuTarGzFile.delete()
+                    cleanupFiles(zipFile, cpuTarGzFile)
                     onFailure("上传失败: ${t.message}")
+                    isUploading.set(false)
                 }
             })
         } catch (e: Exception) {
             Log.e("sb", "Error during zip and upload: ${e.message}")
+            cleanupFiles(zipFile, cpuTarGzFile)
             onFailure("压缩或上传过程中发生错误: ${e.message}")
+            isUploading.set(false)
+        }
+    }
+
+    private fun cleanupFiles(zipFile: File?, cpuTarGzFile: File?) {
+        try {
+            zipFile?.delete()
+            cpuTarGzFile?.delete()
+        } catch (e: Exception) {
+            Log.e("sb", "Error cleaning up files: ${e.message}")
         }
     }
 }
