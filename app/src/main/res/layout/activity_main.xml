@@ -23,6 +23,14 @@
         </FrameLayout>
 
 
+        <com.nest.kanxue.core.fingerprint.SurfaceFingerprint
+            android:id="@+id/surfaceFingerprint"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:visibility="invisible" />
+
+
         <Switch
             android:id="@+id/cpu_capture_switch"
             android:layout_width="wrap_content"

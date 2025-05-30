@@ -16,12 +16,13 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
-import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -48,11 +49,9 @@ import com.nest.kanxue.core.GetAllCodec
 import com.nest.kanxue.core.GetAllVulkanInfo
 import com.nest.kanxue.core.GetInutService
 import com.nest.kanxue.core.GetServiceList
-import com.nest.kanxue.core.GpuFingerprinter
 import com.nest.kanxue.core.OpenFrameWorkJar
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
-import com.nest.kanxue.core.Shell_AM_GetConfig
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
 import com.nest.kanxue.core.ShellGetKernel
@@ -60,11 +59,17 @@ import com.nest.kanxue.core.ShellGetLinuxVersion
 import com.nest.kanxue.core.ShellGetMeminfo
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
+import com.nest.kanxue.core.Shell_AM_GetConfig
 import com.nest.kanxue.core.Shell_PM_List_Features
 import com.nest.kanxue.core.Shell_lshal
 import com.nest.kanxue.core.Shell_lspci
 import com.nest.kanxue.core.Shell_lsusb
 import com.nest.kanxue.core.TempFilesCopier
+import com.nest.kanxue.core.fingerprint.AudioFingerprint
+import com.nest.kanxue.core.fingerprint.GpuFingerprinter
+import com.nest.kanxue.core.fingerprint.SurfaceFingerprint
+import com.nest.kanxue.core.fingerprint.SurfaceFingerprint.FingerprintCallback
+import com.nest.kanxue.core.fingerprint.ViewRectFingerprint
 import com.nest.kanxue.core.stat.ShellGetStat_All
 import com.nest.kanxue.core.stat.ShellGetStat_Odm
 import com.nest.kanxue.core.stat.ShellGetStat_Product
@@ -113,9 +118,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import kotlin.concurrent.thread
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -182,7 +187,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fileContent : TextView
     private lateinit var cpuCaptureSwitch: android.widget.Switch
     private var isCpuCapturing = true  // 设置为true以匹配Switch的默认状态
-
+    private var surfaceFingerprint: SurfaceFingerprint? = null
 
     //地理位置属性
     var locationJSONObject = JSONObject();
@@ -487,15 +492,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        surfaceFingerprint = findViewById<SurfaceFingerprint>(R.id.surfaceFingerprint)
+        // 确保视图是可见的
+        surfaceFingerprint?.visibility = View.VISIBLE
+        // 设置一个最小尺寸
+        surfaceFingerprint?.layoutParams = ViewGroup.LayoutParams(100, 100)
 
         val testbutton = findViewById<Button>(R.id.test)
         testbutton.setOnClickListener{
             val dataDir = this.filesDir.parentFile
             Log.d("dataDir", dataDir.absolutePath.toString())
 
-
             Log.d("GpuFingerprinter", GpuFingerprinter.generateGpuFingerprint()) // Pretty-print with 2 space indent)
+            Log.d("AudioFingerprint", AudioFingerprint.generateAudioFingerprint()) // Pretty-print with 2 space indent)
+            Log.d("ViewRectFingerprint", ViewRectFingerprint.generateRectFingerprint(this)) // Pretty-print with 2 space indent)
 
+
+            Log.d("SurfaceFingerprint", surfaceFingerprint.toString())
+            surfaceFingerprint?.setCallback { fingerprint ->
+                Log.d("SurfaceFingerprint", "GPU Fingerprint: $fingerprint")
+                // 处理指纹...
+            }
 
 
 
