@@ -48,6 +48,7 @@ import com.nest.kanxue.core.GetAllCodec
 import com.nest.kanxue.core.GetAllVulkanInfo
 import com.nest.kanxue.core.GetInutService
 import com.nest.kanxue.core.GetServiceList
+import com.nest.kanxue.core.GpuFingerprinter
 import com.nest.kanxue.core.OpenFrameWorkJar
 import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
@@ -491,6 +492,10 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
             val dataDir = this.filesDir.parentFile
             Log.d("dataDir", dataDir.absolutePath.toString())
+
+
+            Log.d("GpuFingerprinter", GpuFingerprinter.generateGpuFingerprint()) // Pretty-print with 2 space indent)
+
 
 
 

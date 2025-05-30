@@ -1,7 +1,10 @@
 package com.nest.kanxue.core
 
 import android.content.Context
-import android.opengl.GLES20
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -17,13 +20,18 @@ import android.opengl.EGLConfig
 import android.opengl.EGLContext
 import android.opengl.EGLDisplay
 import android.opengl.EGLSurface
-import android.opengl.GLES30
+import android.opengl.GLES20
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileOutputStream
 import java.security.MessageDigest
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.Paint.Style
+import android.graphics.Paint.Align
 
 // web js fingerprint里面有一个功能是js计算显卡，webgl，声卡，clientrect指纹的几个函数，
 // 使用kt在aosp12中重现类似的方法，并把几个hash只保存为一个json格式结构，给出简洁详细的源码
@@ -95,8 +103,6 @@ class DeviceFingerprinter(private val context: Context) {
                 val glVendor = GLES20.glGetString(GLES20.GL_VENDOR)
                 val glVersion = GLES20.glGetString(GLES20.GL_VERSION)
                 val glslVersion = GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION)
-
-                // 获取更多详细信息
                 val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS)
                 val maxTextureSize = IntArray(1)
                 GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, maxTextureSize, 0)
@@ -127,6 +133,41 @@ class DeviceFingerprinter(private val context: Context) {
             }
 
             return webglData
+        }
+
+        // Canvas fingerprinting
+        private fun getCanvasFingerprint(): Int {
+            val width = 200
+            val height = 200
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val paint = Paint(ANTI_ALIAS_FLAG)
+
+            // 设置背景
+            canvas.drawColor(Color.WHITE)
+
+            // 绘制文本
+            paint.color = Color.BLACK
+            paint.textSize = 20f
+            paint.typeface = Typeface.DEFAULT
+            paint.textAlign = Align.CENTER
+            canvas.drawText("Canvas Fingerprint", width / 2f, height / 2f, paint)
+
+            // 绘制一些图形
+            paint.style = Style.STROKE
+            paint.strokeWidth = 2f
+            canvas.drawRect(Rect(10, 10, width - 10, height - 10), paint)
+            canvas.drawCircle(width / 2f, height / 2f, 50f, paint)
+
+            // 计算哈希值
+            val pixels = IntArray(width * height)
+            bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+            val hash = pixels.contentHashCode()
+
+            // 清理资源
+            bitmap.recycle()
+
+            return hash
         }
 
         // Audio fingerprinting
@@ -209,7 +250,7 @@ class DeviceFingerprinter(private val context: Context) {
             return audioData
         }
 
-        // Client rect fingerprinting (similar to JS getBoundingClientRect)
+        // Client rect fingerprinting
         fun getClientRectFingerprint(context: Context, view: View): JSONObject {
             val rectData = JSONObject()
             val displayMetrics = DisplayMetrics()
@@ -233,11 +274,6 @@ class DeviceFingerprinter(private val context: Context) {
             return rectData
         }
 
-        // Canvas fingerprinting
-        private fun getCanvasFingerprint(): Int {
-            return System.identityHashCode(CanvasFingerprintRenderer())
-        }
-
         // Combine all fingerprints into one JSON
         fun getCombinedFingerprint(context: Context, view: View): JSONObject {
             val fingerprint = JSONObject()
@@ -250,9 +286,4 @@ class DeviceFingerprinter(private val context: Context) {
             return fingerprint
         }
     }
-}
-
-// Helper class for canvas fingerprinting
-private class CanvasFingerprintRenderer {
-    // 简化版本，不再需要实现 GLSurfaceView.Renderer
 }
