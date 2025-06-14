@@ -31,6 +31,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -81,6 +82,7 @@ import com.nest.kanxue.core.stat_F.ShellGetStat_F_Odm_dlkm
 import com.nest.kanxue.core.stat_F.ShellGetStat_F_Product
 import com.nest.kanxue.core.stat_F.ShellGetStat_F_System_ext
 import com.nest.kanxue.core.stat_F.ShellGetStat_F_Vendor
+import com.nest.kanxue.data_local_tmp.readDataLocalTmp
 import com.nest.kanxue.devicefingerprint.DrmIdFetcher
 import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
@@ -91,6 +93,7 @@ import com.nest.kanxue.exec.ProcessGrep
 import com.nest.kanxue.exec.ShellCommandExecutor
 import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
+import com.nest.kanxue.http.RetrofitClient
 import com.nest.kanxue.inputmethodlist.getInputMethodList
 import com.nest.kanxue.mcc.TelephonyPropertyCollector
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
@@ -115,8 +118,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -691,6 +700,78 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
+
+        val data_local_file_btn = findViewById<Button>(R.id.stat_data_local_file_btn)
+        data_local_file_btn.setOnClickListener {
+            // 在后台线程中执行文件操作
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    // 创建zip文件
+                    var data_local_tmp = Build.MODEL + "_" + Utils.getCurrentDateTime() + "_data_local_tmp.zip"
+
+                    val outputPath = "${getExternalFilesDir(null)}/${data_local_tmp}"
+                    val success = readDataLocalTmp.createZipFile(outputPath)
+
+                    val apiService = RetrofitClient.create()
+                    val requestFile = File(outputPath).asRequestBody("application/zip".toMediaType())
+                    val filePart = MultipartBody.Part.createFormData("file", File(outputPath).name, requestFile)
+
+                    val call = apiService.uploadFile(filePart)
+                    call.enqueue(object : Callback<String> {
+                        override fun onResponse(call: Call<String>, response: Response<String>) {
+                            try {
+                                Log.d("sb", "File uploaded response = " + response.code())
+                                Log.d("sb", "File uploaded response = " + response.message())
+
+                                if (response.isSuccessful) {
+                                    Log.d("sb", "File uploaded successfully")
+                                } else {
+                                    val errorBody = response.errorBody()?.string()
+                                    Log.e("sb", "Upload failed with response: $errorBody")
+                                }
+                            } catch (e: Exception) {
+                                Log.e("sb", "Error processing response: ${e.message}")
+                            } finally {
+
+                            }
+                        }
+
+                        override fun onFailure(call: Call<String>, t: Throwable) {
+                            Log.e("sb", "File upload error = ${t.message}")
+
+
+
+                        }
+                    })
+
+
+
+                    // 在主线程中更新UI
+                    withContext(Dispatchers.Main) {
+                        if (success) {
+                            Toast.makeText(this@MainActivity,
+                                "文件已保存到: $outputPath",
+                                Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(this@MainActivity,
+                                "文件创建失败",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity,
+                            "发生错误: ${e.message}",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+
+
+
 
 
 
