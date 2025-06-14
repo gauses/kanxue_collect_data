@@ -726,12 +726,49 @@ class MainActivity : AppCompatActivity() {
 
                                 if (response.isSuccessful) {
                                     Log.d("sb", "File uploaded successfully")
+                                    runOnUiThread {
+                                        android.app.AlertDialog.Builder(this@MainActivity)
+                                            .setTitle("上传结果")
+                                            .setMessage("${data_local_tmp} 文件上传成功")
+                                            .setPositiveButton("确定", null)
+                                            .show()
+                                    }
                                 } else {
                                     val errorBody = response.errorBody()?.string()
                                     Log.e("sb", "Upload failed with response: $errorBody")
+                                    runOnUiThread {
+                                        if (errorBody?.contains("Expected a string but was BEGIN_OBJECT") == true) {
+                                            android.app.AlertDialog.Builder(this@MainActivity)
+                                                .setTitle("上传结果")
+                                                .setMessage("${data_local_tmp} 文件上传成功")
+                                                .setPositiveButton("确定", null)
+                                                .show()
+                                        } else {
+                                            android.app.AlertDialog.Builder(this@MainActivity)
+                                                .setTitle("上传结果")
+                                                .setMessage("${data_local_tmp} 文件上传失败：$errorBody")
+                                                .setPositiveButton("确定", null)
+                                                .show()
+                                        }
+                                    }
                                 }
                             } catch (e: Exception) {
                                 Log.e("sb", "Error processing response: ${e.message}")
+                                runOnUiThread {
+                                    if (e.message?.contains("Expected a string but was BEGIN_OBJECT") == true) {
+                                        android.app.AlertDialog.Builder(this@MainActivity)
+                                            .setTitle("上传结果")
+                                            .setMessage("${data_local_tmp} 文件上传成功")
+                                            .setPositiveButton("确定", null)
+                                            .show()
+                                    } else {
+                                        android.app.AlertDialog.Builder(this@MainActivity)
+                                            .setTitle("上传结果")
+                                            .setMessage("${data_local_tmp} 文件上传出错：${e.message}")
+                                            .setPositiveButton("确定", null)
+                                            .show()
+                                    }
+                                }
                             } finally {
 
                             }
@@ -739,9 +776,21 @@ class MainActivity : AppCompatActivity() {
 
                         override fun onFailure(call: Call<String>, t: Throwable) {
                             Log.e("sb", "File upload error = ${t.message}")
-
-
-
+                            runOnUiThread {
+                                if (t.message?.contains("Expected a string but was BEGIN_OBJECT") == true) {
+                                    android.app.AlertDialog.Builder(this@MainActivity)
+                                        .setTitle("上传结果")
+                                        .setMessage("${data_local_tmp} 文件上传成功")
+                                        .setPositiveButton("确定", null)
+                                        .show()
+                                } else {
+                                    android.app.AlertDialog.Builder(this@MainActivity)
+                                        .setTitle("上传结果")
+                                        .setMessage("${data_local_tmp} 文件上传失败：${t.message}")
+                                        .setPositiveButton("确定", null)
+                                        .show()
+                                }
+                            }
                         }
                     })
 
@@ -749,15 +798,15 @@ class MainActivity : AppCompatActivity() {
 
                     // 在主线程中更新UI
                     withContext(Dispatchers.Main) {
-                        if (success) {
-                            Toast.makeText(this@MainActivity,
-                                "文件已保存到: $outputPath",
-                                Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this@MainActivity,
-                                "文件创建失败",
-                                Toast.LENGTH_SHORT).show()
-                        }
+//                        if (success) {
+//                            Toast.makeText(this@MainActivity,
+//                                "文件已保存到: $outputPath",
+//                                Toast.LENGTH_LONG).show()
+//                        } else {
+//                            Toast.makeText(this@MainActivity,
+//                                "文件创建失败",
+//                                Toast.LENGTH_SHORT).show()
+//                        }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
