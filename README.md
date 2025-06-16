@@ -133,3 +133,18 @@ b30a10925327329a89586118748872ea31add850a78b57ba8aa9d30aa7e8e241 - Redmi-M2003J1
 b30a10925327329a89586118748872ea31add850a78b57ba8aa9d30aa7e8e241 - Redmi-M2003J15SC
 
 409c6a05d994c78c94cfaf5ec178f09f5466dbcfaa6956ed6b4621ba0c7a9f83
+
+
+
+
+
+0614：
+上传/data/local/tmp文件
+[
+{"path":" /data/local/tmp/root.info"},
+{"path":"/data/local/tmp/dev.info"},
+{"path":"/data/local/tmp/socket.info"},
+{"path":"/data/local/tmp/block.info"},
+{"path":"/data/local/tmp/by-name.info"},
+{"path":"/data/local/tmp/otacerts.zip"}
+]
