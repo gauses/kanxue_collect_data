@@ -7,18 +7,33 @@ import java.io.FileWriter
 object ShellGetMountstats {
     private const val TAG = "ShellGetMountstats"
 
-    /////proc/self/mountstats
-    fun getCpuinfoUsingFile(): String {
+
+
+    // 备选方法：使用Runtime执行无需root的命令
+    fun readCompatibleUsingCommand(): String {
         return try {
-            File("proc/self/mountstats").bufferedReader().use { it.readText() }
+            val process = Runtime.getRuntime().exec("cat proc/self/mountstats")
+            process.inputStream.bufferedReader().use { reader ->
+                reader.readText()
+            }
         } catch (e: Exception) {
-            ""
+            "Error executing command: ${e.message}"
         }
     }
 
+
+//    /////proc/self/mountstats
+//    fun getCpuinfoUsingFile(): String {
+//        return try {
+//            File("proc/self/mountstats").bufferedReader().use { it.readText() }
+//        } catch (e: Exception) {
+//            ""
+//        }
+//    }
+
     fun saveSystemPropsToFile(targetDir: File) {
         try {
-            val props = getCpuinfoUsingFile()
+            val props = readCompatibleUsingCommand()
             if (!targetDir.exists()) {
                 targetDir.mkdirs()
             }
