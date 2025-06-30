@@ -55,12 +55,14 @@ import com.nest.kanxue.core.Power_SupplyFilesCopier
 import com.nest.kanxue.core.ShellGetCgroup
 import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
+import com.nest.kanxue.core.ShellGetEnviron
 import com.nest.kanxue.core.ShellGetKernel
 import com.nest.kanxue.core.ShellGetLinuxVersion
 import com.nest.kanxue.core.ShellGetMaps
 import com.nest.kanxue.core.ShellGetMeminfo
 import com.nest.kanxue.core.ShellGetMountinfo
 import com.nest.kanxue.core.ShellGetMounts
+import com.nest.kanxue.core.ShellGetMountstats
 import com.nest.kanxue.core.ShellGetProp
 import com.nest.kanxue.core.Shell_AM_GetConfig
 import com.nest.kanxue.core.Shell_PM_List_Features
@@ -1273,6 +1275,15 @@ class MainActivity : AppCompatActivity() {
                         }
                         ShellGetMaps.saveSystemPropsToFile(File(externalDir111.absolutePath))
 
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/mountstats\")"
+                        }
+                        ShellGetMountstats.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/environ\")"
+                        }
+                        ShellGetEnviron.saveSystemPropsToFile(File(externalDir111.absolutePath))
 
 
 
