@@ -148,3 +148,10 @@ b30a10925327329a89586118748872ea31add850a78b57ba8aa9d30aa7e8e241 - Redmi-M2003J1
 {"path":"/data/local/tmp/by-name.info"},
 {"path":"/data/local/tmp/otacerts.zip"}
 ]
+
+
+
+0630:
+增加采集：
+/proc/self/mountinfo
+/proc/self/maps

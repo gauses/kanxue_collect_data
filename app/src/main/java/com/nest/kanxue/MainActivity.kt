@@ -57,7 +57,9 @@ import com.nest.kanxue.core.ShellGetCpuInfo
 import com.nest.kanxue.core.ShellGetDiskstats
 import com.nest.kanxue.core.ShellGetKernel
 import com.nest.kanxue.core.ShellGetLinuxVersion
+import com.nest.kanxue.core.ShellGetMaps
 import com.nest.kanxue.core.ShellGetMeminfo
+import com.nest.kanxue.core.ShellGetMountinfo
 import com.nest.kanxue.core.ShellGetMounts
 import com.nest.kanxue.core.ShellGetProp
 import com.nest.kanxue.core.Shell_AM_GetConfig
@@ -1259,6 +1261,20 @@ class MainActivity : AppCompatActivity() {
                             uploadStatus.text = "开始执行File(\"/proc/cpuinfo\")"
                         }
                         ShellGetCpuInfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/mountinfo\")"
+                        }
+                        ShellGetMountinfo.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+                        runOnUiThread {
+                            uploadStatus.text = "开始执行File(\"/proc/maps\")"
+                        }
+                        ShellGetMaps.saveSystemPropsToFile(File(externalDir111.absolutePath))
+
+
+
 
                         runOnUiThread {
                             uploadStatus.text = "开始执行File(\"/proc/meminfo\")"
