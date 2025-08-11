@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
+import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -516,6 +517,17 @@ class MainActivity : AppCompatActivity() {
             val dataDir = this.filesDir.parentFile
             Log.d("dataDir", dataDir.absolutePath.toString())
 
+
+            //测试上传framework到sdcard/download/nest文件夹下面
+            val externalDir111 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
+            val success = OpenFrameWorkJar.copyFrameworkJars(externalDir111)
+            if (success) {
+                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
+            } else {
+                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+            }
+
+
             Log.d("GpuFingerprinter", GpuFingerprinter.generateGpuFingerprint()) // Pretty-print with 2 space indent)
             Log.d("AudioFingerprint", AudioFingerprint.generateAudioFingerprint()) // Pretty-print with 2 space indent)
             Log.d("ViewRectFingerprint", ViewRectFingerprint.generateRectFingerprint(this)) // Pretty-print with 2 space indent)
@@ -575,16 +587,20 @@ class MainActivity : AppCompatActivity() {
 
 
             //Framework.jar
-            val success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
-            if (success) {
-                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
-            } else {
-                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+            //Framework.jar,正常不需要上传，因为内部的文件大约50M左右
+            if (false){
+                val _success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
+                if (_success) {
+                    Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
+                } else {
+                    Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+                }
+
+                // 获取 framework.jar 信息
+                val info = OpenFrameWorkJar.getFrameworkJarInfo()
+                Log.d("OpenFrameWorkJar", info)
             }
 
-            // 获取 framework.jar 信息
-            val info = OpenFrameWorkJar.getFrameworkJarInfo()
-            Log.d("OpenFrameWorkJar", info)
 
 
             val displayCardInfo = DisplayCard.getDisplayCardInfo()
@@ -1383,18 +1399,6 @@ class MainActivity : AppCompatActivity() {
 
                         //显卡JSON文件
                         DisplayCard.saveDisplayCardInfo(File(externalDir111.absolutePath))
-
-
-                        //Framework.jar,正常不需要上传，因为内部的文件大约50M左右
-                        if (false){
-                            val success = OpenFrameWorkJar.copyFrameworkJars(lastTargetDir)
-                            if (success) {
-                                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
-                            } else {
-                                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
-                            }
-                        }
-
 
 
                         GetInutService.saveInutServiceToFile(this@MainActivity, lastTargetDir)
