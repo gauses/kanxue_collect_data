@@ -93,6 +93,7 @@ import com.nest.kanxue.devicefingerprint.getDrmId
 import com.nest.kanxue.devicefingerprint.getStorageInfo
 import com.nest.kanxue.devicefingerprint.getSystemProp
 import com.nest.kanxue.deviceidentification.getDeviceIdentifiers
+import com.nest.kanxue.dexguard.OpendexguardAPK
 import com.nest.kanxue.exec.InstrumentationUtil
 import com.nest.kanxue.exec.ProcessGrep
 import com.nest.kanxue.exec.ShellCommandExecutor
@@ -519,13 +520,21 @@ class MainActivity : AppCompatActivity() {
 
 
             //测试上传framework到sdcard/download/nest文件夹下面
-            val externalDir111 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
-            val success = OpenFrameWorkJar.copyFrameworkJars(externalDir111)
-            if (success) {
-                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
-            } else {
-                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
-            }
+//            val externalDir111 = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "nest")
+//            val success = OpenFrameWorkJar.copyFrameworkJars(externalDir111)
+//            if (success) {
+//                Log.d("OpenFrameWorkJar", "Framework.jar copied successfully")
+//            } else {
+//                Log.e("OpenFrameWorkJar", "Failed to copy framework.jar")
+//            }
+
+
+            //获取比特云手机下的dexguardAPK：/system/priv-app/dexguard*/*apk
+//            val systemPrivApp = File("/system/priv-app")
+//            OpendexguardAPK.copydexguardAPK(systemPrivApp)
+
+
+//            GetDataMiscDg.getallFiles(this)
 
 
             Log.d("GpuFingerprinter", GpuFingerprinter.generateGpuFingerprint()) // Pretty-print with 2 space indent)
