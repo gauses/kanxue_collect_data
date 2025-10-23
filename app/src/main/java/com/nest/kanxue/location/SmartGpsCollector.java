@@ -11,6 +11,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import java.util.List;
+
 public class SmartGpsCollector {
 
     private static final String TAG = "SmartGpsCollector";
@@ -20,6 +22,36 @@ public class SmartGpsCollector {
     private boolean isCollecting = false;
     private boolean gnssSupported = false;
 
+    private boolean isGpsProviderAvailable() {
+        try {
+            List<String> providers = locationManager.getAllProviders();
+            Log.i(TAG, "可用的位置提供者: " + providers);
+            
+            if (!providers.contains(LocationManager.GPS_PROVIDER)) {
+                Log.e(TAG, "设备不支持GPS定位");
+                return false;
+            }
+
+            LocationProvider gpsProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+            if (gpsProvider == null) {
+                Log.e(TAG, "无法获取GPS Provider信息");
+                return false;
+            }
+
+            Log.i(TAG, String.format("GPS Provider信息: 精度要求=%b, 功耗要求=%b, 速度要求=%b",
+                gpsProvider.requiresCell(),
+                gpsProvider.requiresNetwork(),
+                gpsProvider.requiresSatellite()
+            ));
+
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "检查GPS Provider时出错: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public SmartGpsCollector(Context context) {
         this.context = context.getApplicationContext();
         this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -28,7 +60,10 @@ public class SmartGpsCollector {
     // ==================== 启动采集 ====================
     @SuppressLint("MissingPermission")
     public void start() {
-        if (isCollecting) return;
+        if (isCollecting) {
+            Log.i(TAG, "已经在采集中，忽略重复启动");
+            return;
+        }
 
         // 检查权限
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -42,16 +77,55 @@ public class SmartGpsCollector {
             return;
         }
 
+        // 检查GPS Provider是否可用
+        if (!isGpsProviderAvailable()) {
+            Log.e(TAG, "❌ GPS Provider不可用");
+            return;
+        }
+
         isCollecting = true;
         Log.i(TAG, "=== 启动智能 GPS 采集 ===");
 
-        // 1️⃣ 启动常规位置更新
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                1000,  // 每秒更新一次
-                0,
-                locationListener
-        );
+        try {
+            // 获取最后一次已知位置
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastKnownLocation != null) {
+                Log.i(TAG, "最后一次已知位置: " + 
+                    String.format("lat=%.6f, lon=%.6f, time=%d", 
+                    lastKnownLocation.getLatitude(),
+                    lastKnownLocation.getLongitude(),
+                    lastKnownLocation.getTime()));
+            } else {
+                Log.i(TAG, "没有最后一次已知位置");
+            }
+
+            // 1️⃣ 启动常规位置更新
+            Log.i(TAG, "正在注册位置更新监听器...");
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    1000,  // 每秒更新一次
+                    0,
+                    locationListener
+            );
+            Log.i(TAG, "✅ 位置更新监听器注册成功");
+
+            // 同时也尝试使用网络定位
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                Log.i(TAG, "正在注册网络位置更新监听器...");
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        1000,
+                        0,
+                        locationListener
+                );
+                Log.i(TAG, "✅ 网络位置更新监听器注册成功");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "注册位置监听器时出错: " + e.getMessage());
+            e.printStackTrace();
+            stop();
+            return;
+        }
 
         // 2️⃣ 检查是否支持 GNSS 原始数据
         try {
