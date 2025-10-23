@@ -13,6 +13,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class SmartGpsCollector {
@@ -23,11 +26,7 @@ public class SmartGpsCollector {
     private final LocationManager locationManager;
     private boolean isCollecting = false;
     private boolean gnssSupported = false;
-    private GnssClock lastClock = null;
-    
-    // 用于保存原始数据的目录
-    private File rawDataDir;
-    private FileOutputStream rawDataStream;
+
 
     private boolean isGpsProviderAvailable() {
         try {
@@ -118,10 +117,10 @@ public class SmartGpsCollector {
                 Log.i(TAG, "没有最后一次已知位置");
             }
 
-            // 1️⃣ 启动常规位置更新
+        // 1️⃣ 启动常规位置更新
             Log.i(TAG, "正在注册位置更新监听器...");
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
                     100,  // 每0.1秒更新一次
                     0,    // 最小距离变化
                     locationListener,
@@ -154,7 +153,8 @@ public class SmartGpsCollector {
                 Log.i(TAG, "Android版本支持GNSS原始数据");
                 
                 // 检查设备是否支持GNSS测量
-                if (locationManager.hasSystemFeature(LocationManager.GPS_MEASUREMENT)) {
+                PackageManager pm = context.getPackageManager();
+                if (pm.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
                     Log.i(TAG, "设备支持GNSS测量功能");
                 } else {
                     Log.w(TAG, "设备不支持GNSS测量功能");
@@ -166,7 +166,7 @@ public class SmartGpsCollector {
                     new Handler(Looper.getMainLooper()) // 确保在主线程回调
                 );
                 
-                if (gnssSupported) {
+            if (gnssSupported) {
                     Log.i(TAG, "✅ GNSS回调注册成功，已启用Raw模式");
                     
                     // 注册导航消息监听器
@@ -176,109 +176,15 @@ public class SmartGpsCollector {
                                 @Override
                                 public void onGnssNavigationMessageReceived(GnssNavigationMessage event) {
                                     StringBuilder navMsg = new StringBuilder();
-                                    navMsg.append(String.format("GNSS导航消息:\\n"));
-                                    navMsg.append(String.format("类型=%d\\n", event.getType()));
-                                    navMsg.append(String.format("SVID=%d\\n", event.getSvid()));
-                                    navMsg.append(String.format("消息ID=%d\\n", event.getMessageId()));
-                                    navMsg.append(String.format("提交状态=%d\\n", event.getSubmessageId()));
-                                    
-                                    // 获取原始数据
-                                    byte[] data = event.getData();
-                                    if (data != null) {
-                                        // 构建详细的十六进制显示
-                                        StringBuilder hexDump = new StringBuilder();
-                                        hexDump.append(String.format("原始数据 [长度=%d字节]:\\n", data.length));
-                                        
-                                        // 每行16字节
-                                        for (int i = 0; i < data.length; i += 16) {
-                                            // 偏移地址
-                                            hexDump.append(String.format("%04X: ", i));
-                                            
-                                            // 十六进制部分
-                                            StringBuilder hexPart = new StringBuilder();
-                                            // ASCII部分
-                                            StringBuilder asciiPart = new StringBuilder("  |");
-                                            
-                                            // 处理这一行的字节
-                                            for (int j = 0; j < 16; j++) {
-                                                if (i + j < data.length) {
-                                                    byte b = data[i + j];
-                                                    // 十六进制表示
-                                                    hexPart.append(String.format("%02X ", b));
-                                                    // ASCII表示（可打印字符）
-                                                    if (b >= 32 && b <= 126) {
-                                                        asciiPart.append((char)b);
-                                                    } else {
-                                                        asciiPart.append('.');
-                                                    }
-                                                } else {
-                                                    // 填充空格
-                                                    hexPart.append("   ");
-                                                    asciiPart.append(" ");
-                                                }
-                                            }
-                                            
-                                            hexDump.append(hexPart).append(asciiPart).append("|\\n");
-                                        }
-                                        
-                                        // 计算校验和
-                                        int checksum = 0;
-                                        for (byte b : data) {
-                                            checksum ^= (b & 0xFF);
-                                        }
-                                        hexDump.append(String.format("校验和: 0x%02X\\n", checksum));
-                                        
-                                        // 添加到导航消息日志
-                                        navMsg.append(hexDump.toString());
-                                        
-                                        // 单独打印原始数据的十六进制转储
-                                        Log.i(TAG, "----------------------------------------");
-                                        Log.i(TAG, String.format("GNSS原始数据 [SVID=%d, TYPE=%d, MSGID=%d]", 
-                                            event.getSvid(), event.getType(), event.getMessageId()));
-                                        Log.i(TAG, hexDump.toString());
-                                        Log.i(TAG, "----------------------------------------");
+                                    navMsg.append("GNSS导航消息:\n");
+                                    navMsg.append(String.format("类型=%d\n", event.getType()));
+                                    navMsg.append(String.format("SVID=%d\n", event.getSvid()));
+                                    navMsg.append(String.format("消息ID=%d\n", event.getMessageId()));
+                                    navMsg.append(String.format("提交状态=%d\n", event.getSubmessageId()));
 
-                                        // 保存原始数据到文件
-                                        try {
-                                            if (rawDataStream == null) {
-                                                // 创建保存目录
-                                                rawDataDir = new File(Environment.getExternalStoragePublicDirectory(
-                                                    Environment.DIRECTORY_DOWNLOADS), "gnss_raw_data");
-                                                if (!rawDataDir.exists()) {
-                                                    rawDataDir.mkdirs();
-                                                }
-                                                
-                                                // 创建数据文件
-                                                String timestamp = String.valueOf(System.currentTimeMillis());
-                                                File rawFile = new File(rawDataDir, 
-                                                    String.format("gnss_nav_msg_%s.bin", timestamp));
-                                                rawDataStream = new FileOutputStream(rawFile, true);
-                                                Log.i(TAG, "创建GNSS原始数据文件: " + rawFile.getAbsolutePath());
-                                            }
-                                            
-                                            // 写入头部信息（时间戳、类型、SVID等）
-                                            byte[] header = String.format("TIME=%d,TYPE=%d,SVID=%d,MSGID=%d\\n", 
-                                                System.currentTimeMillis(),
-                                                event.getType(),
-                                                event.getSvid(),
-                                                event.getMessageId()
-                                            ).getBytes();
-                                            rawDataStream.write(header);
-                                            
-                                            // 写入原始数据
-                                            rawDataStream.write(data);
-                                            rawDataStream.write('\\n');
-                                            rawDataStream.flush();
-                                            
-                                            Log.i(TAG, String.format("保存了%d字节的原始数据", data.length));
-                                        } catch (IOException e) {
-                                            Log.e(TAG, "保存原始数据时出错: " + e.getMessage());
-                                            e.printStackTrace();
-                                        }
-                                    }
                                     
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                        navMsg.append(String.format("数据有效性状态=%d\\n", event.getStatus()));
+                                        navMsg.append(String.format("数据有效性状态=%d\n", event.getStatus()));
                                     }
                                     
                                     Log.i(TAG, navMsg.toString());
@@ -288,13 +194,13 @@ public class SmartGpsCollector {
                                 public void onStatusChanged(int status) {
                                     String statusStr;
                                     switch (status) {
-                                        case GnssNavigationMessage.STATUS_NOT_SUPPORTED:
+                                        case 0: // STATUS_NOT_SUPPORTED
                                             statusStr = "不支持";
                                             break;
-                                        case GnssNavigationMessage.STATUS_READY:
+                                        case 1: // STATUS_READY
                                             statusStr = "就绪";
                                             break;
-                                        case GnssNavigationMessage.STATUS_LOCATION_DISABLED:
+                                        case 2: // STATUS_LOCATION_DISABLED
                                             statusStr = "位置服务已禁用";
                                             break;
                                         default:
@@ -378,17 +284,7 @@ public class SmartGpsCollector {
             } else {
                 locationManager.removeNmeaListener(nmeaListener);
             }
-            
-            // 关闭原始数据文件
-            if (rawDataStream != null) {
-                try {
-                    rawDataStream.close();
-                    rawDataStream = null;
-                    Log.i(TAG, "GNSS原始数据文件已关闭");
-                } catch (IOException e) {
-                    Log.e(TAG, "关闭原始数据文件时出错: " + e.getMessage());
-                }
-            }
+
         } catch (Exception e) {
             Log.e(TAG, "停止采集时出错: " + e.getMessage());
         }
@@ -484,51 +380,6 @@ public class SmartGpsCollector {
         public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
             Log.i(TAG, "收到GNSS测量数据，卫星数量: " + eventArgs.getMeasurements().size());
             
-            // 获取并记录时钟数据
-            lastClock = eventArgs.getClock();
-            StringBuilder clockData = new StringBuilder("GNSS时钟数据:\\n");
-            
-            if (lastClock != null) {
-                // 基本时钟信息
-                clockData.append(String.format("时间纳秒=%d\\n", lastClock.getTimeNanos()));
-                if (lastClock.hasLeapSecond()) {
-                    clockData.append(String.format("闰秒=%d\\n", lastClock.getLeapSecond()));
-                }
-                
-                // 时间偏差
-                if (lastClock.hasTimeUncertaintyNanos()) {
-                    clockData.append(String.format("时间不确定度=%f ns\\n", lastClock.getTimeUncertaintyNanos()));
-                }
-                
-                // 全偏差
-                if (lastClock.hasFullBiasNanos()) {
-                    clockData.append(String.format("全偏差=%d ns\\n", lastClock.getFullBiasNanos()));
-                }
-                
-                // 偏差
-                if (lastClock.hasBiasNanos()) {
-                    clockData.append(String.format("偏差=%f ns\\n", lastClock.getBiasNanos()));
-                }
-                if (lastClock.hasBiasUncertaintyNanos()) {
-                    clockData.append(String.format("偏差不确定度=%f ns\\n", lastClock.getBiasUncertaintyNanos()));
-                }
-                
-                // 漂移
-                if (lastClock.hasDriftNanosPerSecond()) {
-                    clockData.append(String.format("漂移=%f ns/s\\n", lastClock.getDriftNanosPerSecond()));
-                }
-                if (lastClock.hasDriftUncertaintyNanosPerSecond()) {
-                    clockData.append(String.format("漂移不确定度=%f ns/s\\n", lastClock.getDriftUncertaintyNanosPerSecond()));
-                }
-                
-                // 硬件时钟不连续计数
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    clockData.append(String.format("硬件时钟不连续计数=%d\\n", lastClock.getHardwareClockDiscontinuityCount()));
-                }
-                
-                Log.i(TAG, clockData.toString());
-            }
-            
             for (GnssMeasurement m : eventArgs.getMeasurements()) {
                 int svid = m.getSvid();
                 int constellation = m.getConstellationType();
@@ -554,11 +405,12 @@ public class SmartGpsCollector {
                     }
                     
                     // 伪距和时间数据
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        rawData.append(String.format("伪距=%f\\n", m.getPseudorangeMeters()));
-                        rawData.append(String.format("伪距标准差=%f\\n", m.getPseudorangeRateUncertaintyMetersPerSecond()));
-                        rawData.append(String.format("接收机时间偏差=%f ns\\n", m.getReceivedSvTimeUncertaintyNanos()));
+                    rawData.append(String.format("伪距变化率=%.3f m/s\n", m.getPseudorangeRateMetersPerSecond()));
+                    if (m.hasCarrierFrequencyHz()) {
+                        rawData.append(String.format("载波频率=%.0f Hz\n", m.getCarrierFrequencyHz()));
                     }
+                    rawData.append(String.format("接收时间=%.0f ns\n", (double)m.getReceivedSvTimeNanos()));
+                    rawData.append(String.format("时间偏差=%.0f ns\n", (double)m.getTimeOffsetNanos()));
                     
                     // 载波相位数据
                     if (m.hasCarrierPhase()) {
@@ -571,32 +423,78 @@ public class SmartGpsCollector {
                     
                     // 信号质量指标
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        rawData.append(String.format("AGC=%.1f dB\\n", m.getAutomaticGainControlLevelDb()));
-                        rawData.append(String.format("码状态=%d\\n", m.getCodeType()));
+                        rawData.append(String.format("AGC=%.1f dB\n", m.getAutomaticGainControlLevelDb()));
+                        rawData.append(String.format("码状态=%s\n", m.getCodeType()));
                     }
                     
                     // 状态标志
                     rawData.append(String.format("状态标志: "));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        rawData.append(String.format(
-                            "ADR有效=%b, 载波同步=%b, 比特同步=%b, 码锁定=%b, TOW解码=%b\\n",
-                            m.hasAutomaticGainControlLevelDb(),
-                            m.hasCarrierFrequencyHz(),
-                            m.hasCarrierPhase(),
-                            m.hasCarrierPhaseUncertainty(),
-                            m.hasPseudorangeRateUncertaintyMetersPerSecond()
-                        ));
+                                        // 检查各种测量值的可用性
+                                        StringBuilder statusFlags = new StringBuilder("状态标志: ");
+                                        if (m.hasCarrierFrequencyHz()) statusFlags.append("载波频率可用, ");
+                                        if (m.hasCarrierPhase()) statusFlags.append("载波相位可用, ");
+                                        if (m.hasCarrierPhaseUncertainty()) statusFlags.append("相位不确定度可用, ");
+                                        if (m.hasSnrInDb()) statusFlags.append("SNR可用, ");
+                                        
+                                        // 移除最后的逗号和空格
+                                        String flags = statusFlags.toString().trim();
+                                        if (flags.endsWith(",")) {
+                                            flags = flags.substring(0, flags.length() - 1);
+                                        }
+                                        rawData.append(flags).append("\n");
                     }
                     
-                    // 原始数据的字节表示
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        Bundle extras = m.getExtras();
-                        if (extras != null) {
-                            rawData.append("额外原始数据:\\n");
-                            for (String key : extras.keySet()) {
-                                rawData.append(String.format("%s = %s\\n", key, extras.get(key)));
-                            }
+                    // 添加其他可用的测量数据
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {   
+                        rawData.append("\n其他测量数据:\n");
+                        
+                        // 累积增量距离状态
+                        int adrState = m.getAccumulatedDeltaRangeState();
+                        rawData.append(String.format("ADR状态=%d (", adrState));
+                        if ((adrState & GnssMeasurement.ADR_STATE_VALID) != 0) rawData.append("有效 ");
+                        if ((adrState & GnssMeasurement.ADR_STATE_RESET) != 0) rawData.append("重置 ");
+                        if ((adrState & GnssMeasurement.ADR_STATE_CYCLE_SLIP) != 0) rawData.append("周跳变 ");
+                        rawData.append(")\n");
+                        
+                        // 多路径指示器
+                        int multipath = m.getMultipathIndicator();
+                        String multipathStr;
+                        switch (multipath) {
+                            case GnssMeasurement.MULTIPATH_INDICATOR_UNKNOWN:
+                                multipathStr = "未知";
+                                break;
+                            case GnssMeasurement.MULTIPATH_INDICATOR_DETECTED:
+                                multipathStr = "检测到";
+                                break;
+                            case GnssMeasurement.MULTIPATH_INDICATOR_NOT_DETECTED:
+                                multipathStr = "未检测到";
+                                break;
+                            default:
+                                multipathStr = "无效值: " + multipath;
                         }
+                        rawData.append(String.format("多路径状态: %s\n", multipathStr));
+                        
+                        // 卫星状态
+                        rawData.append("卫星状态: ");
+                        if (m.getState() != 0) {
+                            if ((m.getState() & GnssMeasurement.STATE_CODE_LOCK) != 0) rawData.append("码锁定 ");
+                            if ((m.getState() & GnssMeasurement.STATE_BIT_SYNC) != 0) rawData.append("比特同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_SUBFRAME_SYNC) != 0) rawData.append("子帧同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_TOW_DECODED) != 0) rawData.append("TOW解码 ");
+                            if ((m.getState() & GnssMeasurement.STATE_MSEC_AMBIGUOUS) != 0) rawData.append("毫秒模糊 ");
+                            if ((m.getState() & GnssMeasurement.STATE_SYMBOL_SYNC) != 0) rawData.append("符号同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_GLO_STRING_SYNC) != 0) rawData.append("GLONASS字符串同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_GLO_TOD_DECODED) != 0) rawData.append("GLONASS TOD解码 ");
+                            if ((m.getState() & GnssMeasurement.STATE_BDS_D2_BIT_SYNC) != 0) rawData.append("北斗D2比特同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_BDS_D2_SUBFRAME_SYNC) != 0) rawData.append("北斗D2子帧同步 ");
+                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1BC_CODE_LOCK) != 0) rawData.append("Galileo E1BC码锁定 ");
+                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) != 0) rawData.append("Galileo E1C二次码锁定 ");
+                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1B_PAGE_SYNC) != 0) rawData.append("Galileo E1B页同步 ");
+                        } else {
+                            rawData.append("无有效状态");
+                        }
+                        rawData.append("\n");
                     }
                     
                     Log.i(TAG, rawData.toString());
