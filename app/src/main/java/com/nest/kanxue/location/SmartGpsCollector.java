@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
-<<<<<<< HEAD
 import android.os.Bundle;
-=======
 import android.os.Looper;
->>>>>>> bc563a526b398e22050272a944c3746b0c2b6aca
 import android.util.Log;
 
 import androidx.annotation.NonNull;
