@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
+<<<<<<< HEAD
+=======
 import android.os.Handler;
+>>>>>>> 2964255031e59bb22e1b52e7a2652ca1381e0676
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;

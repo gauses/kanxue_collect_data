@@ -539,8 +539,8 @@ class MainActivity : AppCompatActivity() {
             collector = SmartGpsCollector(this)
             collector.start()
 
-            Thread.sleep(30000)
-            collector.stop()
+            Thread.sleep(60000)
+            //collector.stop()
 
 
 
