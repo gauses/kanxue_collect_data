@@ -1,12 +1,11 @@
 package com.nest.kanxue.location;
 
-package com.example.gpscollector;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.*;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
