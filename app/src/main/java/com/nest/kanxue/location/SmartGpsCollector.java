@@ -6,19 +6,19 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
-<<<<<<< HEAD
-=======
-import android.os.Handler;
->>>>>>> 2964255031e59bb22e1b52e7a2652ca1381e0676
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 public class SmartGpsCollector {
@@ -29,6 +29,8 @@ public class SmartGpsCollector {
     private final LocationManager locationManager;
     private boolean isCollecting = false;
     private boolean gnssSupported = false;
+    private BufferedWriter measurementWriter;
+    private static final String MEASUREMENT_FILE = "gnss_measurements.txt";
 
 
     private boolean isGpsProviderAvailable() {
@@ -83,6 +85,20 @@ public class SmartGpsCollector {
     public void start() {
         if (isCollecting) {
             Log.i(TAG, "已经在采集中，忽略重复启动");
+            return;
+        }
+        
+        // 创建测量数据文件
+        try {
+            File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (!downloadDir.exists()) {
+                downloadDir.mkdirs();
+            }
+            File file = new File(downloadDir, MEASUREMENT_FILE);
+            measurementWriter = new BufferedWriter(new FileWriter(file, true));  // true表示追加模式
+            Log.i(TAG, "创建测量数据文件: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            Log.e(TAG, "创建测量数据文件失败: " + e.getMessage());
             return;
         }
 
@@ -287,6 +303,18 @@ public class SmartGpsCollector {
             } else {
                 locationManager.removeNmeaListener(nmeaListener);
             }
+            
+            // 关闭测量数据文件
+            if (measurementWriter != null) {
+                try {
+                    measurementWriter.flush();
+                    measurementWriter.close();
+                    measurementWriter = null;
+                    Log.i(TAG, "测量数据文件已关闭");
+                } catch (IOException e) {
+                    Log.e(TAG, "关闭测量数据文件时出错: " + e.getMessage());
+                }
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "停止采集时出错: " + e.getMessage());
@@ -383,126 +411,104 @@ public class SmartGpsCollector {
         public void onGnssMeasurementsReceived(GnssMeasurementsEvent eventArgs) {
             Log.i(TAG, "收到GNSS测量数据，卫星数量: " + eventArgs.getMeasurements().size());
             
-            for (GnssMeasurement m : eventArgs.getMeasurements()) {
-                int svid = m.getSvid();
-                int constellation = m.getConstellationType();
-                double cn0 = m.getCn0DbHz();
-                double freqHz = m.hasCarrierFrequencyHz() ? m.getCarrierFrequencyHz() : -1;
-                double prRate = m.getPseudorangeRateMetersPerSecond();
-
-                // 只记录信号强度大于20的卫星
-                if (cn0 > 20) {
-                    StringBuilder rawData = new StringBuilder();
-                    rawData.append(String.format("GNSS Raw数据 [SVID=%d, CONST=%d]:\\n", svid, constellation));
-                    
-                    // 基本信息
-                    rawData.append(String.format("信号强度(C/N0)=%.1f dBHz\\n", cn0));
-                    rawData.append(String.format("载波频率=%.0f Hz\\n", freqHz));
-                    rawData.append(String.format("伪距变化率=%.3f m/s\\n", prRate));
-                    
-                    // 原始测量数据
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        rawData.append(String.format("累积增量时间=%.3f ns\\n", m.getAccumulatedDeltaRangeMeters()));
-                        rawData.append(String.format("ADR状态=%d\\n", m.getAccumulatedDeltaRangeState()));
-                        rawData.append(String.format("ADR不确定度=%.3f\\n", m.getAccumulatedDeltaRangeUncertaintyMeters()));
-                    }
-                    
-                    // 伪距和时间数据
-                    rawData.append(String.format("伪距变化率=%.3f m/s\n", m.getPseudorangeRateMetersPerSecond()));
-                    if (m.hasCarrierFrequencyHz()) {
-                        rawData.append(String.format("载波频率=%.0f Hz\n", m.getCarrierFrequencyHz()));
-                    }
-                    rawData.append(String.format("接收时间=%.0f ns\n", (double)m.getReceivedSvTimeNanos()));
-                    rawData.append(String.format("时间偏差=%.0f ns\n", (double)m.getTimeOffsetNanos()));
-                    
-                    // 载波相位数据
-                    if (m.hasCarrierPhase()) {
-                        rawData.append(String.format("载波相位=%f cycles\\n", m.getCarrierPhase()));
-                        rawData.append(String.format("载波相位不确定度=%f cycles\\n", m.getCarrierPhaseUncertainty()));
-                    }
-                    
-                    // 多路径指示器
-                    rawData.append(String.format("多路径指示器=%d\\n", m.getMultipathIndicator()));
-                    
-                    // 信号质量指标
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        rawData.append(String.format("AGC=%.1f dB\n", m.getAutomaticGainControlLevelDb()));
-                        rawData.append(String.format("码状态=%s\n", m.getCodeType()));
-                    }
-                    
-                    // 状态标志
-                    rawData.append(String.format("状态标志: "));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                        // 检查各种测量值的可用性
-                                        StringBuilder statusFlags = new StringBuilder("状态标志: ");
-                                        if (m.hasCarrierFrequencyHz()) statusFlags.append("载波频率可用, ");
-                                        if (m.hasCarrierPhase()) statusFlags.append("载波相位可用, ");
-                                        if (m.hasCarrierPhaseUncertainty()) statusFlags.append("相位不确定度可用, ");
-                                        if (m.hasSnrInDb()) statusFlags.append("SNR可用, ");
-                                        
-                                        // 移除最后的逗号和空格
-                                        String flags = statusFlags.toString().trim();
-                                        if (flags.endsWith(",")) {
-                                            flags = flags.substring(0, flags.length() - 1);
-                                        }
-                                        rawData.append(flags).append("\n");
-                    }
-                    
-                    // 添加其他可用的测量数据
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {   
-                        rawData.append("\n其他测量数据:\n");
-                        
-                        // 累积增量距离状态
-                        int adrState = m.getAccumulatedDeltaRangeState();
-                        rawData.append(String.format("ADR状态=%d (", adrState));
-                        if ((adrState & GnssMeasurement.ADR_STATE_VALID) != 0) rawData.append("有效 ");
-                        if ((adrState & GnssMeasurement.ADR_STATE_RESET) != 0) rawData.append("重置 ");
-                        if ((adrState & GnssMeasurement.ADR_STATE_CYCLE_SLIP) != 0) rawData.append("周跳变 ");
-                        rawData.append(")\n");
-                        
-                        // 多路径指示器
-                        int multipath = m.getMultipathIndicator();
-                        String multipathStr;
-                        switch (multipath) {
-                            case GnssMeasurement.MULTIPATH_INDICATOR_UNKNOWN:
-                                multipathStr = "未知";
-                                break;
-                            case GnssMeasurement.MULTIPATH_INDICATOR_DETECTED:
-                                multipathStr = "检测到";
-                                break;
-                            case GnssMeasurement.MULTIPATH_INDICATOR_NOT_DETECTED:
-                                multipathStr = "未检测到";
-                                break;
-                            default:
-                                multipathStr = "无效值: " + multipath;
-                        }
-                        rawData.append(String.format("多路径状态: %s\n", multipathStr));
-                        
-                        // 卫星状态
-                        rawData.append("卫星状态: ");
-                        if (m.getState() != 0) {
-                            if ((m.getState() & GnssMeasurement.STATE_CODE_LOCK) != 0) rawData.append("码锁定 ");
-                            if ((m.getState() & GnssMeasurement.STATE_BIT_SYNC) != 0) rawData.append("比特同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_SUBFRAME_SYNC) != 0) rawData.append("子帧同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_TOW_DECODED) != 0) rawData.append("TOW解码 ");
-                            if ((m.getState() & GnssMeasurement.STATE_MSEC_AMBIGUOUS) != 0) rawData.append("毫秒模糊 ");
-                            if ((m.getState() & GnssMeasurement.STATE_SYMBOL_SYNC) != 0) rawData.append("符号同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_GLO_STRING_SYNC) != 0) rawData.append("GLONASS字符串同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_GLO_TOD_DECODED) != 0) rawData.append("GLONASS TOD解码 ");
-                            if ((m.getState() & GnssMeasurement.STATE_BDS_D2_BIT_SYNC) != 0) rawData.append("北斗D2比特同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_BDS_D2_SUBFRAME_SYNC) != 0) rawData.append("北斗D2子帧同步 ");
-                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1BC_CODE_LOCK) != 0) rawData.append("Galileo E1BC码锁定 ");
-                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1C_2ND_CODE_LOCK) != 0) rawData.append("Galileo E1C二次码锁定 ");
-                            if ((m.getState() & GnssMeasurement.STATE_GAL_E1B_PAGE_SYNC) != 0) rawData.append("Galileo E1B页同步 ");
-                        } else {
-                            rawData.append("无有效状态");
-                        }
-                        rawData.append("\n");
-                    }
-                    
-                    Log.i(TAG, rawData.toString());
-                }
+            // 获取时钟数据
+            GnssClock clock = eventArgs.getClock();
+            double[] clockData = new double[] {
+                clock.getTimeNanos(),
+                clock.getBiasNanos(),
+                clock.getDriftNanosPerSecond(),
+                clock.getFullBiasNanos(),
+                clock.getHardwareClockDiscontinuityCount(),
+                clock.getLeapSecond(),
+                clock.getTimeUncertaintyNanos(),
+                clock.getBiasUncertaintyNanos(),
+                clock.getDriftUncertaintyNanosPerSecond()
+            };
+            
+            // 获取测量数据
+            Collection<GnssMeasurement> measurements = eventArgs.getMeasurements();
+            double[][] measurementData = new double[measurements.size()][15];
+            int i = 0;
+            for (GnssMeasurement m : measurements) {
+                measurementData[i] = new double[] {
+                    m.getSvid(),                                    // 卫星ID
+                    m.getConstellationType(),                       // 星座类型
+                    m.getTimeOffsetNanos(),                        // 时间偏移
+                    m.getState(),                                  // 状态
+                    m.getReceivedSvTimeNanos(),                    // 接收时间
+                    m.getReceivedSvTimeUncertaintyNanos(),         // 接收时间不确定度
+                    m.getCn0DbHz(),                                // 载噪比
+                    m.getPseudorangeRateMetersPerSecond(),        // 伪距变化率
+                    m.getPseudorangeRateUncertaintyMetersPerSecond(), // 伪距变化率不确定度
+                    m.getAccumulatedDeltaRangeState(),            // ADR状态
+                    m.getAccumulatedDeltaRangeMeters(),           // ADR米
+                    m.getAccumulatedDeltaRangeUncertaintyMeters(),// ADR不确定度
+                    m.getCarrierFrequencyHz(),                    // 载波频率
+                    m.getCarrierCycles(),                         // 载波周期
+                    m.getCarrierPhase()                           // 载波相位
+                };
+                i++;
             }
+            
+            // 打印数组内容
+            StringBuilder arrayStr = new StringBuilder();
+            arrayStr.append("时钟数据: [");
+            for (double d : clockData) {
+                arrayStr.append(String.format("%.3f, ", d));
+            }
+            arrayStr.append("]\n测量数据:\n");
+            
+            for (i = 0; i < measurementData.length; i++) {
+                arrayStr.append(String.format("卫星%d: [", i));
+                for (double d : measurementData[i]) {
+                    arrayStr.append(String.format("%.3f, ", d));
+                }
+                arrayStr.append("]\n");
+            }
+            
+            Log.i(TAG, arrayStr.toString());
+            
+            // 构建数据字符串
+            StringBuilder dataStr = new StringBuilder();
+            
+            // 时钟数据
+            dataStr.append("时钟数据数组: ");
+            for (double d : clockData) {
+                dataStr.append(String.format("%.3f ", d));
+            }
+            dataStr.append("\n");
+            
+            // 测量数据
+            dataStr.append("测量数据数组:\n");
+            for (int j = 0; j < measurementData.length; j++) {
+                dataStr.append(String.format("卫星%d: ", j));
+                for (double d : measurementData[j]) {
+                    dataStr.append(String.format("%.3f ", d));
+                }
+                dataStr.append("\n");
+            }
+            dataStr.append("\n");  // 在不同时间的数据之间添加空行
+            
+            // 打印到logcat
+            Log.i(TAG, "----------------------------------------");
+            Log.i(TAG, "GNSS原始数据数组:");
+            Log.i(TAG, dataStr.toString());
+            Log.i(TAG, "----------------------------------------");
+            
+            // 写入数据到文件
+            try {
+                // 添加时间戳
+                String timestamp = String.format("[%d]\n", System.currentTimeMillis());
+                measurementWriter.write(timestamp);
+                measurementWriter.write(dataStr.toString());
+                measurementWriter.write("\n");  // 额外的换行确保数据分隔
+                measurementWriter.flush();
+                Log.i(TAG, "成功写入数据到文件");
+            } catch (IOException e) {
+                Log.e(TAG, "写入测量数据失败: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
 
         @Override
