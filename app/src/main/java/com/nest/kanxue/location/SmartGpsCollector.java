@@ -24,6 +24,10 @@ public class SmartGpsCollector {
     private boolean isCollecting = false;
     private boolean gnssSupported = false;
     private GnssClock lastClock = null;
+    
+    // 用于保存原始数据的目录
+    private File rawDataDir;
+    private FileOutputStream rawDataStream;
 
     private boolean isGpsProviderAvailable() {
         try {
@@ -181,18 +185,96 @@ public class SmartGpsCollector {
                                     // 获取原始数据
                                     byte[] data = event.getData();
                                     if (data != null) {
-                                        StringBuilder hexData = new StringBuilder("原始数据(HEX)=");
-                                        for (byte b : data) {
-                                            hexData.append(String.format("%02X", b));
+                                        // 构建详细的十六进制显示
+                                        StringBuilder hexDump = new StringBuilder();
+                                        hexDump.append(String.format("原始数据 [长度=%d字节]:\\n", data.length));
+                                        
+                                        // 每行16字节
+                                        for (int i = 0; i < data.length; i += 16) {
+                                            // 偏移地址
+                                            hexDump.append(String.format("%04X: ", i));
+                                            
+                                            // 十六进制部分
+                                            StringBuilder hexPart = new StringBuilder();
+                                            // ASCII部分
+                                            StringBuilder asciiPart = new StringBuilder("  |");
+                                            
+                                            // 处理这一行的字节
+                                            for (int j = 0; j < 16; j++) {
+                                                if (i + j < data.length) {
+                                                    byte b = data[i + j];
+                                                    // 十六进制表示
+                                                    hexPart.append(String.format("%02X ", b));
+                                                    // ASCII表示（可打印字符）
+                                                    if (b >= 32 && b <= 126) {
+                                                        asciiPart.append((char)b);
+                                                    } else {
+                                                        asciiPart.append('.');
+                                                    }
+                                                } else {
+                                                    // 填充空格
+                                                    hexPart.append("   ");
+                                                    asciiPart.append(" ");
+                                                }
+                                            }
+                                            
+                                            hexDump.append(hexPart).append(asciiPart).append("|\\n");
                                         }
-                                        navMsg.append(hexData.toString()).append("\\n");
                                         
                                         // 计算校验和
                                         int checksum = 0;
                                         for (byte b : data) {
                                             checksum ^= (b & 0xFF);
                                         }
-                                        navMsg.append(String.format("校验和=0x%02X\\n", checksum));
+                                        hexDump.append(String.format("校验和: 0x%02X\\n", checksum));
+                                        
+                                        // 添加到导航消息日志
+                                        navMsg.append(hexDump.toString());
+                                        
+                                        // 单独打印原始数据的十六进制转储
+                                        Log.i(TAG, "----------------------------------------");
+                                        Log.i(TAG, String.format("GNSS原始数据 [SVID=%d, TYPE=%d, MSGID=%d]", 
+                                            event.getSvid(), event.getType(), event.getMessageId()));
+                                        Log.i(TAG, hexDump.toString());
+                                        Log.i(TAG, "----------------------------------------");
+
+                                        // 保存原始数据到文件
+                                        try {
+                                            if (rawDataStream == null) {
+                                                // 创建保存目录
+                                                rawDataDir = new File(Environment.getExternalStoragePublicDirectory(
+                                                    Environment.DIRECTORY_DOWNLOADS), "gnss_raw_data");
+                                                if (!rawDataDir.exists()) {
+                                                    rawDataDir.mkdirs();
+                                                }
+                                                
+                                                // 创建数据文件
+                                                String timestamp = String.valueOf(System.currentTimeMillis());
+                                                File rawFile = new File(rawDataDir, 
+                                                    String.format("gnss_nav_msg_%s.bin", timestamp));
+                                                rawDataStream = new FileOutputStream(rawFile, true);
+                                                Log.i(TAG, "创建GNSS原始数据文件: " + rawFile.getAbsolutePath());
+                                            }
+                                            
+                                            // 写入头部信息（时间戳、类型、SVID等）
+                                            byte[] header = String.format("TIME=%d,TYPE=%d,SVID=%d,MSGID=%d\\n", 
+                                                System.currentTimeMillis(),
+                                                event.getType(),
+                                                event.getSvid(),
+                                                event.getMessageId()
+                                            ).getBytes();
+                                            rawDataStream.write(header);
+                                            
+                                            // 写入原始数据
+                                            rawDataStream.write(data);
+                                            rawDataStream.write('\\n');
+                                            rawDataStream.flush();
+                                            
+                                            Log.i(TAG, String.format("保存了%d字节的原始数据", data.length));
+                                        } catch (IOException e) {
+                                            Log.e(TAG, "保存原始数据时出错: " + e.getMessage());
+                                            e.printStackTrace();
+                                        }
                                     }
                                     
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -295,6 +377,17 @@ public class SmartGpsCollector {
                 locationManager.unregisterGnssMeasurementsCallback(gnssCallback);
             } else {
                 locationManager.removeNmeaListener(nmeaListener);
+            }
+            
+            // 关闭原始数据文件
+            if (rawDataStream != null) {
+                try {
+                    rawDataStream.close();
+                    rawDataStream = null;
+                    Log.i(TAG, "GNSS原始数据文件已关闭");
+                } catch (IOException e) {
+                    Log.e(TAG, "关闭原始数据文件时出错: " + e.getMessage());
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "停止采集时出错: " + e.getMessage());
