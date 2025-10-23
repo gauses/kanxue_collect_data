@@ -101,6 +101,7 @@ import com.nest.kanxue.hardwarerelated.CustomGLSurfaceView
 import com.nest.kanxue.hardwarerelated.getHardwareRelated
 import com.nest.kanxue.http.RetrofitClient
 import com.nest.kanxue.inputmethodlist.getInputMethodList
+import com.nest.kanxue.location.SmartGpsCollector
 import com.nest.kanxue.mcc.TelephonyPropertyCollector
 import com.nest.kanxue.model_system_determination.getModelSystemDeter
 import com.nest.kanxue.modifymachine.CheckInstallPackageChangerApps
@@ -144,6 +145,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mCpuFilesCopier: com.nest.kanxue.core.CpuFilesCopier
     private lateinit var mTempFilesCopier: com.nest.kanxue.core.TempFilesCopier
+
+
+    private lateinit var collector: SmartGpsCollector
 
     private lateinit var mPower_SupplyFilesCopier: Power_SupplyFilesCopier
 
@@ -517,6 +521,27 @@ class MainActivity : AppCompatActivity() {
         testbutton.setOnClickListener{
             val dataDir = this.filesDir.parentFile
             Log.d("dataDir", dataDir.absolutePath.toString())
+
+            // 动态请求定位权限
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    100
+                )
+            }
+
+
+
+            // 初始化 SmartGpsCollector
+            collector = SmartGpsCollector(this)
+            collector.start()
+
+            Thread.sleep(30000)
+            collector.stop()
+
 
 
             //测试上传framework到sdcard/download/nest文件夹下面
