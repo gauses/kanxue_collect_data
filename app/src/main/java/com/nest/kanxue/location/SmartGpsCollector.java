@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,18 @@ public class SmartGpsCollector {
                 gpsProvider.requiresNetwork(),
                 gpsProvider.requiresSatellite()
             ));
+
+            // 获取最佳位置提供者
+            Criteria criteria = new Criteria();
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);  // 高精度
+            criteria.setAltitudeRequired(true);           // 需要海拔
+            criteria.setBearingRequired(true);            // 需要方位
+            criteria.setSpeedRequired(true);              // 需要速度
+            criteria.setCostAllowed(true);                // 允许付费服务
+            criteria.setPowerRequirement(Criteria.POWER_HIGH); // 高功耗
+
+            String bestProvider = locationManager.getBestProvider(criteria, true);
+            Log.i(TAG, "最佳位置提供者: " + bestProvider);
 
             return true;
         } catch (Exception e) {
@@ -103,9 +116,10 @@ public class SmartGpsCollector {
             Log.i(TAG, "正在注册位置更新监听器...");
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000,  // 每秒更新一次
-                    0,
-                    locationListener
+                    100,  // 每0.1秒更新一次
+                    0,    // 最小距离变化
+                    locationListener,
+                    Looper.getMainLooper()
             );
             Log.i(TAG, "✅ 位置更新监听器注册成功");
 
@@ -114,9 +128,10 @@ public class SmartGpsCollector {
                 Log.i(TAG, "正在注册网络位置更新监听器...");
                 locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        1000,
+                        100,
                         0,
-                        locationListener
+                        locationListener,
+                        Looper.getMainLooper()
                 );
                 Log.i(TAG, "✅ 网络位置更新监听器注册成功");
             }
