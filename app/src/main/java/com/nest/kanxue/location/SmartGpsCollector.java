@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
@@ -144,20 +145,79 @@ public class SmartGpsCollector {
 
         // 2️⃣ 检查是否支持 GNSS 原始数据
         try {
-            gnssSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                    locationManager.registerGnssMeasurementsCallback(gnssCallback);
-            if (gnssSupported) {
-                Log.i(TAG, "✅ 检测到 GNSS 原始数据支持，已启用 Raw 模式");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Log.i(TAG, "Android版本支持GNSS原始数据");
+                
+                // 检查设备是否支持GNSS测量
+                if (locationManager.hasSystemFeature(LocationManager.GPS_MEASUREMENT)) {
+                    Log.i(TAG, "设备支持GNSS测量功能");
+                } else {
+                    Log.w(TAG, "设备不支持GNSS测量功能");
+                }
+                
+                // 尝试注册回调
+                gnssSupported = locationManager.registerGnssMeasurementsCallback(
+                    gnssCallback,
+                    new Handler(Looper.getMainLooper()) // 确保在主线程回调
+                );
+                
+                if (gnssSupported) {
+                    Log.i(TAG, "✅ GNSS回调注册成功，已启用Raw模式");
+                    
+                    // 检查GNSS状态
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        GnssStatus.Callback gnssStatusCallback = new GnssStatus.Callback() {
+                            @Override
+                            public void onStarted() {
+                                Log.i(TAG, "GNSS开始工作");
+                            }
+                            
+                            @Override
+                            public void onStopped() {
+                                Log.i(TAG, "GNSS停止工作");
+                            }
+                            
+                            @Override
+                            public void onFirstFix(int ttffMillis) {
+                                Log.i(TAG, "GNSS首次定位，用时: " + ttffMillis + "ms");
+                            }
+                            
+                            @Override
+                            public void onSatelliteStatusChanged(GnssStatus status) {
+                                Log.i(TAG, String.format("GNSS卫星状态更新: 可见卫星数=%d", status.getSatelliteCount()));
+                                
+                                for (int i = 0; i < status.getSatelliteCount(); i++) {
+                                    Log.i(TAG, String.format(
+                                        "卫星信息[%d]: 类型=%d, ID=%d, 信噪比=%.1f, 方位角=%.1f, 仰角=%.1f",
+                                        i,
+                                        status.getConstellationType(i),
+                                        status.getSvid(i),
+                                        status.getCn0DbHz(i),
+                                        status.getAzimuthDegrees(i),
+                                        status.getElevationDegrees(i)
+                                    ));
+                                }
+                            }
+                        };
+                        locationManager.registerGnssStatusCallback(gnssStatusCallback, new Handler(Looper.getMainLooper()));
+                        Log.i(TAG, "✅ GNSS状态监听器注册成功");
+                    }
+                } else {
+                    Log.w(TAG, "⚠️ GNSS回调注册失败，降级为NMEA模式");
+                    locationManager.addNmeaListener(nmeaListener, new Handler(Looper.getMainLooper()));
+                }
             } else {
-                Log.w(TAG, "⚠️ GNSS 原始数据不支持，降级为 NMEA 模式");
-                locationManager.addNmeaListener(nmeaListener);
+                Log.w(TAG, "⚠️ Android版本过低，不支持GNSS原始数据");
+                locationManager.addNmeaListener(nmeaListener, new Handler(Looper.getMainLooper()));
             }
         } catch (SecurityException e) {
-            Log.e(TAG, "❌ 权限不足，无法启动 GNSS 回调");
+            Log.e(TAG, "❌ 权限不足，无法启动GNSS回调: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
-            Log.e(TAG, "❌ 注册 GNSS 回调失败：" + e.getMessage());
+            Log.e(TAG, "❌ 注册GNSS回调失败: " + e.getMessage());
+            e.printStackTrace();
             gnssSupported = false;
-            locationManager.addNmeaListener(nmeaListener);
+            locationManager.addNmeaListener(nmeaListener, new Handler(Looper.getMainLooper()));
         }
     }
 
