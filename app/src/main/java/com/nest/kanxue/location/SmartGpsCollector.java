@@ -6,17 +6,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.*;
 import android.os.Build;
-<<<<<<< HEAD
 import android.os.Handler;
-=======
-<<<<<<< HEAD
 import android.os.Bundle;
-=======
->>>>>>> bab65dc1d0607d6e2ecda4e3469dee1f3a854b8e
 import android.os.Looper;
->>>>>>> bc563a526b398e22050272a944c3746b0c2b6aca
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
