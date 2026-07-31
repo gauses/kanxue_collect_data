@@ -1577,7 +1577,8 @@ class MainActivity : AppCompatActivity() {
                     sensor.fifoMaxEventCount,
                     sensor.power,
                     sensor.minDelay,
-                    sensor.version
+                    sensor.version,
+                    sensor.isWakeUpSensor
                 )
             )
         }

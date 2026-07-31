@@ -42,6 +42,7 @@ data class SensorInfo(
     val Power: Float,
     val MinDelay: Int,
     val Version: Int,
+    val isWakeUpSensor: Boolean
 )
 
 class Testor {
