@@ -111,6 +111,7 @@ import com.nest.kanxue.screentoolandclick.CheckAutoClick
 import com.nest.kanxue.simulators.CheckSimulators
 import com.nest.kanxue.sishuiliuyun.sishuiliuyunCpuManager
 import com.nest.kanxue.statprocpath.FileStatsAdapter
+import com.nest.kanxue.property.PropertyInfoUtils
 import com.nest.kanxue.temperature.loadRemperatureUtils
 import com.nest.kanxue.testsh.testShellBuildId
 import com.nest.kanxue.testsh.testShellGetProp
@@ -1244,6 +1245,9 @@ class MainActivity : AppCompatActivity() {
                     mTempFilesCopier = TempFilesCopier(this@MainActivity, lastTempTargetDir)
 
                     loadRemperatureUtils.saveTemperatureInfo(File(externalDir111.absolutePath ))
+
+                    // 复制 /dev/__properties__/property_info 原始文件，随 zip 一起打包
+                    PropertyInfoUtils.copyPropertyInfo(File(externalDir111.absolutePath))
 
 
 

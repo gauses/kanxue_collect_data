@@ -157,13 +157,53 @@ object loadRemperatureUtils {
         return -1.0
     }
 
-    // 保存温度信息到文件
+    /** 安全读取文件内容，读不到返回 null（非普通文件/不存在/无权限/空/异常）。 */
+    private fun readFileSafe(f: File): String? {
+        return try {
+            if (f.isFile && f.canRead()) f.readText().trim().takeIf { it.isNotEmpty() } else null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
+     * 忠实镜像 /sys/class/thermal 下每个 thermal_zone 的全部字段。
+     * 目录里有什么文件就采什么（原样字符串），不推断 AIDL type、不做值域过滤。
+     * 每个条目额外带 "zone"（温区目录名，如 thermal_zone0）便于定位；
+     * 其中 sysfs 原生的 "type" 字段即传感器名（如 cpu0-silver-usr）。
+     */
+    fun getThermalSensorsDetailed(): JSONObject {
+        val root = JSONObject()
+        val sensors = JSONArray()
+        try {
+            File(THERMAL_ZONE_PATH).listFiles()
+                ?.filter { it.isDirectory && it.name.startsWith("thermal_zone") }
+                ?.sortedBy { it.name.removePrefix("thermal_zone").toIntOrNull() ?: Int.MAX_VALUE }
+                ?.forEach { zoneDir ->
+                    val entry = JSONObject()
+                    entry.put("zone", zoneDir.name)
+                    zoneDir.listFiles()
+                        ?.sortedBy { it.name }
+                        ?.forEach { f ->
+                            readFileSafe(f)?.let { v -> entry.put(f.name, v) }
+                        }
+                    // 至少读到了 zone 之外的字段才收录
+                    if (entry.length() > 1) sensors.put(entry)
+                }
+        } catch (e: Exception) {
+            Log.e("Temperature", "采集thermal详细数据失败: ${e.message}")
+        }
+        root.put("sensors", sensors)
+        return root
+    }
+
+    // 采集 thermal 全部字段并保存到 temperature_info.txt
     fun saveTemperatureInfo(targetDir: File): JSONObject {
         if (!targetDir.exists()) {
             targetDir.mkdirs()
         }
 
-        val tempInfo = getTemperatureInfo()
+        val tempInfo = getThermalSensorsDetailed()
         try {
             val outputFile = File(targetDir, "temperature_info.txt")
             outputFile.writeText(tempInfo.toString(2))
