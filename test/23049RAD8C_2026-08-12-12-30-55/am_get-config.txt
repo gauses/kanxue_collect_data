@@ -1,0 +1,2 @@
+config: mcc460-mnc2-zh-rCN-ldltr-sw393dp-w393dp-h873dp-normal-long-notround-widecg-highdr-port-notnight-440dpi-finger-keysexposed-nokeys-navhidden-nonav-2400x1080-v35
+abi: arm64-v8a,armeabi-v7a,armeabi

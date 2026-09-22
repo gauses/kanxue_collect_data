@@ -1,0 +1,22 @@
+Vulkan API Version: 4206592
+Device Name: Adreno (TM) 725
+API Version: 4198528
+Driver Version: 2150002783
+Vendor ID: 20803
+Device ID: 117637122
+Device Type: 1
+Pipeline Cache UUID: 39-e3-1f-0c-43-51-00-00-00-00-02-00-03-07-00-00
+Memory Types: 
+  Type 0: Heap Index: 0, Property Flags: 1
+  Type 1: Heap Index: 0, Property Flags: 1
+  Type 2: Heap Index: 0, Property Flags: 1
+  Type 3: Heap Index: 0, Property Flags: 11
+  Type 4: Heap Index: 0, Property Flags: 7
+  Type 5: Heap Index: 0, Property Flags: 7
+  Type 6: Heap Index: 0, Property Flags: 15
+  Type 7: Heap Index: 1, Property Flags: 33
+  Type 8: Heap Index: 0, Property Flags: 17
+Memory Heaps: 
+  Heap 0: Size: 15888097280, Flags: 1
+  Heap 1: Size: 268435456, Flags: 1
+Total Device Local Memory Size: 16156532736 Bytes

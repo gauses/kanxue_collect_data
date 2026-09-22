@@ -1,0 +1,1071 @@
+--------- beginning of crash
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 1143
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{b27611e u0a75 RCVR bg:+78ms idle change:uncachedprocstate procs:0 seq(50,50)} caps=-------T
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{b27611e u0a75 RCVR bg:+78ms idle change:uncachedprocstate procs:0 seq(50,50)} caps=-------T
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:24:49.814  1143  1143 E AndroidRuntime: 	... 9 more
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 2432
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:24:54.372  2432  2432 E AndroidRuntime: 	... 9 more
+09-21 15:27:14.283   447   606 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 606 (SensorService), pid 447 (system_server)
+09-21 15:27:14.674  5651  5651 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:27:14.674  5651  5651 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:27:14.674  5651  5651 F DEBUG   : Revision: 'MP1.0'
+09-21 15:27:14.674  5651  5651 F DEBUG   : ABI: 'arm64'
+09-21 15:27:14.674  5651  5651 F DEBUG   : Timestamp: 2026-09-21 15:27:14.398010264+0900
+09-21 15:27:14.674  5651  5651 F DEBUG   : Process uptime: 157s
+09-21 15:27:14.674  5651  5651 F DEBUG   : Cmdline: system_server
+09-21 15:27:14.674  5651  5651 F DEBUG   : pid: 447, tid: 606, name: SensorService  >>> system_server <<<
+09-21 15:27:14.674  5651  5651 F DEBUG   : uid: 1000
+09-21 15:27:14.674  5651  5651 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:27:14.674  5651  5651 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:27:14.674  5651  5651 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x0  0000000000000000  x1  000000000000025e  x2  0000000000000006  x3  0000007525818020
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x4  00000078b9eee080  x5  00000078b9eee080  x6  00000078b9eee080  x7  0000000000186fcd
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x8  00000000000000f0  x9  89838f169744f061  x10 000000ff00000020  x11 000000004cb5eba6
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x12 000000000012800c  x13 000000789e99d118  x14 000000789ed1ccb8  x15 cccccccccccccccd
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x16 000000789e9940f8  x17 000000789e97c100  x18 000000750b790000  x19 00000000000001bf
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x20 000000000000025e  x21 00000000ffffffff  x22 00000075e5cb4000  x23 00000075e5cb5e20
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x24 0000007525818880  x25 b4000076292b7c08  x26 b4000076292b7c20  x27 b4000076b92af6f8
+09-21 15:27:14.674  5651  5651 F DEBUG   :     x28 b4000077193b9830  x29 00000075258180a0
+09-21 15:27:14.674  5651  5651 F DEBUG   :     lr  000000789e9199c8  sp  0000007525818020  pc  000000789e9199ec  pst 0000000000001000
+09-21 15:27:14.674  5651  5651 F DEBUG   : 11 total frames
+09-21 15:27:14.674  5651  5651 F DEBUG   : backtrace:
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:27:14.674  5651  5651 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 6339
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{d4f588f u0a75 RCVR bg:+49ms idle change:uncachedprocstate procs:0 seq(47,47)} caps=-------T
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{d4f588f u0a75 RCVR bg:+49ms idle change:uncachedprocstate procs:0 seq(47,47)} caps=-------T
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:27:18.949  6339  6339 E AndroidRuntime: 	... 9 more
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 7119
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:27:21.947  7119  7119 E AndroidRuntime: 	... 9 more
+09-21 15:39:02.042  5785  5870 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 5870 (SensorService), pid 5785 (system_server)
+09-21 15:39:02.439 13436 13436 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:39:02.439 13436 13436 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:39:02.439 13436 13436 F DEBUG   : Revision: 'MP1.0'
+09-21 15:39:02.439 13436 13436 F DEBUG   : ABI: 'arm64'
+09-21 15:39:02.439 13436 13436 F DEBUG   : Timestamp: 2026-09-21 15:39:02.168952452+0900
+09-21 15:39:02.439 13436 13436 F DEBUG   : Process uptime: 707s
+09-21 15:39:02.439 13436 13436 F DEBUG   : Cmdline: system_server
+09-21 15:39:02.439 13436 13436 F DEBUG   : pid: 5785, tid: 5870, name: SensorService  >>> system_server <<<
+09-21 15:39:02.439 13436 13436 F DEBUG   : uid: 1000
+09-21 15:39:02.439 13436 13436 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:39:02.439 13436 13436 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:39:02.439 13436 13436 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x0  0000000000000000  x1  00000000000016ee  x2  0000000000000006  x3  00000073123a4020
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x4  000000769f4ca080  x5  000000769f4ca080  x6  000000769f4ca080  x7  0000000000187291
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x8  00000000000000f0  x9  fec93149fdec2a6a  x10 000000ff00000020  x11 00000000a9ddf3da
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x12 000000000012800c  x13 0000007682d66e08  x14 00000076830e6cb8  x15 cccccccccccccccd
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x16 0000007682d5e0f8  x17 0000007682d46100  x18 0000007306cd4000  x19 0000000000001699
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x20 00000000000016ee  x21 00000000ffffffff  x22 00000073d712d000  x23 00000073d712ee20
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x24 00000073123a4880  x25 b4000073fcb1a228  x26 b4000073fcb1a240  x27 b40000749caf8ef8
+09-21 15:39:02.439 13436 13436 F DEBUG   :     x28 b40000745cbe3290  x29 00000073123a40a0
+09-21 15:39:02.439 13436 13436 F DEBUG   :     lr  0000007682ce39c8  sp  00000073123a4020  pc  0000007682ce39ec  pst 0000000000001000
+09-21 15:39:02.439 13436 13436 F DEBUG   : 11 total frames
+09-21 15:39:02.439 13436 13436 F DEBUG   : backtrace:
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:39:02.439 13436 13436 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 14122
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{6c44853 u0a75 RCVR bg:+35ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{6c44853 u0a75 RCVR bg:+35ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:39:06.740 14122 14122 E AndroidRuntime: 	... 9 more
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 15031
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:39:10.111 15031 15031 E AndroidRuntime: 	... 9 more
+09-21 15:44:40.379 13559 13646 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 13646 (SensorService), pid 13559 (system_server)
+09-21 15:44:40.776 21325 21325 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:44:40.776 21325 21325 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:44:40.776 21325 21325 F DEBUG   : Revision: 'MP1.0'
+09-21 15:44:40.776 21325 21325 F DEBUG   : ABI: 'arm64'
+09-21 15:44:40.776 21325 21325 F DEBUG   : Timestamp: 2026-09-21 15:44:40.505135061+0900
+09-21 15:44:40.776 21325 21325 F DEBUG   : Process uptime: 338s
+09-21 15:44:40.776 21325 21325 F DEBUG   : Cmdline: system_server
+09-21 15:44:40.776 21325 21325 F DEBUG   : pid: 13559, tid: 13646, name: SensorService  >>> system_server <<<
+09-21 15:44:40.776 21325 21325 F DEBUG   : uid: 1000
+09-21 15:44:40.776 21325 21325 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:44:40.776 21325 21325 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:44:40.776 21325 21325 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x0  0000000000000000  x1  000000000000354e  x2  0000000000000006  x3  0000006e4a354020
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x4  00000071d19a1080  x5  00000071d19a1080  x6  00000071d19a1080  x7  00000000001873e4
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x8  00000000000000f0  x9  9563aa1b70a1c2e5  x10 000000ff00000020  x11 00000000cfc73324
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x12 000000000012800c  x13 00000071b6f17d98  x14 00000071b7297cb8  x15 cccccccccccccccd
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x16 00000071b6f0f0f8  x17 00000071b6ef7100  x18 0000006e407ac000  x19 00000000000034f7
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x20 000000000000354e  x21 00000000ffffffff  x22 0000006f0d427000  x23 0000006f0d428e20
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x24 0000006e4a354880  x25 b400006f2fdabc08  x26 b400006f2fdabc20  x27 b400006f8fdaa508
+09-21 15:44:40.776 21325 21325 F DEBUG   :     x28 b40000710fe702a0  x29 0000006e4a3540a0
+09-21 15:44:40.776 21325 21325 F DEBUG   :     lr  00000071b6e949c8  sp  0000006e4a354020  pc  00000071b6e949ec  pst 0000000000001000
+09-21 15:44:40.776 21325 21325 F DEBUG   : 11 total frames
+09-21 15:44:40.776 21325 21325 F DEBUG   : backtrace:
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:44:40.776 21325 21325 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 21914
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{f5bd53f u0a75 RCVR bg:+61ms idle change:uncachedprocstate procs:0 seq(38,38)} caps=-------T
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{f5bd53f u0a75 RCVR bg:+61ms idle change:uncachedprocstate procs:0 seq(38,38)} caps=-------T
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:44:45.087 21914 21914 E AndroidRuntime: 	... 9 more
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 22900
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:44:48.486 22900 22900 E AndroidRuntime: 	... 9 more
+09-21 15:45:34.004 21446 21539 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 21539 (SensorService), pid 21446 (system_server)
+09-21 15:45:34.388 24343 24343 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:45:34.388 24343 24343 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:45:34.388 24343 24343 F DEBUG   : Revision: 'MP1.0'
+09-21 15:45:34.388 24343 24343 F DEBUG   : ABI: 'arm64'
+09-21 15:45:34.388 24343 24343 F DEBUG   : Timestamp: 2026-09-21 15:45:34.129434107+0900
+09-21 15:45:34.388 24343 24343 F DEBUG   : Process uptime: 53s
+09-21 15:45:34.388 24343 24343 F DEBUG   : Cmdline: system_server
+09-21 15:45:34.388 24343 24343 F DEBUG   : pid: 21446, tid: 21539, name: SensorService  >>> system_server <<<
+09-21 15:45:34.388 24343 24343 F DEBUG   : uid: 1000
+09-21 15:45:34.388 24343 24343 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:45:34.388 24343 24343 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:45:34.388 24343 24343 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x0  0000000000000000  x1  0000000000005423  x2  0000000000000006  x3  0000006dc6b9b020
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x4  0000007147beb080  x5  0000007147beb080  x6  0000007147beb080  x7  0000000000187419
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x8  00000000000000f0  x9  5a531ba2315821c9  x10 000000ff00000020  x11 00000000b0c45a38
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x12 000000000012800c  x13 000022fbb7578f36  x14 000000002fa632ce  x15 cccccccccccccccd
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x16 00000071435960f8  x17 000000714357e100  x18 0000006dbccf4000  x19 00000000000053c6
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x20 0000000000005423  x21 00000000ffffffff  x22 0000006e8ae7d000  x23 0000006e8ae7ee20
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x24 0000006dc6b9b880  x25 b400006eace4da30  x26 b400006eace4da48  x27 b400006face4d408
+09-21 15:45:34.388 24343 24343 F DEBUG   :     x28 b400006fdcf19ce0  x29 0000006dc6b9b0a0
+09-21 15:45:34.388 24343 24343 F DEBUG   :     lr  000000714351b9c8  sp  0000006dc6b9b020  pc  000000714351b9ec  pst 0000000000001000
+09-21 15:45:34.388 24343 24343 F DEBUG   : 11 total frames
+09-21 15:45:34.388 24343 24343 F DEBUG   : backtrace:
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:45:34.388 24343 24343 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 25038
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{345cea8 u0a75 RCVR bg:+47ms idle change:uncachedprocstate procs:0 seq(45,45)} caps=-------T
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{345cea8 u0a75 RCVR bg:+47ms idle change:uncachedprocstate procs:0 seq(45,45)} caps=-------T
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:45:38.896 25038 25038 E AndroidRuntime: 	... 9 more
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 25937
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:45:42.011 25937 25937 E AndroidRuntime: 	... 9 more
+09-21 15:50:02.202 24477 24561 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 24561 (SensorService), pid 24477 (system_server)
+09-21 15:50:02.591 30517 30517 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:50:02.591 30517 30517 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:50:02.591 30517 30517 F DEBUG   : Revision: 'MP1.0'
+09-21 15:50:02.591 30517 30517 F DEBUG   : ABI: 'arm64'
+09-21 15:50:02.591 30517 30517 F DEBUG   : Timestamp: 2026-09-21 15:50:02.323108830+0900
+09-21 15:50:02.591 30517 30517 F DEBUG   : Process uptime: 267s
+09-21 15:50:02.591 30517 30517 F DEBUG   : Cmdline: system_server
+09-21 15:50:02.591 30517 30517 F DEBUG   : pid: 24477, tid: 24561, name: SensorService  >>> system_server <<<
+09-21 15:50:02.591 30517 30517 F DEBUG   : uid: 1000
+09-21 15:50:02.591 30517 30517 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:50:02.591 30517 30517 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:50:02.591 30517 30517 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x0  0000000000000000  x1  0000000000005ff1  x2  0000000000000006  x3  0000006c6ce1e020
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x4  0000006ff987d080  x5  0000006ff987d080  x6  0000006ff987d080  x7  0000000000187525
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x8  00000000000000f0  x9  afa9c4f7119f285e  x10 000000ff00000020  x11 0000000031d56730
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x12 000000000012800c  x13 0000006fc73bae08  x14 0000006fc773acb8  x15 cccccccccccccccd
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x16 0000006fc73b20f8  x17 0000006fc739a100  x18 0000006c633dc000  x19 0000000000005f9d
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x20 0000000000005ff1  x21 00000000ffffffff  x22 0000006d289ca000  x23 0000006d289cbe20
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x24 0000006c6ce1e880  x25 b400006dcb40dd20  x26 b400006dcb40dd38  x27 b400006eab42a7c8
+09-21 15:50:02.591 30517 30517 F DEBUG   :     x28 b400006e7b513a50  x29 0000006c6ce1e0a0
+09-21 15:50:02.591 30517 30517 F DEBUG   :     lr  0000006fc73379c8  sp  0000006c6ce1e020  pc  0000006fc73379ec  pst 0000000000001000
+09-21 15:50:02.591 30517 30517 F DEBUG   : 11 total frames
+09-21 15:50:02.591 30517 30517 F DEBUG   : backtrace:
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:50:02.591 30517 30517 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 31190
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{ef8b4dd u0a75 RCVR bg:+59ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{ef8b4dd u0a75 RCVR bg:+59ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:50:06.955 31190 31190 E AndroidRuntime: 	... 9 more
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 32038
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:50:09.974 32038 32038 E AndroidRuntime: 	... 9 more
+09-21 15:51:55.932 30647 30733 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 30733 (SensorService), pid 30647 (system_server)
+09-21 15:51:56.339 37771 37771 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:51:56.339 37771 37771 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:51:56.339 37771 37771 F DEBUG   : Revision: 'MP1.0'
+09-21 15:51:56.339 37771 37771 F DEBUG   : ABI: 'arm64'
+09-21 15:51:56.339 37771 37771 F DEBUG   : Timestamp: 2026-09-21 15:51:56.070033083+0900
+09-21 15:51:56.339 37771 37771 F DEBUG   : Process uptime: 113s
+09-21 15:51:56.339 37771 37771 F DEBUG   : Cmdline: system_server
+09-21 15:51:56.339 37771 37771 F DEBUG   : pid: 30647, tid: 30733, name: SensorService  >>> system_server <<<
+09-21 15:51:56.339 37771 37771 F DEBUG   : uid: 1000
+09-21 15:51:56.339 37771 37771 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:51:56.339 37771 37771 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:51:56.339 37771 37771 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x0  0000000000000000  x1  000000000000780d  x2  0000000000000006  x3  0000006cf551f020
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x4  000000707a4bb080  x5  000000707a4bb080  x6  000000707a4bb080  x7  0000000000187597
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x8  00000000000000f0  x9  1b7b03299c7f7c05  x10 000000ff00000020  x11 00000000114963a6
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x12 000000000012800c  x13 000022fdd9ba8f36  x14 000000002fa91bb2  x15 cccccccccccccccd
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x16 000000706e73e0f8  x17 000000706e726100  x18 0000006cec894000  x19 00000000000077b7
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x20 000000000000780d  x21 00000000ffffffff  x22 0000006db8c8f000  x23 0000006db8c90e20
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x24 0000006cf551f880  x25 b400006f6a7c4fc8  x26 b400006f6a7c4fe0  x27 b400006e1a7d4ab8
+09-21 15:51:56.339 37771 37771 F DEBUG   :     x28 b400006e5a8c9430  x29 0000006cf551f0a0
+09-21 15:51:56.339 37771 37771 F DEBUG   :     lr  000000706e6c39c8  sp  0000006cf551f020  pc  000000706e6c39ec  pst 0000000000001000
+09-21 15:51:56.339 37771 37771 F DEBUG   : 11 total frames
+09-21 15:51:56.339 37771 37771 F DEBUG   : backtrace:
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:51:56.339 37771 37771 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 38462
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{41e59c7 u0a75 RCVR bg:+47ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{41e59c7 u0a75 RCVR bg:+47ms idle change:uncachedprocstate procs:0 seq(48,48)} caps=-------T
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:52:00.895 38462 38462 E AndroidRuntime: 	... 9 more
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 39424
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:52:04.604 39424 39424 E AndroidRuntime: 	... 9 more
+09-21 15:56:22.748 37891 37974 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 37974 (SensorService), pid 37891 (system_server)
+09-21 15:56:23.202 44236 44236 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:56:23.202 44236 44236 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:56:23.202 44236 44236 F DEBUG   : Revision: 'MP1.0'
+09-21 15:56:23.202 44236 44236 F DEBUG   : ABI: 'arm64'
+09-21 15:56:23.202 44236 44236 F DEBUG   : Timestamp: 2026-09-21 15:56:22.941113284+0900
+09-21 15:56:23.202 44236 44236 F DEBUG   : Process uptime: 266s
+09-21 15:56:23.202 44236 44236 F DEBUG   : Cmdline: system_server
+09-21 15:56:23.202 44236 44236 F DEBUG   : pid: 37891, tid: 37974, name: SensorService  >>> system_server <<<
+09-21 15:56:23.202 44236 44236 F DEBUG   : uid: 1000
+09-21 15:56:23.202 44236 44236 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:56:23.202 44236 44236 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:56:23.202 44236 44236 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x0  0000000000000000  x1  0000000000009456  x2  0000000000000006  x3  000000788473e020
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x4  0000007c0ab7b080  x5  0000007c0ab7b080  x6  0000007c0ab7b080  x7  00000000001876a2
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x8  00000000000000f0  x9  d3e27eaaab909a5b  x10 000000ff00000020  x11 00000000a30995ea
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x12 000000000012800c  x13 0000007bfe548dd0  x14 0000007bfe8c8cb8  x15 cccccccccccccccd
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x16 0000007bfe5400f8  x17 0000007bfe528100  x18 000000787d538000  x19 0000000000009403
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x20 0000000000009456  x21 00000000ffffffff  x22 0000007938f31000  x23 0000007938f32e20
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x24 000000788473e880  x25 b400007989592890  x26 b4000079895928a8  x27 b400007a99592d58
+09-21 15:56:23.202 44236 44236 F DEBUG   :     x28 b40000799966cce0  x29 000000788473e0a0
+09-21 15:56:23.202 44236 44236 F DEBUG   :     lr  0000007bfe4c59c8  sp  000000788473e020  pc  0000007bfe4c59ec  pst 0000000000001000
+09-21 15:56:23.202 44236 44236 F DEBUG   : 11 total frames
+09-21 15:56:23.202 44236 44236 F DEBUG   : backtrace:
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:56:23.202 44236 44236 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 44814
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{b202c9a u0a75 RCVR bg:+62ms idle change:uncachedprocstate procs:0 seq(42,42)} caps=-------T
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{b202c9a u0a75 RCVR bg:+62ms idle change:uncachedprocstate procs:0 seq(42,42)} caps=-------T
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:56:27.669 44814 44814 E AndroidRuntime: 	... 9 more
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 45839
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:56:31.145 45839 45839 E AndroidRuntime: 	... 9 more
+09-21 15:58:51.984 44360 44452 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 44452 (SensorService), pid 44360 (system_server)
+09-21 15:58:52.448 48681 48681 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 15:58:52.448 48681 48681 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 15:58:52.448 48681 48681 F DEBUG   : Revision: 'MP1.0'
+09-21 15:58:52.448 48681 48681 F DEBUG   : ABI: 'arm64'
+09-21 15:58:52.448 48681 48681 F DEBUG   : Timestamp: 2026-09-21 15:58:52.172255181+0900
+09-21 15:58:52.448 48681 48681 F DEBUG   : Process uptime: 148s
+09-21 15:58:52.448 48681 48681 F DEBUG   : Cmdline: system_server
+09-21 15:58:52.448 48681 48681 F DEBUG   : pid: 44360, tid: 44452, name: SensorService  >>> system_server <<<
+09-21 15:58:52.448 48681 48681 F DEBUG   : uid: 1000
+09-21 15:58:52.448 48681 48681 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 15:58:52.448 48681 48681 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 15:58:52.448 48681 48681 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x0  0000000000000000  x1  000000000000ada4  x2  0000000000000006  x3  0000006e761db020
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x4  000022fa00001d22  x5  000022fa00001d22  x6  000022fa00001d22  x7  000022fa00001d22
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x8  00000000000000f0  x9  dfe3821accab5311  x10 000000ff00000020  x11 00000071d5762584
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x12 0000000000000000  x13 00000071d5762584  x14 000000000000000b  x15 0000000000001b6a
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x16 00000071d57540f8  x17 00000071d573c100  x18 0000006e6b8f0000  x19 000000000000ad48
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x20 000000000000ada4  x21 00000000ffffffff  x22 0000006f3b8b1000  x23 0000006f3b8b2e20
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x24 0000006e761db880  x25 b40000707c53d2f8  x26 b40000707c53d310  x27 b400006fbc52d718
+09-21 15:58:52.448 48681 48681 F DEBUG   :     x28 b400006fdc61adf0  x29 0000006e761db0a0
+09-21 15:58:52.448 48681 48681 F DEBUG   :     lr  00000071d56d99c8  sp  0000006e761db020  pc  00000071d56d99ec  pst 0000000000001000
+09-21 15:58:52.448 48681 48681 F DEBUG   : 11 total frames
+09-21 15:58:52.448 48681 48681 F DEBUG   : backtrace:
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:58:52.448 48681 48681 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 49448
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{2f247c1 u0a75 RCVR bg:+235ms idle change:uncachedprocstate procs:0 seq(71,71)} caps=-------T
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{2f247c1 u0a75 RCVR bg:+235ms idle change:uncachedprocstate procs:0 seq(71,71)} caps=-------T
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:58:57.577 49448 49448 E AndroidRuntime: 	... 9 more
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 50241
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 15:59:00.267 50241 50241 E AndroidRuntime: 	... 9 more
+09-21 16:00:38.406 48802 48881 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 48881 (SensorService), pid 48802 (system_server)
+09-21 16:00:38.888 54791 54791 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 16:00:38.888 54791 54791 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 16:00:38.888 54791 54791 F DEBUG   : Revision: 'MP1.0'
+09-21 16:00:38.888 54791 54791 F DEBUG   : ABI: 'arm64'
+09-21 16:00:38.888 54791 54791 F DEBUG   : Timestamp: 2026-09-21 16:00:38.609104581+0900
+09-21 16:00:38.888 54791 54791 F DEBUG   : Process uptime: 106s
+09-21 16:00:38.888 54791 54791 F DEBUG   : Cmdline: system_server
+09-21 16:00:38.888 54791 54791 F DEBUG   : pid: 48802, tid: 48881, name: SensorService  >>> system_server <<<
+09-21 16:00:38.888 54791 54791 F DEBUG   : uid: 1000
+09-21 16:00:38.888 54791 54791 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 16:00:38.888 54791 54791 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 16:00:38.888 54791 54791 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x0  0000000000000000  x1  000000000000bef1  x2  0000000000000006  x3  00000079775cd020
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x4  0000007d0bc97080  x5  0000007d0bc97080  x6  0000007d0bc97080  x7  00000000001877a2
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x8  00000000000000f0  x9  be2d1a4c911093be  x10 000000ff00000020  x11 00000000219ee4aa
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x12 000000000012800c  x13 00002300c52d3d36  x14 000000002fad1676  x15 cccccccccccccccd
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x16 0000007cf190c0f8  x17 0000007cf18f4100  x18 000000796eaac000  x19 000000000000bea2
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x20 000000000000bef1  x21 00000000ffffffff  x22 0000007a36229000  x23 0000007a3622ae20
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x24 00000079775cd880  x25 b400007b4f08a120  x26 b400007b4f08a138  x27 b400007b3f07d858
+09-21 16:00:38.888 54791 54791 F DEBUG   :     x28 b400007aff1566c0  x29 00000079775cd0a0
+09-21 16:00:38.888 54791 54791 F DEBUG   :     lr  0000007cf18919c8  sp  00000079775cd020  pc  0000007cf18919ec  pst 0000000000001000
+09-21 16:00:38.888 54791 54791 F DEBUG   : 11 total frames
+09-21 16:00:38.888 54791 54791 F DEBUG   : backtrace:
+09-21 16:00:38.888 54791 54791 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:00:38.888 54791 54791 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:00:38.889 54791 54791 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 55383
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{4365d43 u0a75 RCVR bg:+524ms idle change:uncachedprocstate procs:0 seq(40,40)} caps=-------T
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{4365d43 u0a75 RCVR bg:+524ms idle change:uncachedprocstate procs:0 seq(40,40)} caps=-------T
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:00:43.626 55383 55383 E AndroidRuntime: 	... 9 more
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 56337
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:00:47.081 56337 56337 E AndroidRuntime: 	... 9 more
+09-21 16:04:09.480 54918 54999 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 54999 (SensorService), pid 54918 (system_server)
+09-21 16:04:09.897 61106 61106 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 16:04:09.897 61106 61106 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 16:04:09.897 61106 61106 F DEBUG   : Revision: 'MP1.0'
+09-21 16:04:09.897 61106 61106 F DEBUG   : ABI: 'arm64'
+09-21 16:04:09.897 61106 61106 F DEBUG   : Timestamp: 2026-09-21 16:04:09.630425338+0900
+09-21 16:04:09.897 61106 61106 F DEBUG   : Process uptime: 211s
+09-21 16:04:09.897 61106 61106 F DEBUG   : Cmdline: system_server
+09-21 16:04:09.897 61106 61106 F DEBUG   : pid: 54918, tid: 54999, name: SensorService  >>> system_server <<<
+09-21 16:04:09.897 61106 61106 F DEBUG   : uid: 1000
+09-21 16:04:09.897 61106 61106 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 16:04:09.897 61106 61106 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 16:04:09.897 61106 61106 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x0  0000000000000000  x1  000000000000d6d7  x2  0000000000000006  x3  00000072959df020
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x4  000000762c114080  x5  000000762c114080  x6  000000762c114080  x7  0000000000187875
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x8  00000000000000f0  x9  c98a0f022c55f1e8  x10 000000ff00000020  x11 00000000155e649e
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x12 000000000012800c  x13 000000760d9cce08  x14 000000760dd4ccb8  x15 cccccccccccccccd
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x16 000000760d9c40f8  x17 000000760d9ac100  x18 000000728b490000  x19 000000000000d686
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x20 000000000000d6d7  x21 00000000ffffffff  x22 00000073612e3000  x23 00000073612e4e20
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x24 00000072959df880  x25 b4000074b1942120  x26 b4000074b1942138  x27 b400007531937f38
+09-21 16:04:09.897 61106 61106 F DEBUG   :     x28 b400007441a30a50  x29 00000072959df0a0
+09-21 16:04:09.897 61106 61106 F DEBUG   :     lr  000000760d9499c8  sp  00000072959df020  pc  000000760d9499ec  pst 0000000000001000
+09-21 16:04:09.897 61106 61106 F DEBUG   : 11 total frames
+09-21 16:04:09.897 61106 61106 F DEBUG   : backtrace:
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:04:09.897 61106 61106 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 61642
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{6fdec26 u0a75 RCVR bg:+181ms idle change:uncachedprocstate procs:0 seq(38,38)} caps=-------T
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{6fdec26 u0a75 RCVR bg:+181ms idle change:uncachedprocstate procs:0 seq(38,38)} caps=-------T
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:04:14.144 61642 61642 E AndroidRuntime: 	... 9 more
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 62616
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:04:17.451 62616 62616 E AndroidRuntime: 	... 9 more
+09-21 16:07:17.352 61223 61307 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 61307 (SensorService), pid 61223 (system_server)
+09-21 16:07:17.835  2327  2327 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 16:07:17.835  2327  2327 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 16:07:17.835  2327  2327 F DEBUG   : Revision: 'MP1.0'
+09-21 16:07:17.835  2327  2327 F DEBUG   : ABI: 'arm64'
+09-21 16:07:17.835  2327  2327 F DEBUG   : Timestamp: 2026-09-21 16:07:17.563908169+0900
+09-21 16:07:17.835  2327  2327 F DEBUG   : Process uptime: 188s
+09-21 16:07:17.835  2327  2327 F DEBUG   : Cmdline: system_server
+09-21 16:07:17.835  2327  2327 F DEBUG   : pid: 61223, tid: 61307, name: SensorService  >>> system_server <<<
+09-21 16:07:17.835  2327  2327 F DEBUG   : uid: 1000
+09-21 16:07:17.835  2327  2327 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 16:07:17.835  2327  2327 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 16:07:17.835  2327  2327 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x0  0000000000000000  x1  000000000000ef7b  x2  0000000000000006  x3  0000007a88a78020
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x4  0000007e087e0080  x5  0000007e087e0080  x6  0000007e087e0080  x7  0000000000187931
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x8  00000000000000f0  x9  16442f95aca60ad1  x10 000000ff00000020  x11 00000000cd75ad3a
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x12 000000000012800c  x13 0000007dfa163f58  x14 0000007dfa4e3cb8  x15 cccccccccccccccd
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x16 0000007dfa15b0f8  x17 0000007dfa143100  x18 0000007a7e0d8000  x19 000000000000ef27
+09-21 16:07:17.835  2327  2327 F DEBUG   :     x20 000000000000ef7b  x21 00000000ffffffff  x22 0000007b40828000  x23 0000007b40829e20
+09-21 16:07:17.836  2327  2327 F DEBUG   :     x24 0000007a88a78880  x25 b400007c925dccd8  x26 b400007c925dccf0  x27 b400007c725d26f8
+09-21 16:07:17.836  2327  2327 F DEBUG   :     x28 b400007b526c59a0  x29 0000007a88a780a0
+09-21 16:07:17.836  2327  2327 F DEBUG   :     lr  0000007dfa0e09c8  sp  0000007a88a78020  pc  0000007dfa0e09ec  pst 0000000000001000
+09-21 16:07:17.836  2327  2327 F DEBUG   : 11 total frames
+09-21 16:07:17.836  2327  2327 F DEBUG   : backtrace:
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:07:17.836  2327  2327 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 3092
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{ab1363 u0a75 RCVR bg:+55ms idle change:uncachedprocstate procs:0 seq(44,44)} caps=-------T
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{ab1363 u0a75 RCVR bg:+55ms idle change:uncachedprocstate procs:0 seq(44,44)} caps=-------T
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:07:22.294  3092  3092 E AndroidRuntime: 	... 9 more
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 4055
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:07:25.983  4055  4055 E AndroidRuntime: 	... 9 more
+09-21 16:08:16.467  2544  2639 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 2639 (SensorService), pid 2544 (system_server)
+09-21 16:08:16.880  5608  5608 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+09-21 16:08:16.881  5608  5608 F DEBUG   : Build fingerprint: 'google/lynx/lynx:16/CP1A.260505.005/15081906:user/release-keys'
+09-21 16:08:16.881  5608  5608 F DEBUG   : Revision: 'MP1.0'
+09-21 16:08:16.881  5608  5608 F DEBUG   : ABI: 'arm64'
+09-21 16:08:16.881  5608  5608 F DEBUG   : Timestamp: 2026-09-21 16:08:16.624421796+0900
+09-21 16:08:16.881  5608  5608 F DEBUG   : Process uptime: 58s
+09-21 16:08:16.881  5608  5608 F DEBUG   : Cmdline: system_server
+09-21 16:08:16.881  5608  5608 F DEBUG   : pid: 2544, tid: 2639, name: SensorService  >>> system_server <<<
+09-21 16:08:16.881  5608  5608 F DEBUG   : uid: 1000
+09-21 16:08:16.881  5608  5608 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+09-21 16:08:16.881  5608  5608 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+09-21 16:08:16.881  5608  5608 F DEBUG   : Abort message: 'Check failed: it != mConnectedDynamicSensors.end() '
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x0  0000000000000000  x1  0000000000000a4f  x2  0000000000000006  x3  0000007bbd3da020
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x4  0000007f368bb080  x5  0000007f368bb080  x6  0000007f368bb080  x7  000000000018796c
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x8  00000000000000f0  x9  2f0caca16544fc08  x10 000000ff00000020  x11 00000000a2e1cade
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x12 000000000012800c  x13 0000230354815b4b  x14 000000002fb093b6  x15 cccccccccccccccd
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x16 0000007f2351f0f8  x17 0000007f23507100  x18 0000007baff68000  x19 00000000000009f0
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x20 0000000000000a4f  x21 00000000ffffffff  x22 0000007c79993000  x23 0000007c79994e20
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x24 0000007bbd3da880  x25 b400007d6c664eb0  x26 b400007d6c664ec8  x27 b400007e0c65a308
+09-21 16:08:16.881  5608  5608 F DEBUG   :     x28 b400007dfc712ab0  x29 0000007bbd3da0a0
+09-21 16:08:16.881  5608  5608 F DEBUG   :     lr  0000007f234a49c8  sp  0000007bbd3da020  pc  0000007f234a49ec  pst 0000000000001000
+09-21 16:08:16.881  5608  5608 F DEBUG   : 11 total frames
+09-21 16:08:16.881  5608  5608 F DEBUG   : backtrace:
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #00 pc 00000000000709ec  /apex/com.android.runtime/lib64/bionic/libc.so (abort+156) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #01 pc 00000000008a0964  /apex/com.android.art/lib64/libart.so (art::Runtime::Abort(char const*)+476) (BuildId: e565350b4bf32a48254cb90cc6de4685)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #02 pc 0000000000016188  /apex/com.android.art/lib64/libbase.so (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_0::__invoke(char const*)+80) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #03 pc 0000000000015730  /system/lib64/libbase.so (android::base::LogMessage::~LogMessage()+544) (BuildId: 5e1c2a9a9b42ab6e6a3f44738913b9f7)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #04 pc 000000000003a814  /system/lib64/libsensorservice.so (android::SensorService::threadLoop()+4996) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #05 pc 0000000000057e2c  /system/lib64/libsensorservice.so (non-virtual thunk to android::SensorService::threadLoop()+12) (BuildId: 7cb8b3f3f4bef64a5d36a699739777f8)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #06 pc 000000000001958c  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+248) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #07 pc 000000000013943c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+144) (BuildId: cd3a52eb30390447e4c945b40dbb5d9e)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #08 pc 000000000001b9fc  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+20) (BuildId: e43c8f8e8ea4f8c15b694e013e143597)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #09 pc 0000000000081490  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+232) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:08:16.881  5608  5608 F DEBUG   :       #10 pc 0000000000074360  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+64) (BuildId: fd5c0655d7ff25c9851e801998f4c3d1)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 6285
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{8c558ec u0a75 RCVR bg:+48ms idle change:uncachedprocstate procs:0 seq(45,45)} caps=-------T
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: Caused by: android.app.BackgroundServiceStartNotAllowedException: Not allowed to start service Intent { act=ACTION_ENABLE_CHANNELS xflg=0x4 cmp=com.google.android.cellbroadcastreceiver/com.android.cellbroadcastreceiver.CellBroadcastConfigService }: app is in background uid UidRecord{8c558ec u0a75 RCVR bg:+48ms idle change:uncachedprocstate procs:0 seq(45,45)} caps=-------T
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ContextImpl.startServiceCommon(ContextImpl.java:2048)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ContextImpl.startService(ContextImpl.java:2003)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.content.ContextWrapper.startService(ContextWrapper.java:855)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigService(CellBroadcastReceiver.java:770)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.startConfigServiceToEnableChannels(CellBroadcastReceiver.java:749)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:183)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:08:21.193  6285  6285 E AndroidRuntime: 	... 9 more
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: FATAL EXCEPTION: main
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: Process: com.google.android.cellbroadcastreceiver, PID: 7174
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.cellbroadcastreceiver.CellBroadcastReceiver: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5038)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2577)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:110)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:248)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:338)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9073)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: Caused by: java.lang.SecurityException: getActiveSubscriptionInfo
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3340)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Parcel.createException(Parcel.java:3324)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3307)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.os.Parcel.readException(Parcel.java:3249)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.internal.telephony.ISub$Stub$Proxy.getActiveSubscriptionInfo(ISub.java:1545)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getActiveSubscriptionInfo(SubscriptionManager.java:1916)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3217)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.telephony.SubscriptionManager.getResourcesForSubId(SubscriptionManager.java:3183)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResources(CellBroadcastSettings.java:1692)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastSettings.getResourcesForDefaultSubId(CellBroadcastSettings.java:1702)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.getResourcesMethod(CellBroadcastReceiver.java:131)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at com.android.cellbroadcastreceiver.CellBroadcastReceiver.onReceive(CellBroadcastReceiver.java:140)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:5029)
+09-21 16:08:24.645  7174  7174 E AndroidRuntime: 	... 9 more

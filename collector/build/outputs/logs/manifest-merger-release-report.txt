@@ -1,0 +1,180 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:2:1-62:12
+INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:2:1-62:12
+	package
+		INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:3:5-51
+	xmlns:android
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:6:5-67
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:7:5-79
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:7:22-76
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:8:5-79
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:8:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:9:5-76
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:9:22-73
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:11:5-80
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:11:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:12:5-81
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:12:22-78
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:14:5-75
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:14:22-72
+uses-permission#android.permission.READ_PHONE_NUMBERS
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:15:5-77
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:15:22-74
+uses-permission#android.permission.READ_SMS
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:16:5-67
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:16:22-64
+uses-permission#android.permission.READ_PRIVILEGED_PHONE_STATE
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:17:5-18:47
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:18:9-44
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:17:22-83
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:20:5-79
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:20:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:21:5-81
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:21:22-78
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:23:5-76
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:23:22-73
+uses-permission#android.permission.BODY_SENSORS
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:24:5-71
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:24:22-68
+uses-permission#android.permission.ACTIVITY_RECOGNITION
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:25:5-79
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:25:22-76
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:26:5-71
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:26:22-68
+uses-permission#android.permission.CAMERA
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:27:5-65
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:27:22-62
+uses-permission#android.permission.QUERY_ALL_PACKAGES
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:29:5-30:53
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:30:9-50
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:29:22-74
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:33:5-78
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:33:22-75
+uses-permission#android.permission.OBSERVE_DISPLAY
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:34:5-35:47
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:35:9-44
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:34:22-71
+uses-permission#android.permission.PRESENTATION_CONTENT_TO_SECONDARY_DISPLAYS
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:36:5-37:47
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:37:9-44
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:36:22-98
+uses-permission#android.permission.DUMP
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:40:5-41:47
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:41:9-44
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:40:22-60
+uses-permission#android.permission.INTERACT_ACROSS_USERS
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:42:5-43:47
+	tools:ignore
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:43:9-44
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:42:22-77
+queries
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:46:5-61:15
+package#com.yztc.studio.plugin
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:47:9-58
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:47:18-55
+package#com.soft.apk008v
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:48:9-52
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:48:18-49
+package#com.uwish.app
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:49:9-49
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:49:18-46
+package#zpp.wjy.xxsq
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:50:9-48
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:50:18-45
+package#com.bigsing.changer
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:51:9-55
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:51:18-52
+package#zap.fh.wipe
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:52:9-47
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:52:18-44
+package#com.sollyu.xposed.hook.model
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:53:9-64
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:53:18-61
+package#com.soft.apk008Tool
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:54:9-55
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:54:18-52
+package#com.doubee.ig
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:55:9-49
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:55:18-46
+package#com.variable.apkhook
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:56:9-56
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:56:18-53
+package#com.addeasy.fastest
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:57:9-55
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:57:18-52
+package#com.xenice.mask
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:58:9-51
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:58:18-48
+package#com.shyl.artifact
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:59:9-53
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:59:18-50
+package#com.android1500.androidfaker
+ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:60:9-64
+	android:name
+		ADDED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:60:18-61
+uses-sdk
+INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml
+INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml

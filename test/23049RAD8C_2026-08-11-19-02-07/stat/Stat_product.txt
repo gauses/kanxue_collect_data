@@ -1,0 +1,7 @@
+  File: /product
+  Size: 289	 Blocks: 8	 IO Blocks: 512	 directory
+Device: fe10h/65040d	 Inode: 39	 Links: 17	 Device type: 0,0
+Access: (0755/drwxr-xr-x)	Uid: (    0/    root)	Gid: (    0/    root)
+Access: 2009-01-01 08:00:00.000000000 +0800
+Modify: 2009-01-01 08:00:00.000000000 +0800
+Change: 2009-01-01 08:00:00.000000000 +0800

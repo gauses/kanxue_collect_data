@@ -41,14 +41,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
-        }
-
-        ndkVersion = "21.4.7075529"
-    }
     buildFeatures {
         viewBinding = true
     }
@@ -56,27 +48,27 @@ android {
 
 dependencies {
 
+    // ===== 用本地 AAR 验证接入（不要用 project(":collector")）=====
+    // files(aar) 不会传递依赖：下面「AAR 运行时」一组是 SDK 内部用的，宿主不写会运行期 ClassNotFound。
+     implementation(project(":collector"))
+//    implementation(files("libs/collector-release-20260812-135237.aar"))
+
+    // AAR 运行时依赖（MainActivity 不直接用，但 DeviceCollector/上传链路会用）
+    implementation(libs.play.services.ads.identifier)          // AAID
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")     // 上传
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.apache.commons:commons-compress:1.26.1") // 打包
+    implementation("androidx.fragment:fragment-ktx:1.6.2") // SDK 权限 Fragment（files(aar) 需显式补）
+
+    // Demo App UI
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.play.services.ads.identifier)
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
-    implementation ("com.google.code.gson:gson:2.8.9")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation ("org.apache.commons:commons-compress:1.26.1")
-//    implementation ("com.google.android.gms:play-services-ads-identifier:18.0.1")
-//    implementation ("androidx.core:core-ktx:1.12.0")  // 如果使用 Kotlin
-//    implementation ("androidx.core:core:1.12.0")  // 最新版本
 }

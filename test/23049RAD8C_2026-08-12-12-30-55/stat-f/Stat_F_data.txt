@@ -1,0 +1,5 @@
+  File: "/data"
+    ID: 0000fe3c00000000 Namelen: 255    Type: f2fs
+Block Size: 4096    Fundamental block size: 4096
+Blocks: Total: 246219515	Free: 180796205	Available: 180763437
+Inodes: Total: 9784317	Free: 8704883

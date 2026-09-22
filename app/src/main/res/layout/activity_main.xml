@@ -1,173 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    android:fitsSystemWindows="true"
-    android:fadeScrollbars="true"
->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context="com.nest.kanxue.MainActivity">
 
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="DeviceCollector SDK Demo"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/hintText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="权限由 SDK 申请；拒绝后对应项降级，仍继续采集并上传。"
+        android:textSize="13sp"
+        android:textColor="#666666"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/permissionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="仅申请权限"
+        app:layout_constraintTop_toBottomOf="@id/hintText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/collectButton"
+        app:layout_constraintHorizontal_weight="1" />
 
-        <FrameLayout
-            android:id="@+id/SurfaceViewFrame"
-            android:layout_width="10dp"
-            android:layout_height="10dp">
-        </FrameLayout>
+    <Button
+        android:id="@+id/collectButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="采集并上传"
+        app:layout_constraintTop_toTopOf="@id/permissionButton"
+        app:layout_constraintBottom_toBottomOf="@id/permissionButton"
+        app:layout_constraintStart_toEndOf="@id/permissionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
 
-
-        <com.nest.kanxue.core.fingerprint.SurfaceFingerprint
-            android:id="@+id/surfaceFingerprint"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:visibility="invisible" />
-
-
-        <Switch
-            android:id="@+id/cpu_capture_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="是否抓取CPU文件(默认抓取上传)"
-            android:textSize="16sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:checked="true"
-            app:layout_constraintTop_toBottomOf="@id/SurfaceViewFrame"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/stat_file_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上传文件"
-            app:layout_constraintTop_toBottomOf="@id/cpu_capture_switch"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-
-        <Button
-            android:id="@+id/stat_data_local_file_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上传/data/local/tmp/文件"
-            android:layout_marginLeft="20dp"
-            app:layout_constraintTop_toBottomOf="@id/cpu_capture_switch"
-            app:layout_constraintLeft_toRightOf="@id/stat_file_btn"
-             />
-
-
-        <Button
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="debug测试，不用点击"
-            app:layout_constraintTop_toBottomOf="@id/stat_file_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
-            />
-
-
-        <Button
-            android:id="@+id/stop_sensor_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="StopSensor"
-            app:layout_constraintLeft_toRightOf="@id/test"
-            app:layout_constraintBottom_toBottomOf="@+id/test"
-            app:layout_constraintRight_toRightOf="parent"
-            />
-
+    <ScrollView
+        android:id="@+id/statusScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/permissionButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/uploadStatusText"
-            app:layout_constraintTop_toBottomOf="@id/test"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-             />
-
-        <TextView
-            android:id="@+id/checkSensorText"
-            app:layout_constraintTop_toBottomOf="@id/uploadStatusText"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="checkSensorText"
-            />
-
-        <TextView
-            android:id="@+id/copyCPUResult"
-            app:layout_constraintTop_toBottomOf="@id/checkSensorText"
-            android:textSize="20sp"
-            android:textColor="@android:color/holo_red_dark"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="copyCPUResult"
-            />
-
-        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-            android:id="@+id/pathInput"
+            android:id="@+id/statusText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/copyCPUResult"
-            android:hint="请输入文件夹路径"
-            android:inputType="text" />
+            android:text="就绪\n• 点「仅申请权限」测试 SDK 弹窗\n• 点「采集并上传」= 申请权限 → 采集 → 上传"
+            android:textSize="15sp"
+            android:lineSpacingExtra="4dp"
+            android:textIsSelectable="true" />
+    </ScrollView>
 
-
-        <Button
-            android:id="@+id/confirmButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/pathInput"
-            android:text="确认路径" />
-
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            app:layout_constraintTop_toBottomOf="@id/confirmButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1" />
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/recyclerView"
-            android:layout_margin="4dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <TextView
-                android:id="@+id/file_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textSize="16sp" />
-        </androidx.cardview.widget.CardView>
-
-
-
-
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

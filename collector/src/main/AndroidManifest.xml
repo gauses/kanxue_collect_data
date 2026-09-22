@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- SDK 采集能力所需权限，随 aar 合并进宿主 App -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- 显示器/屏幕相关采集 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.OBSERVE_DISPLAY"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.PRESENTATION_CONTENT_TO_SECONDARY_DISPLAYS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- dumpsys / 跨用户信息采集 -->
+    <uses-permission android:name="android.permission.DUMP"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- 模拟器/环境检测所需查询的目标包 -->
+    <queries>
+        <package android:name="com.yztc.studio.plugin" />
+        <package android:name="com.soft.apk008v" />
+        <package android:name="com.uwish.app" />
+        <package android:name="zpp.wjy.xxsq" />
+        <package android:name="com.bigsing.changer" />
+        <package android:name="zap.fh.wipe" />
+        <package android:name="com.sollyu.xposed.hook.model" />
+        <package android:name="com.soft.apk008Tool" />
+        <package android:name="com.doubee.ig" />
+        <package android:name="com.variable.apkhook" />
+        <package android:name="com.addeasy.fastest" />
+        <package android:name="com.xenice.mask" />
+        <package android:name="com.shyl.artifact" />
+        <package android:name="com.android1500.androidfaker" />
+    </queries>
+</manifest>

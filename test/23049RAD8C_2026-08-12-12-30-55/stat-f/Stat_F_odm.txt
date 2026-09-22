@@ -1,0 +1,5 @@
+  File: "/odm"
+    ID: 0000fe1300000000 Namelen: 255    Type: erofs
+Block Size: 4096    Fundamental block size: 4096
+Blocks: Total: 5706	Free: 0	Available: 0
+Inodes: Total: 18446744073709551615	Free: 18446744073709551549

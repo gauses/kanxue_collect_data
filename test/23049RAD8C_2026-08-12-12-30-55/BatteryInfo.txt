@@ -1,0 +1,15 @@
+=== 电池信息 ===
+获取时间: 2026-08-12 12:30:56
+
+charge_full = 3420000
+charge_full_design = 3420000
+cycle_count = 
+current_max = 142000
+voltage_max = 
+voltage_min = 
+voltage_current = 4095
+temp = 332
+technology = Li-poly
+capacity_percent = 74
+energy_counter = -9223372036854775808
+current_average = -2147483648

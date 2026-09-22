@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "kanxue_data"
 include(":app")
+include(":collector")
  

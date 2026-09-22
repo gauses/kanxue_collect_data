@@ -1,0 +1,218 @@
+Device ID: -1
+Name: Virtual
+Sources: 769
+VendorId: 0
+Descriptor: a718a782d34bc767f4689c232d64d527998ea7fd
+Motion Range: []
+Keyboard Type: 2
+String: Input Device -1: Virtual
+  Descriptor: a718a782d34bc767f4689c232d64d527998ea7fd
+  Generation: 3
+  Location: built-in
+  Enabled: true
+  Keyboard Type: alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x301 ( keyboard dpad )
+
+
+Device ID: 0
+Name: uinput-goodix
+Sources: 1281
+VendorId: 1638
+Descriptor: 8136f1e77728f603ac0ec0e545d338eba3cbcbc0
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 0: uinput-goodix
+  Descriptor: 8136f1e77728f603ac0ec0e545d338eba3cbcbc0
+  Generation: 78
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x501 ( keyboard gamepad )
+
+
+Device ID: 2
+Name: gpio-keys
+Sources: 257
+VendorId: 1
+Descriptor: 485d69228e24f5e46da1598745890b214130dbc4
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 2: gpio-keys
+  Descriptor: 485d69228e24f5e46da1598745890b214130dbc4
+  Generation: 77
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
+Device ID: 3
+Name: pmic_pwrkey
+Sources: 257
+VendorId: 0
+Descriptor: 39f0cc2fda6f8287fd99ffa0db53ae80f4837e18
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 3: pmic_pwrkey
+  Descriptor: 39f0cc2fda6f8287fd99ffa0db53ae80f4837e18
+  Generation: 76
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
+Device ID: 4
+Name: pmic_resin
+Sources: 257
+VendorId: 0
+Descriptor: 653e1ca6257fe659881d6f71b799cb02b0d69ace
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 4: pmic_resin
+  Descriptor: 653e1ca6257fe659881d6f71b799cb02b0d69ace
+  Generation: 75
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
+Device ID: 5
+Name: pmic_pwrkey_bark
+Sources: 257
+VendorId: 0
+Descriptor: d6a81814443e4548adc5ff066062a2c61a95c470
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 5: pmic_pwrkey_bark
+  Descriptor: d6a81814443e4548adc5ff066062a2c61a95c470
+  Generation: 74
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
+Device ID: 6
+Name: pmic_pwrkey_resin_bark
+Sources: 257
+VendorId: 0
+Descriptor: 90f8b3dbba95ed4e6f173743be6cf2297150f65c
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 6: pmic_pwrkey_resin_bark
+  Descriptor: 90f8b3dbba95ed4e6f173743be6cf2297150f65c
+  Generation: 73
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
+Device ID: 7
+Name: goodix_ts
+Sources: 4355
+VendorId: 48879
+Descriptor: 4055b8a032ccf50ef66dbe2ff99f3b2474e9eab5
+Motion Range: [android.view.InputDevice$MotionRange@a503cbf, android.view.InputDevice$MotionRange@1663f8c, android.view.InputDevice$MotionRange@22de6d5, android.view.InputDevice$MotionRange@79e5eea, android.view.InputDevice$MotionRange@255e5db, android.view.InputDevice$MotionRange@cfdc878, android.view.InputDevice$MotionRange@ff31b51, android.view.InputDevice$MotionRange@e7b7fb6]
+Keyboard Type: 1
+String: Input Device 7: goodix_ts
+  Descriptor: 4055b8a032ccf50ef66dbe2ff99f3b2474e9eab5
+  Generation: 72
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x1103 ( keyboard touchscreen )
+    AXIS_X: source=0x1002 min=0.0 max=1079.9 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_Y: source=0x1002 min=0.0 max=2399.9001 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_PRESSURE: source=0x1002 min=0.0 max=1.0 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_SIZE: source=0x1002 min=0.0 max=1.0 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_TOUCH_MAJOR: source=0x1002 min=0.0 max=2631.8054 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_TOUCH_MINOR: source=0x1002 min=0.0 max=2631.8054 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_TOOL_MAJOR: source=0x1002 min=0.0 max=2631.8054 flat=0.0 fuzz=0.0 resolution=0.0
+    AXIS_TOOL_MINOR: source=0x1002 min=0.0 max=2631.8054 flat=0.0 fuzz=0.0 resolution=0.0
+
+
+Device ID: 8
+Name: ukee-mtp-snd-card Headset Jack
+Sources: -2147483391
+VendorId: 0
+Descriptor: 739173eb7185ad5e41d9294f151f222b5eebd827
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 8: ukee-mtp-snd-card Headset Jack
+  Descriptor: 739173eb7185ad5e41d9294f151f222b5eebd827
+  Generation: 79
+  Location: built-in
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x80000101 ( keyboard )
+
+
+Device ID: 9
+Name: uinput_nav
+Sources: 257
+VendorId: 1
+Descriptor: c918d4443c337892fbd283de9a1c61de5c0a3c0e
+Motion Range: []
+Keyboard Type: 1
+String: Input Device 9: uinput_nav
+  Descriptor: c918d4443c337892fbd283de9a1c61de5c0a3c0e
+  Generation: 69
+  Location: external
+  Enabled: true
+  Keyboard Type: non-alphabetic
+  Has Vibrator: false
+  Has Sensor: false
+  Has battery: false
+  Has mic: false
+  USI Version: null
+  Sources: 0x101 ( keyboard )
+
+
