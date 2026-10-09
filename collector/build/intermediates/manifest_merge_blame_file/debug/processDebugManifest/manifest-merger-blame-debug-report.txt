@@ -1,0 +1,148 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    xmlns:tools="http://schemas.android.com/tools"
+4    package="com.nest.collector" >
+5
+6    <uses-sdk android:minSdkVersion="31" />
+7
+8    <!-- SDK 采集能力所需权限，随 aar 合并进宿主 App -->
+9    <uses-permission android:name="android.permission.INTERNET" />
+9-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:6:5-67
+9-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:6:22-64
+10    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+10-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:7:5-79
+10-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:7:22-76
+11    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+11-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:8:5-79
+11-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:8:22-76
+12    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+12-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:9:5-76
+12-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:9:22-73
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:11:5-80
+13-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:11:22-77
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:12:5-81
+14-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:12:22-78
+15    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+15-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:14:5-75
+15-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:14:22-72
+16    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+16-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:15:5-77
+16-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:15:22-74
+17    <uses-permission android:name="android.permission.READ_SMS" />
+17-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:16:5-67
+17-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:16:22-64
+18    <uses-permission
+18-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:17:5-18:47
+19        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+19-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:17:22-83
+20        tools:ignore="ProtectedPermissions" />
+20-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:18:9-44
+21    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+21-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:20:5-79
+21-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:20:22-76
+22    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+22-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:21:5-81
+22-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:21:22-78
+23    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+23-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:23:5-76
+23-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:23:22-73
+24    <uses-permission android:name="android.permission.BODY_SENSORS" />
+24-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:24:5-71
+24-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:24:22-68
+25    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+25-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:25:5-79
+25-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:25:22-76
+26    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+26-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:26:5-71
+26-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:26:22-68
+27    <uses-permission android:name="android.permission.CAMERA" />
+27-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:27:5-65
+27-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:27:22-62
+28    <uses-permission
+28-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:29:5-30:53
+29        android:name="android.permission.QUERY_ALL_PACKAGES"
+29-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:29:22-74
+30        tools:ignore="QueryAllPackagesPermission" />
+30-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:30:9-50
+31
+32    <!-- 显示器/屏幕相关采集 -->
+33    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+33-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:33:5-78
+33-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:33:22-75
+34    <uses-permission
+34-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:34:5-35:47
+35        android:name="android.permission.OBSERVE_DISPLAY"
+35-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:34:22-71
+36        tools:ignore="ProtectedPermissions" />
+36-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:35:9-44
+37    <uses-permission
+37-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:36:5-37:47
+38        android:name="android.permission.PRESENTATION_CONTENT_TO_SECONDARY_DISPLAYS"
+38-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:36:22-98
+39        tools:ignore="ProtectedPermissions" />
+39-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:37:9-44
+40
+41    <!-- dumpsys / 跨用户信息采集 -->
+42    <uses-permission
+42-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:40:5-41:47
+43        android:name="android.permission.DUMP"
+43-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:40:22-60
+44        tools:ignore="ProtectedPermissions" />
+44-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:41:9-44
+45    <uses-permission
+45-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:42:5-43:47
+46        android:name="android.permission.INTERACT_ACROSS_USERS"
+46-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:42:22-77
+47        tools:ignore="ProtectedPermissions" />
+47-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:43:9-44
+48
+49    <!-- 模拟器/环境检测所需查询的目标包 -->
+50    <queries>
+50-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:46:5-61:15
+51        <package android:name="com.yztc.studio.plugin" />
+51-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:47:9-58
+51-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:47:18-55
+52        <package android:name="com.soft.apk008v" />
+52-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:48:9-52
+52-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:48:18-49
+53        <package android:name="com.uwish.app" />
+53-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:49:9-49
+53-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:49:18-46
+54        <package android:name="zpp.wjy.xxsq" />
+54-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:50:9-48
+54-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:50:18-45
+55        <package android:name="com.bigsing.changer" />
+55-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:51:9-55
+55-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:51:18-52
+56        <package android:name="zap.fh.wipe" />
+56-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:52:9-47
+56-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:52:18-44
+57        <package android:name="com.sollyu.xposed.hook.model" />
+57-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:53:9-64
+57-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:53:18-61
+58        <package android:name="com.soft.apk008Tool" />
+58-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:54:9-55
+58-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:54:18-52
+59        <package android:name="com.doubee.ig" />
+59-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:55:9-49
+59-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:55:18-46
+60        <package android:name="com.variable.apkhook" />
+60-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:56:9-56
+60-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:56:18-53
+61        <package android:name="com.addeasy.fastest" />
+61-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:57:9-55
+61-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:57:18-52
+62        <package android:name="com.xenice.mask" />
+62-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:58:9-51
+62-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:58:18-48
+63        <package android:name="com.shyl.artifact" />
+63-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:59:9-53
+63-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:59:18-50
+64        <package android:name="com.android1500.androidfaker" />
+64-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:60:9-64
+64-->D:\Project\kanxue_collect_data\collector\src\main\AndroidManifest.xml:60:18-61
+65    </queries>
+66
+67</manifest>
